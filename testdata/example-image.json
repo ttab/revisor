@@ -1,0 +1,89 @@
+{
+  "uuid": "579aecb6-83cd-5749-9e56-e6b6045f0823",
+  "type": "x-im/image",
+  "uri": "im://image/HoPhThCxqrskOvzqoUguBF15L0g.jpg",
+  "created": "2022-05-05T11:05:59.30010891Z",
+  "modified": "2022-05-05T11:05:59.30010891Z",
+  "meta": [
+    {
+      "type": "x-im/image",
+      "data": {
+        "copyright": "EXAMPLE",
+        "filename": "78ae858b-fcea-4f18-b59a-a02307fac023.jpg",
+        "height": "3297",
+        "mimeType": "image/jpeg",
+        "objectName": "78ae858b-fcea-4f18-b59a-a02307fac023.jpg",
+        "originalFilename": "78ae858b-fcea-4f18-b59a-a02307fac023.jpg",
+        "photoDate": "2020-10-15T05:10:17.093Z",
+        "photoDateTime": "2020-10-15T05:10:17.093Z",
+        "photographer": "SARAH DOE",
+        "text": "Nullam libero mauris, consequat quis, varius et, dictum id, arcu.",
+        "width": "4946"
+      }
+    }
+  ],
+  "links": [
+    {
+      "uuid": "00000000-0000-0000-0000-000000000000",
+      "type": "x-im/author",
+      "title": "SARAH DOE",
+      "rel": "author"
+    },
+    {
+      "uri": "navimg://batch/588bdc58-ab8a-437b-9960-6d5754543215",
+      "rel": "batch"
+    },
+    {
+      "uri": "imid://user/sub/eec3fd4e-6fa7-45a4-be30-f0cdcb19971a",
+      "type": "x-imid/user",
+      "title": "John Doe",
+      "rel": "creator",
+      "links": [
+        {
+          "uri": "imid://organisation/example",
+          "type": "x-imid/organisation",
+          "title": "example",
+          "rel": "affiliation",
+          "links": [
+            {
+              "uri": "imid://unit/al",
+              "type": "x-imid/unit",
+              "title": "al",
+              "rel": "affiliation"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "uri": "imid://user/sub/eec3fd4e-6fa7-45a4-be30-f0cdcb19971a",
+      "type": "x-imid/user",
+      "title": "John Doe",
+      "rel": "updater",
+      "links": [
+        {
+          "uri": "imid://organisation/example",
+          "type": "x-imid/organisation",
+          "title": "example",
+          "rel": "affiliation",
+          "links": [
+            {
+              "uri": "imid://unit/al",
+              "type": "x-imid/unit",
+              "title": "al",
+              "rel": "affiliation"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "name": "filename",
+      "value": "HoPhThCxqrskOvzqoUguBF15L0g.jpg"
+    }
+  ],
+  "status": "draft",
+  "provider": "NavigaPhotos"
+}

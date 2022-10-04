@@ -1,0 +1,109 @@
+{
+  "uuid": "73922fcd-4f89-4b01-ae6e-a93c393bfcbd",
+  "type": "x-im/newscoverage",
+  "uri": "im://newscoverage/73922fcd-4f89-4b01-ae6e-a93c393bfcbd",
+  "created": "2022-05-10T06:05:23.614Z",
+  "modified": "2022-05-10T06:05:23.614Z",
+  "meta": [
+    {
+      "type": "x-im/newscoverage",
+      "data": {
+        "dateGranularity": "date",
+        "description": "",
+        "end": "2022-05-10T20:59:59.999Z",
+        "priority": "Normal",
+        "publicDescription": "",
+        "slug": "",
+        "start": "2022-05-09T21:00:00.000Z"
+      }
+    }
+  ],
+  "links": [
+    {
+      "uri": "imid://user/sub/baef21c6-ba84-43d8-9f86-553bd0ce5fc1",
+      "type": "x-imid/user",
+      "title": "Janet Doe",
+      "rel": "creator",
+      "links": [
+        {
+          "uri": "imid://organisation/example",
+          "type": "x-imid/organisation",
+          "title": "example",
+          "rel": "affiliation",
+          "links": [
+            {
+              "uri": "imid://unit/wisi",
+              "type": "x-imid/unit",
+              "title": "wisi",
+              "rel": "affiliation"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "uri": "imid://user/sub/baef21c6-ba84-43d8-9f86-553bd0ce5fc1",
+      "type": "x-imid/user",
+      "title": "Janet Doe",
+      "rel": "updater",
+      "links": [
+        {
+          "uri": "imid://organisation/example",
+          "type": "x-imid/organisation",
+          "title": "example",
+          "rel": "affiliation",
+          "links": [
+            {
+              "uri": "imid://unit/wisi",
+              "type": "x-imid/unit",
+              "title": "wisi",
+              "rel": "affiliation"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "uuid": "7bc17363-fd8a-4ccc-affa-b303d0820e44",
+      "type": "x-im/channel",
+      "title": "Wisi",
+      "rel": "channel"
+    },
+    {
+      "uuid": "9045e270-f666-4360-a04d-91cb3f97d304",
+      "type": "x-im/content-profile",
+      "title": "News",
+      "rel": "content-profile"
+    },
+    {
+      "id": "assignment-a8309b31-6dce-4428-a85b-901d5a093dbe",
+      "type": "x-im/assignment",
+      "links": [
+        {
+          "uuid": "a8309b31-6dce-4428-a85b-901d5a093dbe",
+          "type": "x-im/assignment",
+          "rel": "assignment"
+        }
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "name": "copyrightholder",
+      "value": "example"
+    },
+    {
+      "name": "headline",
+      "value": "Fusce suscipit, wisi nec facilisis facilisis"
+    },
+    {
+      "name": "nrp:sector",
+      "value": "Fusce",
+      "parameters": {
+        "literal": "Fusce"
+      }
+    }
+  ],
+  "status": "approved",
+  "provider": "Template Provider"
+}

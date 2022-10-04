@@ -1,0 +1,520 @@
+{
+  "uuid": "36b2d239-dc55-4d63-890a-47c7ce362e55",
+  "type": "x-im/article",
+  "uri": "im://article/36b2d239-dc55-4d63-890a-47c7ce362e55",
+  "title": "Nullam libero mauris, consequat quis, varius et, dictum id, arcu.",
+  "created": "2022-04-20T06:37:22.789506510Z",
+  "modified": "2022-04-20T06:37:22.789506510Z",
+  "content": [
+    {
+      "id": "headline-0",
+      "type": "x-im/header",
+      "data": {
+        "format": "html",
+        "text": "Vivamus id enim. Donec hendrerit tempor tellus."
+      }
+    },
+    {
+      "id": "body-1",
+      "type": "x-im/paragraph",
+      "data": {
+        "format": "html",
+        "text": "Nam a sapien."
+      }
+    },
+    {
+      "id": "body-2",
+      "type": "x-im/paragraph",
+      "data": {
+        "format": "html",
+        "text": "Pellentesque dapibus suscipit ligula.  Donec posuere augue in quam.  Etiam vel tortor sodales tellus ultricies commodo.  Suspendisse potenti.  Aenean in sem ac leo mollis blandit.  Donec neque quam, dignissim in, mollis nec, sagittis eu, wisi.  Phasellus lacus.  Etiam laoreet quam sed arcu.  Phasellus at dui in ligula mollis ultricies.  Integer placerat tristique nisl.  Praesent augue.  Fusce commodo.  Vestibulum convallis, lorem a tempus semper, dui dui euismod elit, vitae placerat urna tortor vitae lacus.  Nullam libero mauris, consequat quis, varius et, dictum id, arcu.  Mauris mollis tincidunt felis.  Aliquam feugiat tellus ut neque.  Nulla facilisis, risus a rhoncus fermentum, tellus tellus lacinia purus, et dictum nunc justo sit amet elit."
+      }
+    },
+    {
+      "id": "body-3",
+      "type": "x-im/paragraph",
+      "data": {
+        "format": "html",
+        "text": "Nullam eu ante vel est convallis dignissim.  Fusce suscipit, wisi nec facilisis facilisis, est dui fermentum leo, quis tempor ligula erat quis odio.  Nunc porta vulputate tellus.  Nunc rutrum turpis sed pede.  Sed bibendum.  Aliquam posuere.  Nunc aliquet, augue nec adipiscing interdum, lacus tellus malesuada massa, quis varius mi purus non odio.  Pellentesque condimentum, magna ut suscipit hendrerit, ipsum augue ornare nulla, non luctus diam neque sit amet urna.  Curabitur vulputate vestibulum lorem.  Fusce sagittis, libero non molestie mollis, magna orci ultrices dolor, at vulputate neque nulla lacinia eros.  Sed id ligula quis est convallis tempor.  Curabitur lacinia pulvinar nibh.  Nam a sapien."
+      }
+    },
+    {
+      "id": "body-4",
+      "type": "x-im/paragraph",
+      "data": {
+        "format": "html",
+        "text": "Aliquam erat volutpat.  Nunc eleifend leo vitae magna.  In id erat non orci commodo lobortis.  Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus.  Sed diam.  Praesent fermentum tempor tellus.  Nullam tempus.  Mauris ac felis vel velit tristique imperdiet.  Donec at pede.  Etiam vel neque nec dui dignissim bibendum.  Vivamus id enim.  Phasellus neque orci, porta a, aliquet quis, semper a, massa.  Phasellus purus.  Pellentesque tristique imperdiet tortor.  Nam euismod tellus id erat."
+      }
+    },
+    {
+      "id": "body-5",
+      "type": "x-im/paragraph",
+      "data": {
+        "format": "html",
+        "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.  Donec hendrerit tempor tellus.  Donec pretium posuere tellus.  Proin quam nisl, tincidunt et, mattis eget, convallis nec, purus.  Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.  Nulla posuere.  Donec vitae dolor.  Nullam tristique diam non turpis.  Cras placerat accumsan nulla.  Nullam rutrum.  Nam vestibulum accumsan nisl."
+      }
+    },
+    {
+      "id": "body-6",
+      "type": "x-im/paragraph",
+      "data": {
+        "format": "html",
+        "text": "Aliquam erat volutpat.  Nunc eleifend leo vitae magna.  In id erat non orci commodo lobortis.  Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus.  Sed diam.  Praesent fermentum tempor tellus.  Nullam tempus.  Mauris ac felis vel velit tristique imperdiet.  Donec at pede.  Etiam vel neque nec dui dignissim bibendum.  Vivamus id enim.  Phasellus neque orci, porta a, aliquet quis, semper a, massa.  Phasellus purus.  Pellentesque tristique imperdiet tortor.  Nam euismod tellus id erat."
+      }
+    },
+    {
+      "id": "body-7",
+      "type": "x-im/paragraph",
+      "data": {
+        "format": "html",
+        "text": "Nullam eu ante vel est convallis dignissim.  Fusce suscipit, wisi nec facilisis facilisis, est dui fermentum leo, quis tempor ligula erat quis odio.  Nunc porta vulputate tellus.  Nunc rutrum turpis sed pede.  Sed bibendum.  Aliquam posuere.  Nunc aliquet, augue nec adipiscing interdum, lacus tellus malesuada massa, quis varius mi purus non odio.  Pellentesque condimentum, magna ut suscipit hendrerit, ipsum augue ornare nulla, non luctus diam neque sit amet urna.  Curabitur vulputate vestibulum lorem.  Fusce sagittis, libero non molestie mollis, magna orci ultrices dolor, at vulputate neque nulla lacinia eros.  Sed id ligula quis est convallis tempor.  Curabitur lacinia pulvinar nibh.  Nam a sapien."
+      }
+    },
+    {
+      "id": "image-12",
+      "uuid": "53d33e6d-c22e-500f-885e-cf4002254e52",
+      "uri": "im://image/hAmZukwweCFpfdn2P_MN3dHUBm4.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "53d33e6d-c22e-500f-885e-cf4002254e52",
+          "uri": "im://image/hAmZukwweCFpfdn2P_MN3dHUBm4.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3697",
+            "width": "5627"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "e5172ec7-7ee7-5f72-83b7-54f8fd591f2a",
+      "uri": "im://image/i92sv7V6B1Oxw2y0jpxXX8Vpzbo.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "e5172ec7-7ee7-5f72-83b7-54f8fd591f2a",
+          "uri": "im://image/i92sv7V6B1Oxw2y0jpxXX8Vpzbo.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "2057",
+            "width": "2937"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "fe7c0f08-5018-5b1d-9808-96ade8733e33",
+      "uri": "im://image/g-fW42wKMJnPstboMYir4yEdkMY.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "fe7c0f08-5018-5b1d-9808-96ade8733e33",
+          "uri": "im://image/g-fW42wKMJnPstboMYir4yEdkMY.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3840",
+            "width": "5760"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "f14923f7-a451-5c05-9b15-3a7394e5ea26",
+      "uri": "im://image/IrDSfaSB6s5FRfxdRlU2ikzsM9s.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "f14923f7-a451-5c05-9b15-3a7394e5ea26",
+          "uri": "im://image/IrDSfaSB6s5FRfxdRlU2ikzsM9s.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3645",
+            "width": "5431"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "11b963a2-b795-52bf-94d0-1223d7ce9c1e",
+      "uri": "im://image/xGI1D-_lDoO5heeSnP63nTwNVo8.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "11b963a2-b795-52bf-94d0-1223d7ce9c1e",
+          "uri": "im://image/xGI1D-_lDoO5heeSnP63nTwNVo8.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3656",
+            "width": "5303"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "0914dfe4-57c4-54d1-b72b-cd6309402d69",
+      "uri": "im://image/4pP5kNoMi9NrN7k5XouOjQ7wPcs.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "0914dfe4-57c4-54d1-b72b-cd6309402d69",
+          "uri": "im://image/4pP5kNoMi9NrN7k5XouOjQ7wPcs.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3423",
+            "width": "5099"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "610f1ecd-8e95-5749-9417-0410769b827f",
+      "uri": "im://image/BVBaa1CpvQyvzF-chb7R_XKuHdY.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "610f1ecd-8e95-5749-9417-0410769b827f",
+          "uri": "im://image/BVBaa1CpvQyvzF-chb7R_XKuHdY.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "5004",
+            "width": "7499"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "164efc6d-e0d0-513d-9da0-a49896b138e8",
+      "uri": "im://image/Ya8OfI31PC3nlCbBWI9rjkx3i1s.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "164efc6d-e0d0-513d-9da0-a49896b138e8",
+          "uri": "im://image/Ya8OfI31PC3nlCbBWI9rjkx3i1s.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3840",
+            "width": "5760"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "38286f20-5f2b-599a-be33-743cff432479",
+      "uri": "im://image/mEecZMwUtuz3e8eHmdqr1rQHuTc.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "38286f20-5f2b-599a-be33-743cff432479",
+          "uri": "im://image/mEecZMwUtuz3e8eHmdqr1rQHuTc.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3840",
+            "width": "5760"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "24bd6510-28f3-588f-8a71-310b42f77208",
+      "uri": "im://image/xqfsmLa8gEN_W1-y3L8e2gX-qfo.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "24bd6510-28f3-588f-8a71-310b42f77208",
+          "uri": "im://image/xqfsmLa8gEN_W1-y3L8e2gX-qfo.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3744",
+            "width": "5616"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "e8749088-51fe-5558-b7ee-d19d45e3c6a2",
+      "uri": "im://image/fFtKq6-IaeR_6soHmJARL2Gbvnw.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "e8749088-51fe-5558-b7ee-d19d45e3c6a2",
+          "uri": "im://image/fFtKq6-IaeR_6soHmJARL2Gbvnw.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3744",
+            "width": "5616"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "6db4f4b1-acb0-53c4-aa81-16a53defeb7b",
+      "uri": "im://image/vVG8d4aqTCeavAYdVWo442FJOQA.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "6db4f4b1-acb0-53c4-aa81-16a53defeb7b",
+          "uri": "im://image/vVG8d4aqTCeavAYdVWo442FJOQA.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "5508",
+            "width": "7437"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "b8c36d84-b083-5b10-af0c-7e4e2bfc7336",
+      "uri": "im://image/nqFEDL5jLqy1MMYyIO6TOspYXiY.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "b8c36d84-b083-5b10-af0c-7e4e2bfc7336",
+          "uri": "im://image/nqFEDL5jLqy1MMYyIO6TOspYXiY.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3744",
+            "width": "5616"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "aa83796b-6570-5f06-ad66-c25995730532",
+      "uri": "im://image/PvzAb3vVSCWTrxxzRV7tiUGWvKk.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "aa83796b-6570-5f06-ad66-c25995730532",
+          "uri": "im://image/PvzAb3vVSCWTrxxzRV7tiUGWvKk.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3744",
+            "width": "5616"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "10c99dc5-fe33-5a1b-a57f-326c4d95e527",
+      "uri": "im://image/YEdKmpS9mxR4sA4AL51lgCKdtmo.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "10c99dc5-fe33-5a1b-a57f-326c4d95e527",
+          "uri": "im://image/YEdKmpS9mxR4sA4AL51lgCKdtmo.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3840",
+            "width": "5760"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "dbbb0f53-b736-500e-bd2e-aefdcb0daa3c",
+      "uri": "im://image/vGC4QfzcodOGOVPidYwS2wcgkkQ.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "dbbb0f53-b736-500e-bd2e-aefdcb0daa3c",
+          "uri": "im://image/vGC4QfzcodOGOVPidYwS2wcgkkQ.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3234",
+            "width": "4849"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "680407e7-f874-55d8-88f1-50115e25ae1d",
+      "uri": "im://image/Cle6qJvBosLFoTHhfrPDHhj3M0w.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "680407e7-f874-55d8-88f1-50115e25ae1d",
+          "uri": "im://image/Cle6qJvBosLFoTHhfrPDHhj3M0w.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3714",
+            "width": "5536"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "image-12",
+      "uuid": "6ab08348-81ac-51f5-a856-60f9d220d646",
+      "uri": "im://image/GaSbd-sFzCSRA04XkvUuwmmgGBM.jpg",
+      "type": "x-im/image",
+      "links": [
+        {
+          "uuid": "6ab08348-81ac-51f5-a856-60f9d220d646",
+          "uri": "im://image/GaSbd-sFzCSRA04XkvUuwmmgGBM.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3840",
+            "width": "5475"
+          },
+          "rel": "self"
+        }
+      ]
+    }
+  ],
+  "meta": [
+    {
+      "id": "RYaudnAJj8gQ",
+      "type": "x-im/newsvalue",
+      "data": {
+        "description": "1D",
+        "duration": "86400",
+        "end": "",
+        "format": "lifetimecode",
+        "score": "4"
+      }
+    },
+    {
+      "id": "teaser-13",
+      "type": "x-im/teaser",
+      "title": "Nunc eleifend leo vitae magna.",
+      "data": {
+        "text": "Sed bibendum.  Fusce sagittis, libero non molestie mollis, magna orci ultrices dolor, at vulputate neque nulla lacinia eros."
+      },
+      "links": [
+        {
+          "uuid": "53d33e6d-c22e-500f-885e-cf4002254e52",
+          "uri": "im://image/hAmZukwweCFpfdn2P_MN3dHUBm4.jpg",
+          "type": "x-im/image",
+          "data": {
+            "height": "3697",
+            "width": "5627"
+          },
+          "rel": "image"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "uri": "cca-importer-example://article/1399472",
+      "type": "cca-importer/event",
+      "data": {
+        "bucket": "wireingest-filearea-srenzubsuxuw",
+        "customer": "example",
+        "id": "1399472",
+        "key": "example/provider/123456.json",
+        "wire-source": "example"
+      },
+      "rel": "same-as"
+    },
+    {
+      "uuid": "5ef0c29c-52e4-5b6f-bd16-e6290297c2e8",
+      "uri": "im://article/5ef0c29c-52e4-5b6f-bd16-e6290297c2e8",
+      "type": "x-im/article",
+      "title": "imported",
+      "data": {
+        "version": "1"
+      },
+      "rel": "external-source"
+    },
+    {
+      "uuid": "00000000-0000-0000-0000-000000000000",
+      "type": "x-im/author",
+      "title": "By John Doe",
+      "rel": "author"
+    },
+    {
+      "uri": "imid://user/sub/219899d2-8584-4241-857f-be0d13a628d5",
+      "type": "x-imid/user",
+      "title": "Pat Haworth",
+      "rel": "creator",
+      "links": [
+        {
+          "uri": "imid://organisation/example",
+          "type": "x-imid/organisation",
+          "title": "example",
+          "rel": "affiliation",
+          "links": [
+            {
+              "uri": "imid://unit/commercial",
+              "type": "x-imid/unit",
+              "title": "commercial",
+              "rel": "affiliation"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "uri": "imid://user/sub/219899d2-8584-4241-857f-be0d13a628d5",
+      "type": "x-imid/user",
+      "title": "Pat Haworth",
+      "rel": "updater",
+      "links": [
+        {
+          "uri": "imid://organisation/example",
+          "type": "x-imid/organisation",
+          "title": "example",
+          "rel": "affiliation",
+          "links": [
+            {
+              "uri": "imid://unit/commercial",
+              "type": "x-imid/unit",
+              "title": "commercial",
+              "rel": "affiliation"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "name": "imext:haspublishedversion",
+      "value": "false"
+    },
+    {
+      "name": "infoSource",
+      "parameters": {
+        "literal": "WireProvider"
+      }
+    }
+  ],
+  "language": "en-GB",
+  "status": "draft",
+  "provider": "cca-importer-example"
+}

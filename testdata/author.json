@@ -1,0 +1,104 @@
+{
+  "uuid": "cad3b535-11bb-4d8d-980e-972f3cbe55d6",
+  "type": "x-im/author",
+  "uri": "im://author/cad3b535-11bb-4d8d-980e-972f3cbe55d6",
+  "title": "John Williams",
+  "created": "2020-06-11T11:23:24Z",
+  "modified": "2021-05-12T13:28:54Z",
+  "meta": [
+    {
+      "id": "0",
+      "type": "x-im/note",
+      "data": {
+        "text": ""
+      }
+    },
+    {
+      "id": "1pGrYW69CaIf",
+      "type": "x-im/contact-info",
+      "data": {
+        "email": "John.Williams@example.com"
+      }
+    }
+  ],
+  "links": [
+    {
+      "uri": "imid://user/sub/ac883f4d-8acc-4169-96d8-05b06c2de55d",
+      "type": "x-imid/user",
+      "title": "John Williams",
+      "rel": "creator",
+      "links": [
+        {
+          "uri": "imid://organisation/example",
+          "type": "x-imid/organisation",
+          "title": "example",
+          "rel": "affiliation",
+          "links": [
+            {
+              "uri": "imid://unit/example",
+              "type": "x-imid/unit",
+              "title": "example",
+              "rel": "affiliation"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "uri": "imid://user/sub/ac883f4d-8acc-4169-96d8-05b06c2de55d",
+      "type": "x-imid/user",
+      "rel": "same-as"
+    },
+    {
+      "uri": "imid://user/sub/ac883f4d-8acc-4169-96d8-05b06c2de55d",
+      "type": "x-imid/user",
+      "title": "John Williams",
+      "rel": "updater",
+      "links": [
+        {
+          "uri": "imid://organisation/example",
+          "type": "x-imid/organisation",
+          "title": "example",
+          "rel": "affiliation",
+          "links": [
+            {
+              "uri": "imid://unit/example",
+              "type": "x-imid/unit",
+              "title": "exampe",
+              "rel": "affiliation"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "name": "imext:firstName",
+      "value": "John"
+    },
+    {
+      "name": "imext:lastName",
+      "value": "Williams"
+    },
+    {
+      "name": "definition",
+      "value": "PH",
+      "parameters": {
+        "role": "drol:short"
+      }
+    },
+    {
+      "name": "conceptid",
+      "parameters": {
+        "created": "",
+        "creator": "",
+        "modified": "",
+        "qcode": "",
+        "uri": "im://author/cad3b535-11bb-4d8d-980e-972f3cbe55d6"
+      }
+    }
+  ],
+  "status": "usable",
+  "provider": "writer"
+}
