@@ -1,12 +1,10 @@
 {
   "uuid": "afbdff19-0e27-565f-9d9a-087f0cc076c9",
-  "type": "x-im/image",
-  "uri": "im://image/2BZDTjc-npIKRRyt1lRaf39Zink.jpg",
-  "created": "2022-05-19T10:50:30.513411714Z",
-  "modified": "2022-05-19T10:50:30.513411714Z",
+  "type": "core/image",
+  "uri": "core://image/2BZDTjc-npIKRRyt1lRaf39Zink.jpg",
   "meta": [
     {
-      "type": "x-im/image",
+      "type": "core/image",
       "data": {
 	"filename": "freestocks-YXyTlLrSVs0-unsplash.jpg",
 	"height": "3648",
@@ -16,83 +14,5 @@
 	"width": "5472"
       }
     }
-  ],
-  "links": [
-    {
-      "uri": "imid://organisation/stuffltd",
-      "type": "x-imid/organisation",
-      "title": "stuffltd",
-      "rel": "shared-with",
-      "links": [
-	{
-	  "uri": "imid://organisation/editorial",
-	  "type": "x-imid/unit",
-	  "title": "editorial",
-	  "rel": "shared-with"
-	},
-	{
-	  "uri": "imid://organisation/commercial",
-	  "type": "x-imid/unit",
-	  "title": "commercial",
-	  "rel": "shared-with"
-	}
-      ]
-    },
-    {
-      "uri": "navimg://batch/2920b9cc-1bc6-47f7-b698-9628b113867a",
-      "rel": "batch"
-    },
-    {
-      "uri": "imid://user/sub/efb86d18-5bdb-45b1-aa51-988b01af1442",
-      "type": "x-imid/user",
-      "title": "Hugo Wetterberg",
-      "rel": "creator",
-      "links": [
-	{
-	  "uri": "imid://organisation/stuffltd",
-	  "type": "x-imid/organisation",
-	  "title": "stuffltd",
-	  "rel": "affiliation",
-	  "links": [
-	    {
-	      "uri": "imid://unit/stuff",
-	      "type": "x-imid/unit",
-	      "title": "stuff",
-	      "rel": "affiliation"
-	    }
-	  ]
-	}
-      ]
-    },
-    {
-      "uri": "imid://user/sub/efb86d18-5bdb-45b1-aa51-988b01af1442",
-      "type": "x-imid/user",
-      "title": "Hugo Wetterberg",
-      "rel": "updater",
-      "links": [
-	{
-	  "uri": "imid://organisation/stuffltd",
-	  "type": "x-imid/organisation",
-	  "title": "stuffltd",
-	  "rel": "affiliation",
-	  "links": [
-	    {
-	      "uri": "imid://unit/stuff",
-	      "type": "x-imid/unit",
-	      "title": "stuff",
-	      "rel": "affiliation"
-	    }
-	  ]
-	}
-      ]
-    }
-  ],
-  "properties": [
-    {
-      "name": "filename",
-      "value": "2BZDTjc-npIKRRyt1lRaf39Zink.jpg"
-    }
-  ],
-  "status": "draft",
-  "provider": "NavigaPhotos"
+  ]
 }

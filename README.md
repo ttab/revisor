@@ -1,6 +1,6 @@
 # Revisor
 
-Revisor allows you to define specifications for NavigaDoc contents as a series of declarations and pattern matching extensions to existing declarations.
+Revisor allows you to define specifications for NewsDoc contents as a series of declarations and pattern matching extensions to existing declarations.
 
 ## Local testing
 
@@ -12,33 +12,38 @@ The easiest way to test specifications against documents is by running the "revi
 $ revisor document ./testdata/article-borked.json
 ```
 
-That will validate the document using only the specifications in "./constraints/naviga.json".
+That will validate the document using only the specifications in "./constraints/core.json".
 
-Try running the same validation against a document with customer-specific content:
+Try running the same validation against a document with organisation specific content:
 
 ``` bash
-$ revisor document ./testdata/example-article.json 
-affd4b2e-9709-45a7-a668-3abea1e1eac6 x-im/article ==>
-link 2 resourceType(x-im/resourceType): undeclared block type or rel
-link 3 template(x-im/template): undeclared block type or rel
-link 4 commentingVisible(x-im/commentingVisible): undeclared block type or rel
-link 5 commentingMode(x-im/commentingMode): undeclared block type or rel
-meta block 1 (x-smf-sndp/tag): undeclared block type or rel
-data attribute "selectedTimestamp" of meta block 1 (x-smf-sndp/tag): unknown attribute
-data attribute "title" of meta block 1 (x-smf-sndp/tag): unknown attribute
-data attribute "contentRepoId" of meta block 1 (x-smf-sndp/tag): unknown attribute
-data attribute "resourceSubtype" of meta block 1 (x-smf-sndp/tag): unknown attribute
-property "x-smf/newsSource": undeclared property
-property "x-smf/originalPublishingChannel": undeclared property
-property "x-smf/originalPublishingChannelName": undeclared property
+$ revisor document ./testdata/example-article.json
+meta block 2 (tt/slugline): undeclared block type or rel
+attribute "type" of meta block 2 (tt/slugline): undeclared block attribute
+attribute "value" of meta block 2 (tt/slugline): undeclared block attribute
+content block 2 (tt/visual): undeclared block type or rel
+attribute "type" of content block 2 (tt/visual): undeclared block attribute
+data attribute "caption" of content block 2 (tt/visual): unknown attribute
+link 1 self(tt/picture) of content block 2 (tt/visual): undeclared block type or rel
+attribute "type" of link 1 self(tt/picture) of content block 2 (tt/visual): undeclared block attribute
+attribute "uri" of link 1 self(tt/picture) of content block 2 (tt/visual): undeclared block attribute
+attribute "url" of link 1 self(tt/picture) of content block 2 (tt/visual): undeclared block attribute
+attribute "rel" of link 1 self(tt/picture) of content block 2 (tt/visual): undeclared block attribute
+data attribute "credit" of link 1 self(tt/picture) of content block 2 (tt/visual): unknown attribute
+data attribute "height" of link 1 self(tt/picture) of content block 2 (tt/visual): unknown attribute
+data attribute "hiresScale" of link 1 self(tt/picture) of content block 2 (tt/visual): unknown attribute
+data attribute "width" of link 1 self(tt/picture) of content block 2 (tt/visual): unknown attribute
+content block 3 (tt/dateline): undeclared block type or rel
+attribute "type" of content block 3 (tt/dateline): undeclared block attribute
+data attribute "text" of content block 3 (tt/dateline): unknown attribute
 documents had validation errors
 ```
 
-Use the flag `-spec ./constraints/example.json` to load the specifications from "./constraints/example.json" as well.
+Use the flag `-spec ./constraints/tt.json` to load the organisation specific constraints for TT.
 
 ### Running a revisor server
 
-It's also possible to run revisor as a service with the `serve` command, it takes the same `--spec`/`--naviga-spec` as the `document` command, and adds `--addr` to control the address to listen to.
+It's also possible to run revisor as a service with the `serve` command, it takes the same `--spec`/`--core-spec` as the `document` command, and adds `--addr` to control the address to listen to.
 
 Start the server in one shell:
 
@@ -83,17 +88,18 @@ Here we declare that links with `rel` "broader" are valid for all blocks that ma
 
 ### String constraints
 
-| Name       | Use                                                                                     |
-|:-----------|:----------------------------------------------------------------------------------------|
-| optional   | Set to `true` if the value doesn't have to be present                                   |
-| allowEmpty | Set to `true` if an empty value is ok                                                   |
-| const      | A specific `"value"` that must match                                                    |
-| enum       | A list `["of", "values"]` where one must match                                          |
-| pattern    | A regular expression that the value must match                                          |
-| glob       | A list of glob patterns `["http://**", "https://**"]` where one must match              |
-| template   | A Go template expression that the value must match, not available for pattern matching. |
-| format     | A named format that the value must follow                                               |
-| time       | A time format specification                                                             |
+| Name       | Use                                                                        |
+|:-----------|:---------------------------------------------------------------------------|
+| optional   | Set to `true` if the value doesn't have to be present                      |
+| allowEmpty | Set to `true` if an empty value is ok.                                     |
+| const      | A specific `"value"` that must match                                       |
+| enum       | A list `["of", "values"]` where one must match                             |
+| pattern    | A regular expression that the value must match                             |
+| glob       | A list of glob patterns `["http://**", "https://**"]` where one must match |
+| format     | A named format that the value must follow                                  |
+| time       | A time format specification                                                |
+
+The distinction between optional and allowEmpty is only relevant for data attributes. The document and block attributes defined in the NewsDoc schema always exist, so `optional` and `allowEmpty` will be treated as equivalent. 
 
 #### Formats
 
@@ -104,8 +110,11 @@ The following formats are available:
 * `float`: a floating point number ("12.34")
 * `bool`: a boolean ("true" or "false")
 * `html`: validate the contents as HTML
+* `uuid`: validate the string as a UUID
 
 When using the format "html" it's also possible to use `htmlPolicy` to use a specific HTML policy. See the section on [HTML policies](#markdown-header-html-policies).
+
+The document and block `uuid` attributes are always validated as UUIDs and need no additional "uuid" format specified.
 
 #### Time formats
 
@@ -115,18 +124,6 @@ A Go time parsing layout (see the [time package](https://pkg.go.dev/time#pkg-con
 
 Glob matching uses [https://github.com/gobwas/glob](https://github.com/gobwas/glob) for matching, and the glob patterns are compiled with "/" and "+" as separators.
 
-#### Templates
-
-The template expressions have the following values available:
-
-* **Blocks**: the current block as `this`, and if the block has a parent block that is available as `parent`.
-
-* **Documents**: the current document as `this`.
-
-* **Properties**: the current property as `this`, and the document as `parent`.
-
-Templating cannot be used for pattern matching, just for validation.
-
 ### Writing a document specification
 
 A specification for a document contains:
@@ -135,17 +132,16 @@ A specification for a document contains:
 * a declaration (`declares`) or pattern matching rule (`match`) 
 * attribute constraints (`attributes`)
 * `meta`, `links`, and `content` block specifications
-* `properties` specifications
 
 ``` json
 {
   "name": "Planning item",
   "description": "Planned news coverage",
-  "declares": "x-im/newscoverage",
+  "declares": "core/newscoverage",
   "meta": [
     {
       "name": "Main metadata block",
-      "declares": {"type":"x-im/newscoverage"},
+      "declares": {"type":"core/newscoverage"},
       "count": 1,
       "data": {
         "dateGranularity": {"enum":["date", "datetime"]},
@@ -172,16 +168,7 @@ A specification for a document contains:
         }
       ]
     }
-  ],
-  "properties": {
-    "nrp:sector": {
-      "value": {},
-      "maxCount": 1,
-      "parameters": {
-        "literal": {}
-      }
-    }
-  }
+  ]
 }
 ```
 
@@ -194,19 +181,18 @@ A block specification can contain:
 * attribute constraints (`attributes`)
 * `data` constraints
 * `meta`, `links`, and `content` block specifications
-* `properties` specifications
 * `count`, `minCount` and `maxCount` to control how many times a block can occur in the list of blocks it's in
 * `blocksFrom` directives that borrows the allowed blocks from a declared document type.
 
 ``` json
 {
-  "declares": {"type": "x-im/socialembed"},
+  "declares": {"type": "core/socialembed"},
   "links": [
     {
-      "declares": {"rel":"self", "type":"x-im/tweet"},
+      "declares": {"rel":"self", "type":"core/tweet"},
       "maxCount": 1,
       "attributes": {
-        "uri": {"glob":["im://tweet/*"]},
+        "uri": {"glob":["core://tweet/*"]},
         "url": {"glob":["https://twitter.com/narendramodi/status/*"]}
       }
     },
@@ -224,28 +210,6 @@ A block specification can contain:
     }
   ]
 }
-```
-
-### Writing a property specification
-
-* a documentation attribute `description`
-* a value string constraint
-* `data` string constraints
-* parameter string constraints (`parameters`)
-* `count`, `minCount` and `maxCount` to control how many times a block can occur in the list of blocks it's in
-
-``` json
-        "imext:haspublishedversion": {
-          "description": "Is set to true if the document has been published previously",
-          "value": {"format":"bool"},
-          "count": 1
-        },
-        "infoSource": {
-          "parameters": {
-            "literal": {}
-          },
-          "maxCount": 1
-        }
 ```
 
 ### HTML policies
@@ -327,11 +291,8 @@ A list of available document attributes, and whether they can be used in pattern
 | uri      | The URI that identifies the document           | No    |
 | url      | A web-browsable location for the document      | No    |
 | type     | The type of the document                       | Yes   |
-| subtype  | The document sub-type                          | Yes   |
 | language | The document language                          | No    |
-| status   | Publication status                             | No    |
 | title    | The document title                             | No    |
-| provider | The system or entity that provided the content | Yes   |
 
 #### Block attributes
 
@@ -381,7 +342,7 @@ $ go test -bench . -benchmem -count 5 -cpu 1 | tee old.txt
 Then run the benchmarks on the new code:
 
 ``` bash
-$ go test -bench . -benchmem -count 5 -cpu 1 | tee old.txt
+$ go test -bench . -benchmem -count 5 -cpu 1 | tee new.txt
 ```
 
 Finally, run benchstat to get a summary of the change:
@@ -400,4 +361,4 @@ ValidateDocument     1.05k ± 0%     0.59k ± 0%  -43.48%  (p=0.008 n=5+5)
 
 ### Fuzz tests
 
-There are two fuzz targets in the project: `FuzzValidationWide` that allows fuzzing of the document and two constraint sets. It will load the naviga constraints, the example organisation constraints, and all documents in "./testdata/" and add them as fuzzing seeds. `FuzzValidationConstraints` adds all constraint sets from the "./constraints/" and adds them as fuzzing seeds. The fuzzing operation is then done against all documents in "./testdata/".
+There are two fuzz targets in the project: `FuzzValidationWide` that allows fuzzing of the document and two constraint sets. It will load the core constraints, the example organisation constraints, and all documents in "./testdata/" and add them as fuzzing seeds. `FuzzValidationConstraints` adds all constraint sets from the "./constraints/" and adds them as fuzzing seeds. The fuzzing operation is then done against all documents in "./testdata/".

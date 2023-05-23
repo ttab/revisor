@@ -5,14 +5,13 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/navigacontentlab/navigadoc/doc"
+	"github.com/ttab/newsdoc"
 )
 
 type Validator struct {
 	constraints []ConstraintSet
 
 	documents            []*DocumentConstraint
-	properties           []PropertyConstraintMap
 	blockConstraints     []BlockConstraintSet
 	attributeConstraints []ConstraintMap
 	htmlPolicies         map[string]*HTMLPolicy
@@ -37,7 +36,6 @@ func NewValidator(
 				constraint.Name, err)
 		}
 
-		v.properties = append(v.properties, constraint.Properties)
 		v.blockConstraints = append(v.blockConstraints, constraint)
 		v.attributeConstraints = append(v.attributeConstraints, constraint.Attributes)
 
@@ -103,10 +101,8 @@ type RefType string
 
 const (
 	RefTypeBlock     RefType = "block"
-	RefTypeProperty  RefType = "property"
 	RefTypeAttribute RefType = "attribute"
 	RefTypeData      RefType = "data attribute"
-	RefTypeParameter RefType = "parameter"
 )
 
 func (rt RefType) String() string {
@@ -120,6 +116,28 @@ type EntityRef struct {
 	Name      string    `json:"name,omitempty"`
 	Type      string    `json:"type,omitempty"`
 	Rel       string    `json:"rel,omitempty"`
+}
+
+type ValueAnnotation struct {
+	Ref        []EntityRef      `json:"ref"`
+	Constraint StringConstraint `json:"constraint"`
+	Value      string           `json:"value"`
+}
+
+type ValueCollector interface {
+	CollectValue(a ValueAnnotation)
+	With(ref EntityRef) ValueCollector
+}
+
+type ValueDiscarder struct{}
+
+// CollectValue implements ValueCollector.
+func (ValueDiscarder) CollectValue(_ ValueAnnotation) {
+}
+
+// With implements ValueCollector.
+func (ValueDiscarder) With(_ EntityRef) ValueCollector {
+	return ValueDiscarder{}
 }
 
 func (er EntityRef) String() string {
@@ -163,17 +181,46 @@ func (v *Validator) validateHTML(policyName string, value string) error {
 	return policy.Check(value)
 }
 
-func (v *Validator) ValidateDocument(document *doc.Document) []ValidationResult {
+type ValidationOptionFunc func(vc *ValidationContext)
+
+func WithValueCollector(
+	collector ValueCollector,
+) ValidationOptionFunc {
+	return func(vc *ValidationContext) {
+		vc.coll = collector
+	}
+}
+
+func (v *Validator) ValidateDocument(
+	document *newsdoc.Document, opts ...ValidationOptionFunc,
+) []ValidationResult {
 	var res []ValidationResult
 
-	propertyConstraints := append([]PropertyConstraintMap{}, v.properties...)
 	blockConstraints := append([]BlockConstraintSet{}, v.blockConstraints...)
 	attributeConstraints := append([]ConstraintMap{}, v.attributeConstraints...)
 
 	var declared bool
 
 	vCtx := ValidationContext{
+		coll:         ValueDiscarder{},
 		ValidateHTML: v.validateHTML,
+	}
+
+	for i := range opts {
+		opts[i](&vCtx)
+	}
+
+	_, err := uuid.Parse(document.UUID)
+	if err != nil {
+		res = append(res, ValidationResult{
+			Entity: []EntityRef{
+				{
+					RefType: RefTypeAttribute,
+					Name:    "uuid",
+				},
+			},
+			Error: fmt.Sprintf("not a valid UUID: %v", err),
+		})
 	}
 
 	for i := range v.documents {
@@ -189,7 +236,6 @@ func (v *Validator) ValidateDocument(document *doc.Document) []ValidationResult 
 		res = v.documents[i].checkAttributes(document, res, &vCtx)
 
 		blockConstraints = append(blockConstraints, v.documents[i])
-		propertyConstraints = append(propertyConstraints, v.documents[i].Properties)
 		attributeConstraints = append(attributeConstraints, v.documents[i].Attributes)
 	}
 
@@ -200,11 +246,9 @@ func (v *Validator) ValidateDocument(document *doc.Document) []ValidationResult 
 	}
 
 	res = v.validateBlocks(
-		NewDocumentBlocks(document), nil,
-		blockConstraints, res,
+		NewDocumentBlocks(document),
+		blockConstraints, res, vCtx.coll,
 	)
-
-	res = validateDocumentProperties(document, propertyConstraints, res, &vCtx)
 
 	res = validateDocumentAttributes(attributeConstraints, document, res, vCtx)
 
@@ -212,27 +256,30 @@ func (v *Validator) ValidateDocument(document *doc.Document) []ValidationResult 
 }
 
 func validateDocumentAttributes(
-	constraints []ConstraintMap, d *doc.Document,
+	constraints []ConstraintMap, d *newsdoc.Document,
 	res []ValidationResult, vCtx ValidationContext,
 ) []ValidationResult {
-	vCtx.TemplateData = TemplateValues{
-		"this": DocumentTemplateValue(d),
-	}
-
 	for i := range constraints {
 		for k, check := range constraints[i] {
 			value, ok := documentAttribute(d, k)
 
+			ref := EntityRef{
+				RefType: RefTypeAttribute,
+				Name:    k,
+			}
+
 			err := check.Validate(value, ok, &vCtx)
 			if err != nil {
 				res = append(res, ValidationResult{
-					Entity: []EntityRef{{
-						RefType: RefTypeAttribute,
-						Name:    k,
-					}},
-					Error: err.Error(),
+					Entity: []EntityRef{ref},
+					Error:  err.Error(),
 				})
 			}
+
+			vCtx.coll.CollectValue(ValueAnnotation{
+				Ref:   []EntityRef{ref},
+				Value: value,
+			})
 		}
 	}
 
@@ -240,14 +287,13 @@ func validateDocumentAttributes(
 }
 
 func (v *Validator) validateBlocks(
-	blocks BlockSource, parent *doc.Block,
+	blocks BlockSource,
 	constraints []BlockConstraintSet, res []ValidationResult,
+	coll ValueCollector,
 ) []ValidationResult {
 	vCtx := ValidationContext{
+		coll:         coll,
 		ValidateHTML: v.validateHTML,
-		TemplateData: TemplateValues{
-			"parent": BlockTemplateValue(parent),
-		},
 	}
 
 	for i := range blockKinds {
@@ -262,24 +308,31 @@ func (v *Validator) validateBlocks(
 }
 
 func (v *Validator) validateBlockSlice(
-	blocks []doc.Block, vCtx ValidationContext,
+	blocks []newsdoc.Block, vCtx ValidationContext,
 	constraints []BlockConstraintSet, kind BlockKind,
 	res []ValidationResult,
 ) []ValidationResult {
 	matches := make(map[*BlockConstraint]int)
 
 	for i := range blocks {
-		vCtx.TemplateData["this"] = BlockTemplateValue(&blocks[i])
+		entity := EntityRef{
+			RefType:   RefTypeBlock,
+			Index:     i,
+			BlockKind: kind,
+			Type:      blocks[i].Type,
+			Rel:       blocks[i].Rel,
+		}
 
-		r := v.validateBlock(&blocks[i], vCtx, constraints, kind, matches, nil)
+		childCtx := vCtx
+
+		childCtx.coll = vCtx.coll.With(entity)
+
+		r := v.validateBlock(
+			&blocks[i], childCtx, constraints, kind, matches, nil,
+		)
+
 		for j := range r {
-			r[j].Entity = append(r[j].Entity, EntityRef{
-				RefType:   RefTypeBlock,
-				Index:     i,
-				BlockKind: kind,
-				Type:      blocks[i].Type,
-				Rel:       blocks[i].Rel,
-			})
+			r[j].Entity = append(r[j].Entity, entity)
 		}
 
 		res = append(res, r...)
@@ -328,7 +381,7 @@ func nilOrGTE(t *int, n int) bool {
 }
 
 func (v *Validator) validateBlock(
-	b *doc.Block, vCtx ValidationContext,
+	b *newsdoc.Block, vCtx ValidationContext,
 	constraintSets []BlockConstraintSet, kind BlockKind,
 	matches map[*BlockConstraint]int, res []ValidationResult,
 ) []ValidationResult {
@@ -338,6 +391,21 @@ func (v *Validator) validateBlock(
 		matchedDataConstraints      []ConstraintMap
 		matchedAttributeConstraints []ConstraintMap
 	)
+
+	if b.UUID != "" {
+		_, err := uuid.Parse(b.UUID)
+		if err != nil {
+			res = append(res, ValidationResult{
+				Entity: []EntityRef{
+					{
+						RefType: RefTypeAttribute,
+						Name:    "uuid",
+					},
+				},
+				Error: fmt.Sprintf("not a valid UUID: %v", err),
+			})
+		}
+	}
 
 	declaredAttributes := make(map[blockAttributeKey]bool)
 
@@ -384,14 +452,29 @@ func (v *Validator) validateBlock(
 		})
 	}
 
+	for k := range declaredAttributes {
+		value, _ := blockMatchAttribute(b, string(k))
+
+		vCtx.coll.CollectValue(ValueAnnotation{
+			Ref: []EntityRef{{
+				RefType: RefTypeAttribute,
+				Name:    string(k),
+			}},
+			Constraint: StringConstraint{
+				Const: &value,
+			},
+			Value: value,
+		})
+	}
+
 	res = validateBlockAttributes(
 		declaredAttributes,
 		matchedAttributeConstraints, b, vCtx, res)
 	res = validateBlockData(b.Data, vCtx, matchedDataConstraints, res)
 
 	res = v.validateBlocks(
-		NewNestedBlocks(b), b,
-		matchedConstraints, res,
+		NewNestedBlocks(b),
+		matchedConstraints, res, vCtx.coll,
 	)
 
 	return res
@@ -416,7 +499,7 @@ func (v *Validator) borrowedBlockConstraints(
 		}
 
 		if borrow.DocType != "" {
-			dummyArt := doc.Document{
+			dummyArt := newsdoc.Document{
 				Type: borrow.DocType,
 			}
 
@@ -441,7 +524,7 @@ func (v *Validator) borrowedBlockConstraints(
 
 func validateBlockAttributes(
 	declaredAttributes map[blockAttributeKey]bool,
-	constraints []ConstraintMap, b *doc.Block, vCtx ValidationContext,
+	constraints []ConstraintMap, b *newsdoc.Block, vCtx ValidationContext,
 	res []ValidationResult,
 ) []ValidationResult {
 	if b.UUID != "" {
@@ -461,16 +544,24 @@ func validateBlockAttributes(
 		for k, check := range constraints[i] {
 			value, ok := blockAttribute(b, k)
 
+			ref := EntityRef{
+				RefType: RefTypeAttribute,
+				Name:    k,
+			}
+
 			err := check.Validate(value, ok, &vCtx)
 			if err != nil {
 				res = append(res, ValidationResult{
-					Entity: []EntityRef{{
-						RefType: RefTypeAttribute,
-						Name:    k,
-					}},
-					Error: err.Error(),
+					Entity: []EntityRef{ref},
+					Error:  err.Error(),
 				})
 			}
+
+			vCtx.coll.CollectValue(ValueAnnotation{
+				Ref:        []EntityRef{ref},
+				Constraint: check,
+				Value:      value,
+			})
 
 			declaredAttributes[blockAttributeKey(k)] = true
 		}
@@ -517,13 +608,15 @@ func validateBlockData(
 
 			known[k] = known[k] || ok
 
+			ref := EntityRef{
+				RefType: RefTypeData,
+				Name:    k,
+			}
+
 			if !ok && !check.Optional {
 				res = append(res, ValidationResult{
-					Entity: []EntityRef{{
-						RefType: RefTypeData,
-						Name:    k,
-					}},
-					Error: "missing required attribute",
+					Entity: []EntityRef{ref},
+					Error:  "missing required attribute",
 				})
 			}
 
@@ -534,13 +627,16 @@ func validateBlockData(
 			err := check.Validate(v, true, &vCtx)
 			if err != nil {
 				res = append(res, ValidationResult{
-					Entity: []EntityRef{{
-						RefType: RefTypeData,
-						Name:    k,
-					}},
-					Error: err.Error(),
+					Entity: []EntityRef{ref},
+					Error:  err.Error(),
 				})
 			}
+
+			vCtx.coll.CollectValue(ValueAnnotation{
+				Ref:        []EntityRef{ref},
+				Constraint: check,
+				Value:      v,
+			})
 		}
 	}
 
@@ -567,16 +663,15 @@ type BlockConstraintSet interface {
 }
 
 type ConstraintSet struct {
-	Version      int                   `json:"version,omitempty"`
-	Schema       string                `json:"$schema,omitempty"`
-	Name         string                `json:"name"`
-	Documents    []DocumentConstraint  `json:"documents,omitempty"`
-	Links        []*BlockConstraint    `json:"links,omitempty"`
-	Meta         []*BlockConstraint    `json:"meta,omitempty"`
-	Content      []*BlockConstraint    `json:"content,omitempty"`
-	Properties   PropertyConstraintMap `json:"properties,omitempty"`
-	Attributes   ConstraintMap         `json:"attributes,omitempty"`
-	HTMLPolicies []HTMLPolicy          `json:"htmlPolicies,omitempty"`
+	Version      int                  `json:"version,omitempty"`
+	Schema       string               `json:"$schema,omitempty"`
+	Name         string               `json:"name"`
+	Documents    []DocumentConstraint `json:"documents,omitempty"`
+	Links        []*BlockConstraint   `json:"links,omitempty"`
+	Meta         []*BlockConstraint   `json:"meta,omitempty"`
+	Content      []*BlockConstraint   `json:"content,omitempty"`
+	Attributes   ConstraintMap        `json:"attributes,omitempty"`
+	HTMLPolicies []HTMLPolicy         `json:"htmlPolicies,omitempty"`
 }
 
 func (cs ConstraintSet) Validate() error {

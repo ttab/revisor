@@ -4,25 +4,30 @@ import (
 	"bytes"
 	_ "embed"
 	"encoding/json"
-	"log"
+	"fmt"
 
-	"github.com/navigacontentlab/revisor"
+	"github.com/ttab/revisor"
 )
 
-//go:embed naviga.json
-var defaultSpec []byte
+//go:embed core.json
+var coreSchema []byte
 
-func Naviga() revisor.ConstraintSet {
-	var spec revisor.ConstraintSet
+func CoreSchemaVersion() string {
+	return "v1.0.0"
+}
 
-	dec := json.NewDecoder(bytes.NewReader(defaultSpec))
+func CoreSchema() (revisor.ConstraintSet, error) {
+	dec := json.NewDecoder(bytes.NewReader(coreSchema))
 
 	dec.DisallowUnknownFields()
 
+	var spec revisor.ConstraintSet
+
 	err := dec.Decode(&spec)
 	if err != nil {
-		log.Fatalf("failed to unmarshal Naviga constraints: %v", err)
+		return revisor.ConstraintSet{}, fmt.Errorf(
+			"failed to unmarshal core constraints: %w", err)
 	}
 
-	return spec
+	return spec, nil
 }

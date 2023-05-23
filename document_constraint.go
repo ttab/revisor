@@ -1,9 +1,10 @@
 package revisor
 
 import (
+	"encoding/json"
 	"fmt"
 
-	"github.com/navigacontentlab/navigadoc/doc"
+	"github.com/ttab/newsdoc"
 )
 
 // DocumentConstraint describes a set of constraints for a document. Either by
@@ -15,12 +16,36 @@ type DocumentConstraint struct {
 	// Declares is used to declare a document type.
 	Declares string `json:"declares,omitempty"`
 	// Match is used to extend other document declarations.
-	Match      ConstraintMap         `json:"match,omitempty"`
-	Links      []*BlockConstraint    `json:"links,omitempty"`
-	Meta       []*BlockConstraint    `json:"meta,omitempty"`
-	Content    []*BlockConstraint    `json:"content,omitempty"`
-	Properties PropertyConstraintMap `json:"properties,omitempty"`
-	Attributes ConstraintMap         `json:"attributes,omitempty"`
+	Match      ConstraintMap      `json:"match,omitempty"`
+	Links      []*BlockConstraint `json:"links,omitempty"`
+	Meta       []*BlockConstraint `json:"meta,omitempty"`
+	Content    []*BlockConstraint `json:"content,omitempty"`
+	Attributes ConstraintMap      `json:"attributes,omitempty"`
+}
+
+type unmarshalDC DocumentConstraint
+
+func (dc *DocumentConstraint) UnmarshalJSON(data []byte) error {
+	var udc unmarshalDC
+
+	// Unmarshal into unmarshalBC and check for attributes with optional set
+	// to true.
+	err := json.Unmarshal(data, &udc)
+	if err != nil {
+		return fmt.Errorf("unmarshal JSON: %w", err)
+	}
+
+	if udc.Attributes != nil {
+		for k, a := range udc.Attributes {
+			a.AllowEmpty = a.AllowEmpty || a.Optional
+
+			udc.Attributes[k] = a
+		}
+	}
+
+	*dc = DocumentConstraint(udc)
+
+	return nil
 }
 
 // BlockConstraints implements the BlockConstraintsSet interface.
@@ -39,7 +64,7 @@ func (dc DocumentConstraint) BlockConstraints(kind BlockKind) []*BlockConstraint
 
 // Matches checks if the given document matches the constraint.
 func (dc DocumentConstraint) Matches(
-	d *doc.Document, vCtx *ValidationContext,
+	d *newsdoc.Document, vCtx *ValidationContext,
 ) Match {
 	if dc.Declares != "" {
 		if d.Type == dc.Declares {
@@ -59,18 +84,22 @@ func (dc DocumentConstraint) Matches(
 		if err != nil {
 			return NoMatch
 		}
+
+		vCtx.coll.CollectValue(ValueAnnotation{
+			Ref: []EntityRef{{
+				RefType: RefTypeAttribute,
+				Name:    k,
+			}},
+			Value: value,
+		})
 	}
 
 	return Matches
 }
 
 func (dc DocumentConstraint) checkAttributes(
-	d *doc.Document, res []ValidationResult, vCtx *ValidationContext,
+	d *newsdoc.Document, res []ValidationResult, vCtx *ValidationContext,
 ) []ValidationResult {
-	vCtx.TemplateData = TemplateValues{
-		"this": DocumentTemplateValue(d),
-	}
-
 	for k, check := range dc.Attributes {
 		value, ok := documentAttribute(d, k)
 		if !ok {
@@ -89,54 +118,14 @@ func (dc DocumentConstraint) checkAttributes(
 
 			continue
 		}
-	}
 
-	return res
-}
-
-func validateDocumentProperties(
-	d *doc.Document, constraints []PropertyConstraintMap,
-	res []ValidationResult, vCtx *ValidationContext,
-) []ValidationResult {
-	counts := make(map[string]int)
-
-	vCtx.TemplateData = TemplateValues{
-		"parent": DocumentTemplateValue(d),
-	}
-
-	for i := range d.Properties {
-		var matched bool
-
-		vCtx.TemplateData["this"] = PropertyTemplateValue(&d.Properties[i])
-
-		res, matched = checkProperty(
-			d.Properties[i], constraints, vCtx, res,
-		)
-
-		if matched {
-			counts[d.Properties[i].Name]++
-		}
-	}
-
-	for i := range constraints {
-		for name, constraint := range constraints[i] {
-			count := counts[name]
-
-			valid := nilOrEqual(constraint.Count, count) &&
-				nilOrGTE(constraint.MinCount, count) &&
-				nilOrLTE(constraint.MaxCount, count)
-			if !valid {
-				res = append(res, ValidationResult{
-					Entity: []EntityRef{
-						{
-							RefType: RefTypeProperty,
-							Name:    name,
-						},
-					},
-					Error: constraint.DescribeCountConstraint(name),
-				})
-			}
-		}
+		vCtx.coll.CollectValue(ValueAnnotation{
+			Ref: []EntityRef{{
+				RefType: RefTypeAttribute,
+				Name:    k,
+			}},
+			Value: value,
+		})
 	}
 
 	return res
@@ -147,37 +136,21 @@ type documentAttributeKey string
 const (
 	docAttrType     documentAttributeKey = "type"
 	docAttrLanguage documentAttributeKey = "language"
-	docAttrStatus   documentAttributeKey = "status"
 	docAttrTitle    documentAttributeKey = "title"
-	docAttrProvider documentAttributeKey = "provider"
-	docAttrSubtype  documentAttributeKey = "subtype"
 	docAttrUUID     documentAttributeKey = "uuid"
 	docAttrURI      documentAttributeKey = "uri"
 	docAttrURL      documentAttributeKey = "url"
-	docAttrPath     documentAttributeKey = "path"
 )
 
-func documentMatchAttribute(d *doc.Document, name string) (string, bool) {
-	//nolint:exhaustive
-	switch documentAttributeKey(name) {
-	case docAttrType:
+func documentMatchAttribute(d *newsdoc.Document, name string) (string, bool) {
+	if documentAttributeKey(name) == docAttrType {
 		return d.Type, true
-	case docAttrSubtype:
-		for i := range d.Properties {
-			if d.Properties[i].Name == "subtype" {
-				return d.Properties[i].Value, true
-			}
-		}
-
-		return "", false
-	case docAttrProvider:
-		return d.Provider, true
 	}
 
 	return "", false
 }
 
-func documentAttribute(d *doc.Document, name string) (string, bool) {
+func documentAttribute(d *newsdoc.Document, name string) (string, bool) {
 	switch documentAttributeKey(name) {
 	case docAttrUUID:
 		return d.UUID, true
@@ -189,22 +162,8 @@ func documentAttribute(d *doc.Document, name string) (string, bool) {
 		return d.URL, true
 	case docAttrTitle:
 		return d.Title, true
-	case docAttrPath:
-		return d.Path, true
 	case docAttrLanguage:
 		return d.Language, true
-	case docAttrStatus:
-		return d.Status, true
-	case docAttrProvider:
-		return d.Provider, true
-	case docAttrSubtype:
-		for i := range d.Properties {
-			if d.Properties[i].Name == "subtype" {
-				return d.Properties[i].Value, true
-			}
-		}
-
-		return "", false
 	}
 
 	return "", false

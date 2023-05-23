@@ -8,8 +8,8 @@
       {
         "refType": "block",
         "kind": "link",
-        "index": 3,
-        "type": "x-im/articlesource",
+        "index": 1,
+        "type": "core/articlesource",
         "rel": "articlesource"
       }
     ],
@@ -24,8 +24,8 @@
       {
         "refType": "block",
         "kind": "link",
-        "index": 3,
-        "type": "x-im/articlesource",
+        "index": 1,
+        "type": "core/articlesource",
         "rel": "articlesource"
       }
     ],
@@ -35,23 +35,16 @@
     "entity": [
       {
         "refType": "attribute",
-        "name": "type"
+        "name": "title"
       },
       {
         "refType": "block",
-        "kind": "link",
-        "type": "x-imid/something",
-        "rel": "affiliation"
-      },
-      {
-        "refType": "block",
-        "kind": "link",
-        "index": 2,
-        "type": "x-imid/user",
-        "rel": "updater"
+        "kind": "meta",
+        "index": 1,
+        "type": "core/teaser"
       }
     ],
-    "error": "must be \"x-imid/organisation\""
+    "error": "cannot be empty"
   },
   {
     "entity": [
@@ -62,8 +55,8 @@
       {
         "refType": "block",
         "kind": "link",
-        "index": 3,
-        "type": "x-im/articlesource",
+        "index": 1,
+        "type": "core/articlesource",
         "rel": "articlesource"
       }
     ],
@@ -78,8 +71,8 @@
       {
         "refType": "block",
         "kind": "link",
-        "index": 3,
-        "type": "x-im/articlesource",
+        "index": 1,
+        "type": "core/articlesource",
         "rel": "articlesource"
       }
     ],
@@ -95,7 +88,7 @@
         "refType": "block",
         "kind": "content",
         "index": 3,
-        "type": "x-im/image"
+        "type": "core/image"
       }
     ],
     "error": "invalid UUID length: 8"
@@ -103,13 +96,43 @@
   {
     "entity": [
       {
+        "refType": "attribute",
+        "name": "uuid"
+      },
+      {
         "refType": "block",
         "kind": "content",
         "index": 3,
-        "type": "x-im/image"
+        "type": "core/image"
       }
     ],
-    "error": "there must be 1 link where rel is \"self\""
+    "error": "not a valid UUID: invalid UUID length: 8"
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "uuid"
+      },
+      {
+        "refType": "block",
+        "kind": "link",
+        "type": "core/section",
+        "rel": "subject"
+      }
+    ],
+    "error": "cannot be empty"
+  },
+  {
+    "entity": [
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 3,
+        "type": "core/image"
+      }
+    ],
+    "error": "there must be 1 link where type is \"core/image\" and rel is \"self\""
   },
   {
     "entity": [
@@ -120,24 +143,10 @@
       {
         "refType": "block",
         "kind": "meta",
-        "type": "x-im/newsvalue"
+        "type": "core/newsvalue"
       }
     ],
     "error": "invalid integer value"
-  },
-  {
-    "entity": [
-      {
-        "refType": "data attribute",
-        "name": "format"
-      },
-      {
-        "refType": "block",
-        "kind": "meta",
-        "type": "x-im/newsvalue"
-      }
-    ],
-    "error": "must be \"lifetimecode\""
   },
   {
     "entity": [
@@ -148,7 +157,7 @@
       {
         "refType": "block",
         "kind": "content",
-        "type": "x-im/header"
+        "type": "core/heading-1"
       }
     ],
     "error": "unclosed tag <em>"
@@ -163,7 +172,7 @@
         "refType": "block",
         "kind": "content",
         "index": 1,
-        "type": "x-im/paragraph"
+        "type": "core/paragraph"
       }
     ],
     "error": "invalid html after line 1 char 0: invalid html entity: entity too long or unterminated"
@@ -178,7 +187,7 @@
         "refType": "block",
         "kind": "content",
         "index": 2,
-        "type": "x-im/paragraph"
+        "type": "core/paragraph"
       }
     ],
     "error": "invalid html after line 1 char 0: invalid html entity: unknown character entity &orci;"
@@ -186,40 +195,28 @@
   {
     "entity": [
       {
-        "refType": "block",
-        "kind": "link",
-        "type": "x-imid/organisation",
-        "rel": "affiliation"
+        "refType": "data attribute",
+        "name": "text"
       },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "index": 1,
+        "type": "core/teaser"
+      }
+    ],
+    "error": "missing required attribute"
+  },
+  {
+    "entity": [
       {
         "refType": "block",
         "kind": "link",
         "index": 1,
-        "type": "x-imid/user",
-        "rel": "creator"
-      }
-    ],
-    "error": "there must be 1 link where rel is \"affiliation\""
-  },
-  {
-    "entity": [
-      {
-        "refType": "block",
-        "kind": "link",
-        "index": 3,
-        "type": "x-im/articlesource",
+        "type": "core/articlesource",
         "rel": "articlesource"
       }
     ],
     "error": "undeclared block type or rel"
-  },
-  {
-    "entity": [
-      {
-        "refType": "property",
-        "name": "imext:haspublishedversion"
-      }
-    ],
-    "error": "there must be 1 \"imext:haspublishedversion\" property"
   }
 ]

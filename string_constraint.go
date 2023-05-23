@@ -66,7 +66,6 @@ type StringConstraint struct {
 	Enum        []string     `json:"enum,omitempty"`
 	Pattern     *Regexp      `json:"pattern,omitempty"`
 	Glob        GlobList     `json:"glob,omitempty"`
-	Template    *Template    `json:"template,omitempty"`
 	Format      StringFormat `json:"format,omitempty"`
 	Time        string       `json:"time,omitempty"`
 	HTMLPolicy  string       `json:"htmlPolicy,omitempty"`
@@ -97,12 +96,6 @@ func (sc *StringConstraint) Requirement() string {
 		))
 	}
 
-	if sc.Template != nil {
-		reqs = append(reqs, fmt.Sprintf("matches the templated value: %s",
-			sc.Template.String()),
-		)
-	}
-
 	if sc.Time != "" {
 		reqs = append(reqs, fmt.Sprintf("is a timestamp in the format: %s",
 			sc.Time),
@@ -117,7 +110,8 @@ func (sc *StringConstraint) Requirement() string {
 }
 
 type ValidationContext struct {
-	TemplateData TemplateValues
+	coll ValueCollector
+
 	ValidateHTML func(policyName, value string) error
 }
 
@@ -205,19 +199,8 @@ func (sc *StringConstraint) Validate(
 		return fmt.Errorf("unknown string format %q", sc.Format)
 	}
 
-	if sc.Template != nil {
-		if vCtx == nil || vCtx.TemplateData == nil {
-			return errors.New("templating is not available in this context")
-		}
-
-		match, err := sc.Template.Render(vCtx.TemplateData)
-		if err != nil {
-			return fmt.Errorf("failed to render template: %w", err)
-		}
-
-		if value != match {
-			return fmt.Errorf("must match templated value %q", match)
-		}
+	if !sc.AllowEmpty && value == "" {
+		return fmt.Errorf("cannot be empty")
 	}
 
 	return nil

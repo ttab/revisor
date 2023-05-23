@@ -1,110 +1,58 @@
 {
   "uuid": "063302c4-41f2-4fe7-9b99-2ec5537f1d9a",
-  "type": "x-im/article",
+  "type": "core/article",
   "uri": "im://article/063302c4-41f2-4fe7-9b99-2ec5537f1d9a",
   "title": "Phasellus purus.",
-  "created": "2022-04-20T15:22:06.665504992Z",
-  "modified": "2022-04-20T15:22:06.665504992Z",
   "content": [
     {
-      "type": "x-im/header",
+      "type": "core/heading-1",
       "data": {
-        "format": "html",
         "text": "Curabitur <em>vulputate vestibulum lorem."
       }
     },
     {
-      "type": "x-im/paragraph",
+      "type": "core/paragraph",
       "data": {
-        "format": "html",
         "text": "Praesent & augue."
       }
     },
     {
-      "type": "x-im/paragraph",
+      "type": "core/paragraph",
       "data": {
-        "format": "html",
         "text": "In id erat non &orci; commodo lobortis."
       }
     },
     {
       "uuid": "83c42696",
-      "type": "x-im/image"
+      "type": "core/image"
     }
   ],
   "meta": [
     {
       "id": "RYaudnAJj8gQ",
-      "type": "x-im/newsvalue",
+      "type": "core/newsvalue",
       "data": {
-        "description": "7D",
         "duration": "604800s",
-        "end": "",
-        "format": "lifetimecoded",
-        "score": "3",
-        "text": "PT6H"
+        "score": "3"
       }
     },
     {
       "id": "MjQ5LDkxLDI0Niw5Mw",
-      "type": "x-im/teaser"
+      "type": "core/teaser"
     }
   ],
   "links": [
     {
-      "type": "x-im/section",
+      "type": "core/section",
       "title": "no topic",
       "rel": "subject"
     },
     {
-      "uri": "imid://user/sub/c8a41462-e59b-46da-91b0-bd5ca4e865da",
-      "type": "x-imid/user",
-      "title": "Naviga org example, clientId c8a41462-e59b-46da-91b0-bd5ca4e865da",
-      "rel": "creator",
-      "links": [
-        {
-          "uri": "imid://organisation/example",
-          "type": "x-imid/organisation",
-          "title": "example",
-          "rel": "affiliation"
-        }
-      ]
-    },
-    {
-      "uri": "imid://user/sub/c8a41462-e59b-46da-91b0-bd5ca4e865da",
-      "type": "x-imid/user",
-      "title": "Naviga org example, clientId c8a41462-e59b-46da-91b0-bd5ca4e865da",
-      "rel": "updater",
-      "links": [
-        {
-          "uri": "imid://organisation/example",
-          "type": "x-imid/something",
-          "title": "example",
-          "rel": "affiliation",
-          "links": [
-            {
-              "uri": "imid://unit/example",
-              "type": "x-imid/unit",
-              "title": "example",
-              "rel": "affiliation"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "uri": "im://articlesource/N/A",
-      "type": "x-im/articlesource",
+      "type": "core/articlesource",
       "title": "N/A",
       "rel": "articlesource"
     }
   ],
-  "properties": [
-    {
-      "name": "infoSource"
-    }
-  ],
-  "language": "en-GB",
-  "status": "draft",
-  "provider": "InfomakerConfig"
+  "language": "en-GB"
 }

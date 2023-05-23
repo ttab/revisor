@@ -1,0 +1,225 @@
+{
+  "uuid": "98cedf81-ce8d-4dc4-bcbc-6091a756cc5c",
+  "type": "core/article",
+  "uri": "core://article/98cedf81-ce8d-4dc4-bcbc-6091a756cc5c",
+  "title": "champ-inter",
+  "content": [
+    {
+      "id": "NzUsMjQ2LDIwOCwxNTE",
+      "type": "core/heading-1",
+      "data": {
+        "text": "Pånyttfödd stjärna vill skjuta Inter till final"
+      }
+    },
+    {
+      "id": "MTQ1LDE5OSwyMzMsMjE3",
+      "type": "tt/visual",
+      "data": {
+        "caption": "Inters Romelu Lukaku firar ett av sina två mål i helgens ligamatch (4–2) mot Sassuolo."
+      },
+      "links": [
+        {
+          "uri": "http://tt.se/media/image/sdlAh_UuIyXsC0",
+          "url": "https://tt.se/media/image/sdlAh_UuIyXsC0_NormalPreview.jpg",
+          "type": "tt/picture",
+          "data": {
+            "credit": "Spada/AP/TT",
+            "height": "683",
+            "hiresScale": "2.9052734375",
+            "width": "1024"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "pagedateline-5b8149a71b05cef3c73af71ca95c555d",
+      "type": "tt/dateline",
+      "data": {
+        "text": "Fotboll"
+      }
+    },
+    {
+      "id": "preamble-a516335827925ef7573589968e87e6ed",
+      "type": "core/preamble",
+      "data": {
+        "text": "Skador och ett VM-fiasko såg länge ut att prägla Romelu Lukakus säsong."
+      }
+    },
+    {
+      "id": "preamble-606c08bdfc665b45ae1a771ec3c94164",
+      "type": "core/preamble",
+      "data": {
+        "text": "Men den belgiske anfallsstjärnan har återuppstått."
+      }
+    },
+    {
+      "id": "preamble-a3775318ca3d05815028f9fcdc432c41",
+      "type": "core/preamble",
+      "data": {
+        "text": "Nu vill han skjuta sitt Inter till Champions League-final."
+      }
+    },
+    {
+      "id": "MjEwLDQyLDI3LDgy",
+      "type": "core/paragraph",
+      "data": {
+        "text": "Det var nog inte många som trodde på en framgångsrik Champions League-säsong för Inter, eller ens avancemang till slutspel, efter den första matchen i september. 0–2 hemma mot Bayern München var precis den start man inte önskade i grupp C, som också innehöll ett stjärnspäckat Barcelona."
+      }
+    },
+    {
+      "id": "paragraph-8ef6f6da60fdbd34b98b79662a1c5da5",
+      "type": "core/paragraph",
+      "data": {
+        "text": "Men tränaren Simone Inzaghi lät sig inte nedslås. Åtta månader senare står Inter med ena benet i finalen efter att ha fått med sig 2–0 från den första semifinalen i bäst av två mot lokalrivalen Milan."
+      }
+    },
+    {
+      "id": "paragraph-0de3351ca8d65ad7e630af90b9f74d39",
+      "type": "core/paragraph",
+      "data": {
+        "text": "– Många gånger har det varit Simone som gett oss tron på att inte ge upp, men vi har alla jobbat tillsammans. Som efter förlusten mot Bayern, när alla andra hade räknat bort oss. Då sade Simone &quot;okej, vi kan fixa det mot Barcelona, låt oss göra ett försök&quot;. Och efter det började resan, säger Inters assisterande tränare Massimiliano Farris till AP."
+      }
+    },
+    {
+      "id": "NTcsMTkwLDE1OCwxMTA",
+      "type": "core/heading-2",
+      "data": {
+        "text": "Lukaku i målform"
+      }
+    },
+    {
+      "id": "paragraph-05add01557d5b0c4d5cb814676aea424",
+      "type": "core/paragraph",
+      "data": {
+        "text": "En 1–0-seger hemma mot Barcelona och 3–3 på bortaplan mot samma lag lade sedan grunden till avancemanget. I slutspelet har dubbla portugisiska hinder passerats – Porto i åttondel, Benfica i kvartsfinal – innan man nu skaffat sig ett ypperligt utgångsläge inför tisdagens semifinalretur mot Milan."
+      }
+    },
+    {
+      "id": "paragraph-a8058aa177c3f4f68dcf761ed5e12180",
+      "type": "core/paragraph",
+      "data": {
+        "text": "Inter kommer till matchen med sju raka segrar i ryggen, och med en belgisk anfallsstjärna i kanonform – och som likt sitt lag vänt en jobbig säsongsstart till succé."
+      }
+    },
+    {
+      "id": "paragraph-d5316c1d5cf0365569ec42e04250771c",
+      "type": "core/paragraph",
+      "data": {
+        "text": "Romelu Lukaku, inlånad från Chelsea, har fått stora delar av säsongen förstörd av skador och vill nog helst glömma vinterns fotbolls-VM där både han och Belgien stod för en fiaskobetonad insats."
+      }
+    },
+    {
+      "id": "paragraph-a9ff8117e707dca542513e66f45cc07e",
+      "type": "core/paragraph",
+      "data": {
+        "text": "Nu går han åter att känna igen. Lukaku, som fyllde 30 år i helgen som gick, har gjort fem mål och legat bakom ytterligare tre på de sex senaste matcherna. Han firade bland annat födelsedagen genom att göra två av målen i Inters 4–2-seger över Sassuolo i lördags."
+      }
+    },
+    {
+      "id": "ODIsMTQ3LDQxLDIyOA",
+      "type": "core/heading-2",
+      "data": {
+        "text": "Jobbigt för Milan"
+      }
+    },
+    {
+      "id": "paragraph-c8bfdda4bb8e9a3690ff694f8ed87526",
+      "type": "core/paragraph",
+      "data": {
+        "text": "Trots formkurvan är det inte omöjligt att Lukaku får inleda Champions League-derbyt på San Siro vid sidan av planen. Det troliga är att Simone Inzaghi väljer att starta med veteranen Edin Dzeko, målskytt i den första semifinalen, och Lautaro Martínez."
+      }
+    },
+    {
+      "id": "paragraph-2045bd32671105a31bc9d5bbbe844df2",
+      "type": "core/paragraph",
+      "data": {
+        "text": "Ett bättre vapen än Lukaku kan man dock knappast ha på bänken."
+      }
+    },
+    {
+      "id": "paragraph-1d3d9dcc6e98a951f4759720484a71c1",
+      "type": "core/paragraph",
+      "data": {
+        "text": "– Alla spelare vill såklart starta, men tränaren måste fatta sitt beslut för lagets bästa. Som jag alltid har sagt är Inter det viktigaste för mig, och det är därför jag ger allt för laget, säger Lukaku till AFP."
+      }
+    },
+    {
+      "id": "paragraph-81ec1af43a77b72ca0ab3a1da377f6cb",
+      "type": "core/paragraph",
+      "data": {
+        "text": "Samtidigt som Inter drömmer om en första Champions League-final sedan segern i turneringen för 13 år sedan, har Milan mycket att grubbla över."
+      }
+    },
+    {
+      "id": "paragraph-dad426c3d9be1331349d75b5c2571b24",
+      "type": "core/paragraph",
+      "data": {
+        "text": "0–2 borta mot bottenlaget Spezia i helgen var ett rejält magplask, som riskerar att kosta Milan en plats i nästa Champions League-säsong. Efter matchen gick spelarna och tränaren Stefano Pioli fram till läktaren för att möta de ditresta Milanfansen, som fick lufta sina åsikter om lagets belägenhet. "
+      }
+    },
+    {
+      "id": "paragraph-85c5966f0b49f8702f1b82f31f5f6659",
+      "type": "core/paragraph",
+      "data": {
+        "text": "Det finns ett alternativt sätt att behålla Champions League-platsen: att vända på steken mot Inter och sedan ta hem finalen. Pioli vägrar ge upp på förhand och kan glädja sig åt att den portugisiske stjärnan Rafael Leão, som missade förra veckans möte med en skada, väntas vara tillbaka."
+      }
+    },
+    {
+      "id": "paragraph-1fb69f0987d9f19cf4cf4e8826053e56",
+      "type": "core/paragraph",
+      "data": {
+        "text": "– Vi ska spela en match som skulle kunna skriva in oss i historieböckerna. Vi måste tro på att vi kan besegra Inter, säger Pioli enligt AFP."
+      }
+    },
+    {
+      "id": "paragraph-cb09f30d7aee116073b73c72b0fa2ef4",
+      "type": "core/paragraph",
+      "data": {
+        "text": "– Vi har inte varit bra i de två senaste matcherna. Men vi kan mycket bättre."
+      }
+    }
+  ],
+  "meta": [
+    {
+      "type": "core/newsvalue",
+      "data": {
+        "duration": "86400",
+        "score": "3"
+      }
+    },
+    {
+      "type": "tt/slugline",
+      "value": "champ-inter"
+    }
+  ],
+  "links": [
+    {
+      "uuid": "9187712c-a795-4cdc-bd4e-560e4f93dc4e",
+      "type": "core/author",
+      "title": "Lasse Mannheimer/TT",
+      "data": {
+        "email": "the-email-address@tt.se",
+        "shortDescription": "lma"
+      },
+      "rel": "author"
+    },
+    {
+      "uuid": "e42bcd66-9823-4895-9966-af50056ea933",
+      "type": "core/assignment",
+      "rel": "assignment"
+    },
+    {
+      "uuid": "0730efa9-43f2-468d-979a-aaffc74d7582",
+      "type": "core/section",
+      "title": "Sport",
+      "rel": "subject"
+    },
+    {
+      "uri": "tt://content-source/tt",
+      "type": "core/content-source",
+      "rel": "source"
+    }
+  ],
+  "language": "sv"
+}

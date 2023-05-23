@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/navigacontentlab/revisor"
+	"github.com/ttab/revisor"
 )
 
 type policyTestCase struct {

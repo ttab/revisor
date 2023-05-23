@@ -8,9 +8,14 @@
       {
         "refType": "block",
         "kind": "link",
+        "type": "tt/picture",
+        "rel": "self"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
         "index": 1,
-        "type": "x-im/resourceType",
-        "rel": "resourceType"
+        "type": "tt/visual"
       }
     ],
     "error": "undeclared block attribute"
@@ -19,46 +24,13 @@
     "entity": [
       {
         "refType": "attribute",
-        "name": "rel"
+        "name": "type"
       },
       {
         "refType": "block",
-        "kind": "link",
-        "index": 3,
-        "type": "x-im/commentingVisible",
-        "rel": "commentingVisible"
-      }
-    ],
-    "error": "undeclared block attribute"
-  },
-  {
-    "entity": [
-      {
-        "refType": "attribute",
-        "name": "rel"
-      },
-      {
-        "refType": "block",
-        "kind": "link",
-        "index": 4,
-        "type": "x-im/commentingMode",
-        "rel": "commentingMode"
-      }
-    ],
-    "error": "undeclared block attribute"
-  },
-  {
-    "entity": [
-      {
-        "refType": "attribute",
-        "name": "title"
-      },
-      {
-        "refType": "block",
-        "kind": "link",
+        "kind": "content",
         "index": 1,
-        "type": "x-im/resourceType",
-        "rel": "resourceType"
+        "type": "tt/visual"
       }
     ],
     "error": "undeclared block attribute"
@@ -67,30 +39,13 @@
     "entity": [
       {
         "refType": "attribute",
-        "name": "title"
+        "name": "type"
       },
       {
         "refType": "block",
-        "kind": "link",
-        "index": 3,
-        "type": "x-im/commentingVisible",
-        "rel": "commentingVisible"
-      }
-    ],
-    "error": "undeclared block attribute"
-  },
-  {
-    "entity": [
-      {
-        "refType": "attribute",
-        "name": "title"
-      },
-      {
-        "refType": "block",
-        "kind": "link",
-        "index": 4,
-        "type": "x-im/commentingMode",
-        "rel": "commentingMode"
+        "kind": "content",
+        "index": 2,
+        "type": "tt/dateline"
       }
     ],
     "error": "undeclared block attribute"
@@ -104,41 +59,14 @@
       {
         "refType": "block",
         "kind": "link",
+        "type": "tt/picture",
+        "rel": "self"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
         "index": 1,
-        "type": "x-im/resourceType",
-        "rel": "resourceType"
-      }
-    ],
-    "error": "undeclared block attribute"
-  },
-  {
-    "entity": [
-      {
-        "refType": "attribute",
-        "name": "type"
-      },
-      {
-        "refType": "block",
-        "kind": "link",
-        "index": 3,
-        "type": "x-im/commentingVisible",
-        "rel": "commentingVisible"
-      }
-    ],
-    "error": "undeclared block attribute"
-  },
-  {
-    "entity": [
-      {
-        "refType": "attribute",
-        "name": "type"
-      },
-      {
-        "refType": "block",
-        "kind": "link",
-        "index": 4,
-        "type": "x-im/commentingMode",
-        "rel": "commentingMode"
+        "type": "tt/visual"
       }
     ],
     "error": "undeclared block attribute"
@@ -152,23 +80,8 @@
       {
         "refType": "block",
         "kind": "meta",
-        "type": "x-smf-sndp/tag"
-      }
-    ],
-    "error": "undeclared block attribute"
-  },
-  {
-    "entity": [
-      {
-        "refType": "attribute",
-        "name": "uri"
-      },
-      {
-        "refType": "block",
-        "kind": "link",
         "index": 1,
-        "type": "x-im/resourceType",
-        "rel": "resourceType"
+        "type": "tt/slugline"
       }
     ],
     "error": "undeclared block attribute"
@@ -182,9 +95,14 @@
       {
         "refType": "block",
         "kind": "link",
-        "index": 3,
-        "type": "x-im/commentingVisible",
-        "rel": "commentingVisible"
+        "type": "tt/picture",
+        "rel": "self"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 1,
+        "type": "tt/visual"
       }
     ],
     "error": "undeclared block attribute"
@@ -193,28 +111,71 @@
     "entity": [
       {
         "refType": "attribute",
-        "name": "uri"
+        "name": "url"
       },
       {
         "refType": "block",
         "kind": "link",
-        "index": 4,
-        "type": "x-im/commentingMode",
-        "rel": "commentingMode"
+        "type": "tt/picture",
+        "rel": "self"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 1,
+        "type": "tt/visual"
       }
     ],
     "error": "undeclared block attribute"
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "value"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "index": 1,
+        "type": "tt/slugline"
+      }
+    ],
+    "error": "undeclared block attribute"
+  },
+  {
+    "entity": [
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 1,
+        "type": "tt/visual"
+      }
+    ],
+    "error": "undeclared block type or rel"
+  },
+  {
+    "entity": [
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 2,
+        "type": "tt/dateline"
+      }
+    ],
+    "error": "undeclared block type or rel"
   },
   {
     "entity": [
       {
         "refType": "data attribute",
-        "name": "contentRepoId"
+        "name": "caption"
       },
       {
         "refType": "block",
-        "kind": "meta",
-        "type": "x-smf-sndp/tag"
+        "kind": "content",
+        "index": 1,
+        "type": "tt/visual"
       }
     ],
     "error": "unknown attribute"
@@ -223,12 +184,19 @@
     "entity": [
       {
         "refType": "data attribute",
-        "name": "resourceSubtype"
+        "name": "credit"
       },
       {
         "refType": "block",
-        "kind": "meta",
-        "type": "x-smf-sndp/tag"
+        "kind": "link",
+        "type": "tt/picture",
+        "rel": "self"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 1,
+        "type": "tt/visual"
       }
     ],
     "error": "unknown attribute"
@@ -237,12 +205,40 @@
     "entity": [
       {
         "refType": "data attribute",
-        "name": "selectedTimestamp"
+        "name": "height"
       },
       {
         "refType": "block",
-        "kind": "meta",
-        "type": "x-smf-sndp/tag"
+        "kind": "link",
+        "type": "tt/picture",
+        "rel": "self"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 1,
+        "type": "tt/visual"
+      }
+    ],
+    "error": "unknown attribute"
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "hiresScale"
+      },
+      {
+        "refType": "block",
+        "kind": "link",
+        "type": "tt/picture",
+        "rel": "self"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 1,
+        "type": "tt/visual"
       }
     ],
     "error": "unknown attribute"
@@ -256,22 +252,29 @@
       {
         "refType": "block",
         "kind": "content",
-        "index": 4,
-        "type": "x-im/paragraph"
+        "index": 2,
+        "type": "tt/dateline"
       }
     ],
-    "error": "invalid html after line 1 char 15: unsupported tag <persontag>"
+    "error": "unknown attribute"
   },
   {
     "entity": [
       {
         "refType": "data attribute",
-        "name": "title"
+        "name": "width"
       },
       {
         "refType": "block",
-        "kind": "meta",
-        "type": "x-smf-sndp/tag"
+        "kind": "link",
+        "type": "tt/picture",
+        "rel": "self"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 1,
+        "type": "tt/visual"
       }
     ],
     "error": "unknown attribute"
@@ -281,33 +284,14 @@
       {
         "refType": "block",
         "kind": "link",
+        "type": "tt/picture",
+        "rel": "self"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
         "index": 1,
-        "type": "x-im/resourceType",
-        "rel": "resourceType"
-      }
-    ],
-    "error": "undeclared block type or rel"
-  },
-  {
-    "entity": [
-      {
-        "refType": "block",
-        "kind": "link",
-        "index": 3,
-        "type": "x-im/commentingVisible",
-        "rel": "commentingVisible"
-      }
-    ],
-    "error": "undeclared block type or rel"
-  },
-  {
-    "entity": [
-      {
-        "refType": "block",
-        "kind": "link",
-        "index": 4,
-        "type": "x-im/commentingMode",
-        "rel": "commentingMode"
+        "type": "tt/visual"
       }
     ],
     "error": "undeclared block type or rel"
@@ -317,36 +301,10 @@
       {
         "refType": "block",
         "kind": "meta",
-        "type": "x-smf-sndp/tag"
+        "index": 1,
+        "type": "tt/slugline"
       }
     ],
     "error": "undeclared block type or rel"
-  },
-  {
-    "entity": [
-      {
-        "refType": "property",
-        "name": "x-smf/newsSource"
-      }
-    ],
-    "error": "undeclared property"
-  },
-  {
-    "entity": [
-      {
-        "refType": "property",
-        "name": "x-smf/originalPublishingChannel"
-      }
-    ],
-    "error": "undeclared property"
-  },
-  {
-    "entity": [
-      {
-        "refType": "property",
-        "name": "x-smf/originalPublishingChannelName"
-      }
-    ],
-    "error": "undeclared property"
   }
 ]

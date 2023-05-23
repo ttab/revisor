@@ -1,16 +1,13 @@
 {
  "uuid": "c09068e0-393b-52f1-89ae-57ad49bfc427",
- "type": "x-im/article",
+ "type": "core/article",
  "uri": "im://article/c09068e0-393b-52f1-89ae-57ad49bfc427",
  "title": "S\u0026P 500 slumps into bear market, Dow dives again as 2022 losses accelerate",
- "modified": "2022-06-14T09:54:54.617836+02:00",
- "published": "2022-06-14T01:30:34+02:00",
  "content": [
   {
    "id": "headline-0",
-   "type": "x-im/header",
+   "type": "core/heading-1",
    "data": {
-    "format": "html",
     "text": "S\u0026P 500 slumps into bear market, Dow dives again as 2022 losses accelerate"
    }
   }
@@ -18,24 +15,20 @@
  "meta": [
   {
    "id": "RYaudnAJj8gQ",
-   "type": "x-im/newsvalue",
+   "type": "core/newsvalue",
    "data": {
-    "description": "1D",
     "duration": "86400",
-    "end": "",
-    "format": "lifetimecode",
     "score": "4"
    }
   },
   {
    "id": "teaser-31",
-   "type": "x-im/teaser",
+   "type": "core/teaser",
    "title": "S\u0026amp;P 500 slumps into bear market, Dow dives again as 2022 losses accelerate",
    "data": {
     "text": "S\u0026amp;P 500 slumps into bear market, Dow dives again as 2022 losses accelerate"
    }
   }
  ],
- "language": "en-GB",
- "status": "draft"
+ "language": "en-GB"
 }

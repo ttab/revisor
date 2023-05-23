@@ -8,18 +8,65 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/navigacontentlab/navigadoc/doc"
-	"github.com/navigacontentlab/revisor"
-	"github.com/navigacontentlab/revisor/internal"
+	"github.com/ttab/newsdoc"
+	"github.com/ttab/revisor"
+	"github.com/ttab/revisor/internal"
 )
 
+func FuzzValidationDocuments(f *testing.F) {
+	var (
+		constraints      revisor.ConstraintSet
+		extraConstraints revisor.ConstraintSet
+	)
+
+	err := internal.UnmarshalFile("constraints/core.json", &constraints)
+	if err != nil {
+		f.Fatalf("failed to unmarshal base constraints: %v", err)
+	}
+
+	err = internal.UnmarshalFile("constraints/tt.json", &extraConstraints)
+	if err != nil {
+		f.Fatalf("failed to unmarshal example constraints: %v", err)
+	}
+
+	paths, err := filepath.Glob(filepath.Join("testdata", "*.json"))
+	if err != nil {
+		f.Fatalf("failed to glob for result files: %v", err)
+	}
+
+	for i := range paths {
+		docData, err := os.ReadFile(paths[i])
+		if err != nil {
+			f.Fatalf("failed to read document data from %q: %v",
+				paths[i], err)
+		}
+
+		f.Add(docData)
+	}
+
+	f.Fuzz(func(t *testing.T, documentData []byte) {
+		var document newsdoc.Document
+
+		if !decodeBytes(t, documentData, &document) {
+			return
+		}
+
+		validator, err := revisor.NewValidator(constraints, extraConstraints)
+		if err != nil {
+			return
+		}
+
+		_ = validator.ValidateDocument(&document)
+	})
+}
+
 func FuzzValidationWide(f *testing.F) {
-	baseConstraints, err := os.ReadFile("constraints/naviga.json")
+	baseConstraints, err := os.ReadFile("constraints/core.json")
 	if err != nil {
 		f.Fatalf("failed to read base constraints: %v", err)
 	}
 
-	exampleConstraints, err := os.ReadFile("constraints/example.json")
+	exampleConstraints, err := os.ReadFile("constraints/tt.json")
 	if err != nil {
 		f.Fatalf("failed to read example constraints: %v", err)
 	}
@@ -41,7 +88,7 @@ func FuzzValidationWide(f *testing.F) {
 
 	f.Fuzz(func(t *testing.T, constraintsA []byte, constraintsB []byte, documentData []byte) {
 		var (
-			document         doc.Document
+			document         newsdoc.Document
 			constraints      revisor.ConstraintSet
 			extraConstraints revisor.ConstraintSet
 		)
@@ -81,10 +128,10 @@ func FuzzValidationConstraints(f *testing.F) {
 		f.Fatalf("failed to glob for result files: %v", err)
 	}
 
-	var documents []*doc.Document
+	var documents []*newsdoc.Document
 
 	for i := range paths {
-		var d doc.Document
+		var d newsdoc.Document
 
 		err := internal.UnmarshalFile(paths[i], &d)
 		if err != nil {
@@ -96,9 +143,7 @@ func FuzzValidationConstraints(f *testing.F) {
 	}
 
 	f.Fuzz(func(t *testing.T, constraintData []byte) {
-		var (
-			constraints revisor.ConstraintSet
-		)
+		var constraints revisor.ConstraintSet
 
 		if !(decodeBytes(t, constraintData, &constraints)) {
 			return
@@ -115,7 +160,11 @@ func FuzzValidationConstraints(f *testing.F) {
 	})
 }
 
-func decodeBytes(t *testing.T, data []byte, o interface{}) bool {
+type testHelper interface {
+	Helper()
+}
+
+func decodeBytes(t testHelper, data []byte, o interface{}) bool {
 	t.Helper()
 
 	dec := json.NewDecoder(bytes.NewReader(data))
@@ -138,12 +187,12 @@ func TestValidateDocument(t *testing.T) {
 		extraConstraints revisor.ConstraintSet
 	)
 
-	err := internal.UnmarshalFile("constraints/naviga.json", &constraints)
+	err := internal.UnmarshalFile("constraints/core.json", &constraints)
 	if err != nil {
 		t.Fatalf("failed to load base constraints: %v", err)
 	}
 
-	err = internal.UnmarshalFile("constraints/example.json", &extraConstraints)
+	err = internal.UnmarshalFile("constraints/tt.json", &extraConstraints)
 	if err != nil {
 		t.Fatalf("failed to load org constraints: %v", err)
 	}
@@ -203,7 +252,7 @@ func testAgainstGolden(t *testing.T, goldenPath string, testCase validatorTest) 
 
 	t.Run(sourceDocPath, func(t *testing.T) {
 		var (
-			document doc.Document
+			document newsdoc.Document
 			want     []revisor.ValidationResult
 		)
 

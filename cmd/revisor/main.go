@@ -10,10 +10,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/navigacontentlab/navigadoc/doc"
-	"github.com/navigacontentlab/revisor"
-	"github.com/navigacontentlab/revisor/constraints"
-	"github.com/navigacontentlab/revisor/internal"
+	"github.com/ttab/newsdoc"
+	"github.com/ttab/revisor"
+	"github.com/ttab/revisor/constraints"
+	"github.com/ttab/revisor/internal"
 	"github.com/urfave/cli/v2"
 )
 
@@ -35,8 +35,8 @@ func main() {
 						Usage: "file path or URL to load spec from",
 					},
 					&cli.BoolFlag{
-						Name:  "naviga-spec",
-						Usage: "use the embedded naviga spec",
+						Name:  "core-spec",
+						Usage: "use the embedded core spec",
 						Value: true,
 					},
 					&cli.StringFlag{
@@ -55,10 +55,10 @@ func main() {
 						EnvVars: []string{"SPEC"},
 					},
 					&cli.BoolFlag{
-						Name:    "naviga-spec",
-						Usage:   "use the embedded naviga spec",
+						Name:    "core-spec",
+						Usage:   "use the embedded core spec",
 						Value:   true,
-						EnvVars: []string{"USE_NAVIGA_SPEC"},
+						EnvVars: []string{"USE_CORE_SPEC"},
 					},
 					&cli.StringFlag{
 						Name:    "addr",
@@ -78,12 +78,18 @@ func main() {
 }
 
 func loadConstraints(
-	navigaSpec bool, sources ...string,
+	coreSpec bool, sources ...string,
 ) ([]revisor.ConstraintSet, error) {
 	var list []revisor.ConstraintSet
 
-	if navigaSpec {
-		list = append(list, constraints.Naviga())
+	if coreSpec {
+		core, err := constraints.CoreSchema()
+		if err != nil {
+			return nil, fmt.Errorf(
+				"failed to load built in core schema: %w", err)
+		}
+
+		list = append(list, core)
 	}
 
 	for _, source := range sources {
@@ -128,9 +134,9 @@ func constraintLoader(source string) (string, loaderFunc, error) {
 func serveCommand(c *cli.Context) error {
 	addr := c.String("addr")
 	specs := c.StringSlice("spec")
-	navigaSpec := c.Bool("naviga-spec")
+	coreSpec := c.Bool("core-spec")
 
-	constraints, err := loadConstraints(navigaSpec, specs...)
+	constraints, err := loadConstraints(coreSpec, specs...)
 	if err != nil {
 		return err
 	}
@@ -159,7 +165,7 @@ func serveCommand(c *cli.Context) error {
 			return
 		}
 
-		var d doc.Document
+		var d newsdoc.Document
 
 		dec := json.NewDecoder(r.Body)
 
@@ -210,9 +216,9 @@ func documentCommand(c *cli.Context) error {
 	paths := c.Args().Slice()
 	jsonOut := c.Bool("json")
 	specs := c.StringSlice("spec")
-	navigaSpec := c.Bool("naviga-spec")
+	coreSpec := c.Bool("core-spec")
 
-	constraints, err := loadConstraints(navigaSpec, specs...)
+	constraints, err := loadConstraints(coreSpec, specs...)
 	if err != nil {
 		return err
 	}
@@ -230,7 +236,7 @@ func documentCommand(c *cli.Context) error {
 	enc.SetIndent("", "  ")
 
 	for _, path := range paths {
-		var d doc.Document
+		var d newsdoc.Document
 
 		err := internal.UnmarshalFile(path, &d)
 		if err != nil {

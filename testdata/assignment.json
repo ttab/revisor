@@ -1,83 +1,28 @@
 {
   "uuid": "6f32d00c-ae31-4640-9278-c76c9d29aadd",
-  "type": "x-im/assignment",
+  "type": "core/assignment",
   "uri": "im://assignment/6f32d00c-ae31-4640-9278-c76c9d29aadd",
   "title": "MM-latka-testi",
-  "created": "2022-05-10T08:04:52.209Z",
-  "modified": "2022-05-10T08:04:52.209Z",
   "meta": [
     {
-      "type": "x-im/assignment",
+      "type": "core/assignment",
       "data": {
-        "description": "",
-        "end": "2022-05-10T20:59:59.999Z",
+        "dateGranularity": "datetime",
         "start": "2022-05-09T21:00:00.000Z",
-        "type": "x-im/article"
+        "startDate": "2022-05-09",
+        "end": "2022-05-10T20:59:59.999Z",
+        "endDate": "2022-05-10"
       }
+    },
+    {
+      "type": "core/assignment-type",
+      "value": "text"
     }
   ],
   "links": [
     {
-      "uri": "imid://organisation/example",
-      "type": "x-imid/organisation",
-      "title": "example",
-      "rel": "shared-with",
-      "links": [
-        {
-          "uri": "imid://organisation/example",
-          "type": "x-imid/organisation",
-          "title": "example",
-          "rel": "shared-with"
-        }
-      ]
-    },
-    {
-      "uri": "imid://user/sub/6a1fd10e-c39c-411f-a977-9c84d3a90ba2",
-      "type": "x-imid/user",
-      "title": "Jacob Doe",
-      "rel": "creator",
-      "links": [
-        {
-          "uri": "imid://organisation/example",
-          "type": "x-imid/organisation",
-          "title": "example",
-          "rel": "affiliation",
-          "links": [
-            {
-              "uri": "imid://unit/is",
-              "type": "x-imid/unit",
-              "title": "is",
-              "rel": "affiliation"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "uri": "imid://user/sub/6a1fd10e-c39c-411f-a977-9c84d3a90ba2",
-      "type": "x-imid/user",
-      "title": "Jacob Doe",
-      "rel": "updater",
-      "links": [
-        {
-          "uri": "imid://organisation/example",
-          "type": "x-imid/organisation",
-          "title": "example",
-          "rel": "affiliation",
-          "links": [
-            {
-              "uri": "imid://unit/is",
-              "type": "x-imid/unit",
-              "title": "is",
-              "rel": "affiliation"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "uuid": "c5d31f38-5a37-4366-9358-94dbdb5aa5d3",
-      "type": "x-im/author",
+      "type": "core/author",
       "title": "Jacob Doe",
       "data": {
         "email": "jacob.doe@example.com",
@@ -88,27 +33,20 @@
     },
     {
       "uuid": "8744c022-a46b-4cff-b952-6c8db6997cb8",
-      "type": "x-im/article",
+      "type": "core/article",
       "rel": "article"
     },
     {
       "uuid": "0bef451a-6321-43aa-8103-1fb2e822a164",
-      "type": "x-im/channel",
+      "type": "core/channel",
       "title": "IS",
       "rel": "channel"
     },
     {
       "uuid": "9045e270-f666-4360-a04d-91cb3f97d304",
-      "type": "x-im/content-profile",
+      "type": "core/content-profile",
       "title": "News",
       "rel": "content-profile"
     }
-  ],
-  "properties": [
-    {
-      "name": "imext:type",
-      "value": "x-im/assignment"
-    }
-  ],
-  "status": "imext:draft"
+  ]
 }

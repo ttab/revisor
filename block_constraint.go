@@ -1,10 +1,11 @@
 package revisor
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 
-	"github.com/navigacontentlab/navigadoc/doc"
+	"github.com/ttab/newsdoc"
 )
 
 // BlockKind describes the different kinds of blocks that are available.
@@ -91,6 +92,31 @@ type BlockConstraint struct {
 	BlocksFrom  []BlocksFrom       `json:"blocksFrom,omitempty"`
 }
 
+type unmarshalBC BlockConstraint
+
+func (bc *BlockConstraint) UnmarshalJSON(data []byte) error {
+	var ubc unmarshalBC
+
+	// Unmarshal into unmarshalBC and check for attributes with optional set
+	// to true.
+	err := json.Unmarshal(data, &ubc)
+	if err != nil {
+		return fmt.Errorf("unmarshal JSON: %w", err)
+	}
+
+	if ubc.Attributes != nil {
+		for k, a := range ubc.Attributes {
+			a.AllowEmpty = a.AllowEmpty || a.Optional
+
+			ubc.Attributes[k] = a
+		}
+	}
+
+	*bc = BlockConstraint(ubc)
+
+	return nil
+}
+
 // BlockConstraints implements the BlockConstraintsSet interface.
 func (bc BlockConstraint) BlockConstraints(kind BlockKind) []*BlockConstraint {
 	switch kind {
@@ -117,7 +143,7 @@ const (
 
 // Matches checks if the given block matches the constraint and returns the
 // names of the attributes that matched.
-func (bc BlockConstraint) Matches(b *doc.Block) (Match, []string) {
+func (bc BlockConstraint) Matches(b *newsdoc.Block) (Match, []string) {
 	match, attributes := bc.declares(b)
 	if match == NoMatch {
 		return NoMatch, nil
@@ -137,7 +163,7 @@ func (bc BlockConstraint) Matches(b *doc.Block) (Match, []string) {
 	return match, attributes
 }
 
-func (bc BlockConstraint) declares(b *doc.Block) (Match, []string) {
+func (bc BlockConstraint) declares(b *newsdoc.Block) (Match, []string) {
 	var attributes []string
 
 	if bc.Declares == nil {
@@ -185,7 +211,7 @@ var allBlockAttributes = []blockAttributeKey{
 	blockAttrRole,
 }
 
-func blockMatchAttribute(block *doc.Block, name string) (string, bool) {
+func blockMatchAttribute(block *newsdoc.Block, name string) (string, bool) {
 	//nolint:exhaustive
 	switch blockAttributeKey(name) {
 	case blockAttrType:
@@ -209,7 +235,7 @@ func blockMatchAttribute(block *doc.Block, name string) (string, bool) {
 	return "", false
 }
 
-func blockAttribute(block *doc.Block, name string) (string, bool) {
+func blockAttribute(block *newsdoc.Block, name string) (string, bool) {
 	switch blockAttributeKey(name) {
 	case blockAttrUUID:
 		return block.UUID, true
@@ -259,8 +285,8 @@ func (bc BlockConstraint) DescribeCountConstraint(kind BlockKind) string {
 			*bc.MaxCount, kind.Description(*bc.MaxCount),
 		)
 	case bc.MinCount != nil:
-		fmt.Fprintf(&s, "more than %d %s",
-			*bc.MinCount, kind.Description(*bc.MinCount),
+		fmt.Fprintf(&s, "%d or more %s",
+			*bc.MinCount, kind.Description(2),
 		)
 	}
 
