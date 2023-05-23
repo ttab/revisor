@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/gobwas/glob v0.2.3
 	github.com/google/uuid v1.3.0
-	github.com/ttab/newsdoc v0.1.0
+	github.com/ttab/newsdoc v0.2.0
 	github.com/urfave/cli/v2 v2.25.3
 	golang.org/x/net v0.10.0
 )

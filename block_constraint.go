@@ -227,7 +227,7 @@ func blockMatchAttribute(block *newsdoc.Block, name string) (string, bool) {
 	case blockAttrValue:
 		return block.Value, true
 	case blockAttrContentType:
-		return block.ContentType, true
+		return block.Contenttype, true
 	case blockAttrRole:
 		return block.Role, true
 	}
@@ -254,7 +254,7 @@ func blockAttribute(block *newsdoc.Block, name string) (string, bool) {
 	case blockAttrValue:
 		return block.Value, true
 	case blockAttrContentType:
-		return block.ContentType, true
+		return block.Contenttype, true
 	case blockAttrRole:
 		return block.Role, true
 	}
