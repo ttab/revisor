@@ -152,7 +152,7 @@
                 }
               },
               "data": {
-                "credit": {},
+                "credit": {"allowEmpty":true},
                 "height": {"format":"int"},
                 "width": {"format":"int"},
                 "hiresScale": {"format":"float"}
