@@ -15,6 +15,7 @@
     {
       "id": "1pGrYW69CaIf",
       "type": "core/contact-info",
+      "role": "office",
       "data": {
         "email": "John.Williams@example.com"
       }
