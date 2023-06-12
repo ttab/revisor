@@ -188,12 +188,23 @@
       "declares": "core/author",
       "meta": [
         {
+          "declares": {"type":"core/author"},
+          "data": {
+            "initials": {"optional":true},
+            "firstName": {},
+            "lastName": {}
+          }
+        },
+        {
           "declares": {"type":"core/contact-info"},
+          "attributes": {
+            "role": {
+              "enum": ["home", "office"]
+            }
+          },
           "data": {
             "email": {"optional":true},
             "name": {"optional":true},
-            "firstName": {"optional":true},
-            "lastName": {"optional":true},
             "mobile": {"optional":true},
             "phone": {"optional":true},
             "postalCode": {
