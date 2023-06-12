@@ -13,7 +13,7 @@ import (
 var coreSchema []byte
 
 func CoreSchemaVersion() string {
-	return "v1.0.0"
+	return "v1.0.1"
 }
 
 func CoreSchema() (revisor.ConstraintSet, error) {
