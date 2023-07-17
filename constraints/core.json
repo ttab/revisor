@@ -434,7 +434,7 @@
             "title": {}
           },
           "data": {
-            "byline": {}
+            "byline": {"allowEmpty":true}
           },
           "blocksFrom":[
             {"docType":"core/article", "kind": "content", "global":true}
