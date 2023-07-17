@@ -5,9 +5,9 @@ go 1.20
 require (
 	github.com/gobwas/glob v0.2.3
 	github.com/google/uuid v1.3.0
-	github.com/ttab/newsdoc v0.3.2
-	github.com/urfave/cli/v2 v2.25.5
-	golang.org/x/net v0.10.0
+	github.com/ttab/newsdoc v0.4.1
+	github.com/urfave/cli/v2 v2.25.7
+	golang.org/x/net v0.12.0
 )
 
 require (
