@@ -192,6 +192,7 @@ func (bc BlockConstraint) declares(b *newsdoc.Block) (Match, []string) {
 type blockAttributeKey string
 
 const (
+	blockAttrID          blockAttributeKey = "id"
 	blockAttrUUID        blockAttributeKey = "uuid"
 	blockAttrType        blockAttributeKey = "type"
 	blockAttrURI         blockAttributeKey = "uri"
@@ -239,6 +240,8 @@ func blockAttribute(block *newsdoc.Block, name string) (string, bool) {
 	switch blockAttributeKey(name) {
 	case blockAttrUUID:
 		return block.UUID, true
+	case blockAttrID:
+		return block.ID, true
 	case blockAttrType:
 		return block.Type, true
 	case blockAttrURI:
