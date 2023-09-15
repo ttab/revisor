@@ -1,0 +1,159 @@
+[
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "rel"
+      },
+      {
+        "refType": "block",
+        "kind": "link",
+        "type": "tt/sector",
+        "rel": "sector"
+      }
+    ],
+    "error": "undeclared block attribute"
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "title"
+      },
+      {
+        "refType": "block",
+        "kind": "link",
+        "type": "tt/sector",
+        "rel": "sector"
+      }
+    ],
+    "error": "undeclared block attribute"
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "type"
+      },
+      {
+        "refType": "block",
+        "kind": "link",
+        "type": "tt/sector",
+        "rel": "sector"
+      }
+    ],
+    "error": "undeclared block attribute"
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "type"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "type": "tt/slugline"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "index": 1,
+        "type": "core/assignment"
+      }
+    ],
+    "error": "undeclared block attribute"
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "uri"
+      },
+      {
+        "refType": "block",
+        "kind": "link",
+        "type": "tt/sector",
+        "rel": "sector"
+      }
+    ],
+    "error": "undeclared block attribute"
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "uuid"
+      },
+      {
+        "refType": "block",
+        "kind": "link",
+        "type": "tt/sector",
+        "rel": "sector"
+      }
+    ],
+    "error": "undeclared block attribute"
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "value"
+      },
+      {
+        "refType": "block",
+        "kind": "link",
+        "type": "tt/sector",
+        "rel": "sector"
+      }
+    ],
+    "error": "undeclared block attribute"
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "value"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "type": "tt/slugline"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "index": 1,
+        "type": "core/assignment"
+      }
+    ],
+    "error": "undeclared block attribute"
+  },
+  {
+    "entity": [
+      {
+        "refType": "block",
+        "kind": "link",
+        "type": "tt/sector",
+        "rel": "sector"
+      }
+    ],
+    "error": "undeclared block type or rel"
+  },
+  {
+    "entity": [
+      {
+        "refType": "block",
+        "kind": "meta",
+        "type": "tt/slugline"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "index": 1,
+        "type": "core/assignment"
+      }
+    ],
+    "error": "undeclared block type or rel"
+  }
+]

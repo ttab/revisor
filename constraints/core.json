@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "name": "Core",
+  "name": "core",
   "meta": [
     {
       "declares": {"type":"core/note"},
@@ -431,7 +431,7 @@
         {
           "declares": {"type":"core/factbox"},
           "attributes": {
-            "title": {}
+            "title": {"allowEmpty":true}
           },
           "data": {
             "byline": {"allowEmpty":true}

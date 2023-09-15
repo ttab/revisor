@@ -2,6 +2,7 @@ package revisor
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/google/uuid"
@@ -71,6 +72,18 @@ func NewValidator(
 	v.htmlPolicies = htmlPolicies
 
 	return &v, nil
+}
+
+// WithConstraints returns a new Validator that uses an additional set of
+// constraints.
+func (v *Validator) WithConstraints(
+	constraints ...ConstraintSet,
+) (*Validator, error) {
+	c := slices.Clone(v.constraints)
+
+	c = append(c, constraints...)
+
+	return NewValidator(c...)
 }
 
 type ValidationResult struct {
@@ -548,6 +561,9 @@ func validateBlockAttributes(
 				RefType: RefTypeAttribute,
 				Name:    k,
 			}
+
+			// Optional attributes are empty strings.
+			check.AllowEmpty = check.AllowEmpty || check.Optional
 
 			err := check.Validate(value, ok, &vCtx)
 			if err != nil {
