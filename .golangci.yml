@@ -31,7 +31,6 @@ linters:
   - nakedret
   - nestif
   - nilnil
-  - nlreturn
   - nolintlint
   - predeclared
   - promlinter

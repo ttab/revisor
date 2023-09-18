@@ -98,6 +98,7 @@ Here we declare that links with `rel` "broader" are valid for all blocks that ma
 | glob       | A list of glob patterns `["http://**", "https://**"]` where one must match |
 | format     | A named format that the value must follow                                  |
 | time       | A time format specification                                                |
+| geometry   | The geometry and coordinate type that must be used for WKT strings.        |
 
 The distinction between optional and allowEmpty is only relevant for data attributes. The document and block attributes defined in the NewsDoc schema always exist, so `optional` and `allowEmpty` will be treated as equivalent. 
 
@@ -111,6 +112,7 @@ The following formats are available:
 * `bool`: a boolean ("true" or "false")
 * `html`: validate the contents as HTML
 * `uuid`: validate the string as a UUID
+* `wkt`: validate the string as a [WKT geometry](#wkt-geometry).
 
 When using the format "html" it's also possible to use `htmlPolicy` to use a specific HTML policy. See the section on [HTML policies](#markdown-header-html-policies).
 
@@ -123,6 +125,26 @@ A Go time parsing layout (see the [time package](https://pkg.go.dev/time#pkg-con
 #### Globs
 
 Glob matching uses [https://github.com/gobwas/glob](https://github.com/gobwas/glob) for matching, and the glob patterns are compiled with "/" and "+" as separators.
+
+#### WKT geometry
+
+The geometry specification is a combination of the geometry type to expect, and optionally the types of coordinates it should contain, in the format `{geometry-type}[-{coordinates}]`. If no geometry is specified any of the supported types and coordinates are allowed. If no coordinates are specified the default X and Y coordinates are assumed.
+
+Geometry types:
+
+* `point`
+* `multipoint`
+* `linestring`
+* `multilinestring`
+* `polygon`
+* `multipolygon`
+* `circularstring`
+
+Coordinates, X and Y is the default if nothing else is specified:
+
+* `z`: X, Y, and Z coordinates
+* `m`: X and Y coordinates and a measurement
+* `zm`:X, Y and Z coordinates and a measurement
 
 ### Writing a document specification
 

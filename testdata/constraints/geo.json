@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "name": "test",
+  "documents": [
+    {
+      "name": "Place",
+      "declares": "core/place",
+      "meta": [
+        {
+          "declares": {"type":"core/place"},
+          "data": {
+            "position": {
+              "format": "wkt",
+              "geometry": "point",
+              "optional": true
+            },
+            "position_3d": {
+              "format": "wkt",
+              "geometry": "point-z",
+              "optional": true
+            },
+            "area": {
+              "format": "wkt",
+              "geometry": "polygon",
+              "optional": true
+            },
+            "road": {
+              "format": "wkt",
+              "geometry": "linestring",
+              "optional": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -20,6 +20,7 @@ const (
 	StringFormatBoolean StringFormat = "bool"
 	StringFormatHTML    StringFormat = "html"
 	StringFormatUUID    StringFormat = "uuid"
+	StringFormatWKT     StringFormat = "wkt"
 )
 
 func (f StringFormat) Describe() string {
@@ -36,6 +37,8 @@ func (f StringFormat) Describe() string {
 		return "a html string"
 	case StringFormatUUID:
 		return "a uuid"
+	case StringFormatWKT:
+		return "a WKT geometry"
 	case StringFormatNone:
 		return ""
 	}
@@ -68,6 +71,7 @@ type StringConstraint struct {
 	Glob        GlobList     `json:"glob,omitempty"`
 	Format      StringFormat `json:"format,omitempty"`
 	Time        string       `json:"time,omitempty"`
+	Geometry    string       `json:"geometry,omitempty"`
 	HTMLPolicy  string       `json:"htmlPolicy,omitempty"`
 }
 
@@ -194,6 +198,11 @@ func (sc *StringConstraint) Validate(
 		_, err := uuid.Parse(value)
 		if err != nil {
 			return errors.New("invalid uuid value")
+		}
+	case StringFormatWKT:
+		err := validateWKT(sc.Geometry, value)
+		if err != nil {
+			return fmt.Errorf("WKT validation: %w", err)
 		}
 	default:
 		return fmt.Errorf("unknown string format %q", sc.Format)

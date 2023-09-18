@@ -3,6 +3,7 @@ module github.com/ttab/revisor
 go 1.21
 
 require (
+	github.com/IvanZagoskin/wkt v0.0.1
 	github.com/gobwas/glob v0.2.3
 	github.com/google/uuid v1.3.0
 	github.com/ttab/newsdoc v0.4.1

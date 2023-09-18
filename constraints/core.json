@@ -74,7 +74,8 @@
           "declares": {"type":"core/position"},
           "data": {
             "geometry": {
-              "description": "TODO: add a WKT format?"
+              "format": "wkt",
+              "geometry": "point"
             }
           }
         }
@@ -857,7 +858,10 @@
           "data": {
             "country": {},
             "extraInfo": {"allowEmpty": true},
-            "geometry": {},
+            "geometry": {
+              "format": "wkt",
+              "geometry": "point"
+            },
             "locality": {},
             "name": {}
           }

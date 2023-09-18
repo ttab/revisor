@@ -216,11 +216,21 @@ func TestValidateDocument(t *testing.T) {
 	}
 
 	extraConstraints := decodeConstraintSets(t,
-		"constraints/tt.json", "constraints/tt_planning.json")
+		"constraints/tt.json", "constraints/tt_planning.json",
+	)
 
 	orgValidator, err := baseValidator.WithConstraints(extraConstraints...)
 	if err != nil {
-		t.Fatalf("failed to create org validator: %v", err)
+		t.Fatalf("failed to create extended validator: %v", err)
+	}
+
+	testConstraints := decodeConstraintSets(t,
+		"testdata/constraints/geo.json",
+	)
+
+	testValidator, err := revisor.NewValidator(testConstraints...)
+	if err != nil {
+		t.Fatalf("failed to create test validator: %v", err)
 	}
 
 	tests := []validatorTest{
@@ -230,9 +240,14 @@ func TestValidateDocument(t *testing.T) {
 			Validator: baseValidator,
 		},
 		{
-			Name:      "OrgConf",
+			Name:      "ExtendedConf",
 			Prefix:    "example-",
 			Validator: orgValidator,
+		},
+		{
+			Name:      "TestConf",
+			Prefix:    "test-",
+			Validator: testValidator,
 		},
 	}
 
@@ -248,7 +263,9 @@ func TestValidateDocument(t *testing.T) {
 			for i := range paths {
 				goldenPath := paths[i]
 
-				if !strings.HasPrefix(filepath.Base(goldenPath), testCase.Prefix) {
+				if !strings.HasPrefix(
+					filepath.Base(goldenPath),
+					testCase.Prefix) {
 					continue
 				}
 

@@ -1,0 +1,77 @@
+[
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "area"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "index": 1,
+        "type": "core/place"
+      }
+    ],
+    "error": "WKT validation: unexpected coordinate type \"z\" where none was expected"
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "position"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "index": 1,
+        "type": "core/place"
+      }
+    ],
+    "error": "WKT validation: failed to parse: skip token and check: unexpected token: 14"
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "position"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "index": 2,
+        "type": "core/place"
+      }
+    ],
+    "error": "WKT validation: geometry is not a point"
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "position_3d"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "index": 1,
+        "type": "core/place"
+      }
+    ],
+    "error": "WKT validation: missing coordinate type where \"z\" was expected"
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "road"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "index": 1,
+        "type": "core/place"
+      }
+    ],
+    "error": "WKT validation: unexpected coordinate type \"z\" where none was expected"
+  }
+]
