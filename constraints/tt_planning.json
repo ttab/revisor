@@ -18,7 +18,10 @@
               },
               "maxCount": 1,
               "attributes": {
-                "value": {}
+                "value": {
+                  "labels": ["keyword"],
+                  "hints": {"alias": ["slug"]}
+                }
               }
             }
           ]
@@ -36,7 +39,9 @@
             "uuid": {},
             "uri": {},
             "title": {},
-            "value": {}
+            "value": {
+              "labels": ["keyword"]
+            }
           }
         }
       ]

@@ -1,0 +1,50 @@
+{
+  "meta.core_place.data.position": {
+    "format": "wkt",
+    "values": [
+      "POINT(12 15)"
+    ],
+    "labels": [
+      "document-position"
+    ]
+  },
+  "meta.core_place.type": {
+    "values": [
+      "core/place"
+    ]
+  },
+  "meta.extra_entity_info.data.description": {
+    "values": [
+      "A place where things are"
+    ],
+    "hints": {
+      "alias": [
+        "description"
+      ]
+    }
+  },
+  "meta.extra_entity_info.data.shortcode": {
+    "values": [
+      "someplace"
+    ],
+    "hints": {
+      "alias": [
+        "shortcode"
+      ]
+    },
+    "labels": [
+      "keyword",
+      "identifier"
+    ]
+  },
+  "meta.extra_entity_info.type": {
+    "values": [
+      "extra/entity-info"
+    ]
+  },
+  "type": {
+    "values": [
+      "core/place"
+    ]
+  }
+}

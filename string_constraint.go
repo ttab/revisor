@@ -73,6 +73,12 @@ type StringConstraint struct {
 	Time        string       `json:"time,omitempty"`
 	Geometry    string       `json:"geometry,omitempty"`
 	HTMLPolicy  string       `json:"htmlPolicy,omitempty"`
+
+	// Labels (and hints) are not constraints per se, but should be seen as
+	// labels on the value that can be used by systems that process data
+	// with the help of revisor schemas.
+	Labels []string            `json:"labels,omitempty"`
+	Hints  map[string][]string `json:"hints,omitempty"`
 }
 
 func (sc *StringConstraint) Requirement() string {

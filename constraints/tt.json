@@ -164,8 +164,12 @@
       "meta": [
         {
           "declares": {"type":"tt/slugline"},
+          "maxCount": 1,
           "attributes": {
-            "value": {}
+            "value": {
+              "labels": ["keyword"],
+              "hints": {"alias": ["slug"]}
+            }
           }
         },
         {
@@ -173,7 +177,9 @@
           "declares": {"type":"tt/sector"},
           "description": "TODO: what is sector?",
           "attributes": {
-            "value": {}
+            "value": {
+              "labels": ["keyword"]
+            }
           }
         }
       ]

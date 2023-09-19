@@ -226,6 +226,7 @@ func TestValidateDocument(t *testing.T) {
 
 	testConstraints := decodeConstraintSets(t,
 		"testdata/constraints/geo.json",
+		"testdata/constraints/labels-hints.json",
 	)
 
 	testValidator, err := revisor.NewValidator(testConstraints...)

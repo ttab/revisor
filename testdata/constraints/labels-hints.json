@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "name": "test-labels-hints",
+  "documents": [
+    {
+      "name": "Place",
+      "match": {"type": {"const": "core/place"}},
+      "meta": [
+        {
+          "match": {"type":{"const":"core/place"}},
+          "data": {
+            "position": {
+              "labels": ["document-position"]
+            }
+          }
+        },
+        {
+          "declares": {"type":"extra/entity-info"},
+          "maxCount": 1,
+          "data": {
+            "shortcode": {
+              "labels": ["keyword", "identifier"],
+              "hints": {
+                "alias": ["shortcode"]
+              }
+            },
+            "description": {
+              "optional": true,
+              "hints": {
+                "alias": ["description"]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

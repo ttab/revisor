@@ -1,0 +1,19 @@
+{
+  "type": "core/place",
+  "uuid": "d9a8a437-3ed3-4b97-b9fc-cf236b6dc5e7",
+  "meta": [
+    {
+      "type": "core/place",
+      "data": {
+        "position": "POINT(12 15)"
+      }
+    },
+    {
+      "type": "extra/entity-info",
+      "data": {
+        "shortcode": "someplace",
+        "description": "A place where things are"
+      }
+    }
+  ]
+}

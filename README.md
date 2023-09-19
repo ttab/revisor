@@ -99,6 +99,8 @@ Here we declare that links with `rel` "broader" are valid for all blocks that ma
 | format     | A named format that the value must follow                                  |
 | time       | A time format specification                                                |
 | geometry   | The geometry and coordinate type that must be used for WKT strings.        |
+| labels     | Labels used to describe the value                                          |
+| hints      | Key value pairs used to describe the value                                 |
 
 The distinction between optional and allowEmpty is only relevant for data attributes. The document and block attributes defined in the NewsDoc schema always exist, so `optional` and `allowEmpty` will be treated as equivalent. 
 
@@ -145,6 +147,27 @@ Coordinates, X and Y is the default if nothing else is specified:
 * `z`: X, Y, and Z coordinates
 * `m`: X and Y coordinates and a measurement
 * `zm`:X, Y and Z coordinates and a measurement
+
+#### Labels and hints
+
+Labels and hints do not play any role in the validation of documents. They are instead meant to describe the value for systems that use the information in the revisor schema to process the data correctly. It could f.ex. be used to tell a system that a specific WKT point is the position of the document itself, that a string value should be indexed as a keyword (non-tokenised), or provide other kinds of processing hints unrelated to the validation.
+
+Example block declaration:
+
+``` json
+{
+  "declares": {
+    "type": "tt/slugline"
+  },
+  "maxCount": 1,
+  "attributes": {
+    "value": {
+      "labels": ["keyword"],
+      "hints": {"alias": ["slug"]}
+    }
+  }
+}
+```
 
 ### Writing a document specification
 
