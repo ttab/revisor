@@ -640,19 +640,7 @@
     {
       "name": "Contacts group",
       "description": "A group used to categorise contacts",
-      "declares": "core/group",
-      "meta": [
-        {
-          "name": "Main metadata block",
-          "declares": {"type":"core/group"},
-          "count": 1,
-          "data": {
-            "kontid": {
-              "description": "TODO: this might be a reference to an ID in a old system, in that case, move to link."
-            }
-          }
-        }
-      ]
+      "declares": "core/group"
     },
     {
       "name": "Contact information",
@@ -667,11 +655,7 @@
             "firstName": {"optional":true},
             "lastName": {"optional":true},
             "employer": {"optional":true},
-            "title": {"optional":true},
-            "kontid": {
-              "optional": true,
-              "description": "TODO: this might be a reference to an ID in a old system, in that case, move to link."
-            }
+            "title": {"optional":true}
           }
         },
         {
