@@ -3,6 +3,49 @@
   "name": "TT",
   "documents": [
     {
+      "declares": "tt/grattis",
+      "links": [
+        {
+          "name": "Old DB reference",
+          "declares": {"rel":"alternate", "type":"tt/old-contact-db"},
+          "attributes": {
+            "uri": {"glob":["tt://kontid/*"]}
+          }
+        }
+      ],
+      "meta": [
+        {
+          "name": "Contact information",
+          "declares": {"type":"core/contact"},
+          "count": 1,
+          "data": {
+            "firstName": {"optional":true},
+            "lastName": {"optional":true}
+          }
+        },
+        {
+          "name": "Birthday date in UTC",
+          "declares": {"type":"tt/birthday"},
+          "count": 1,
+          "attributes": {
+            "value": {"format":"RFC3339"}
+          }
+        }
+      ]
+    },
+    {
+      "match": {"type": {"const":"core/group"}},
+      "links": [
+        {
+          "name": "Old DB reference",
+          "declares": {"rel":"alternate", "type":"tt/old-contact-db"},
+          "attributes": {
+            "uri": {"glob":["tt://kontid/*"]}
+          }
+        }
+      ]
+    },
+    {
       "match": {"type": {"const":"core/author"}},
       "meta": [
         {
