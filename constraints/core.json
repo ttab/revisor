@@ -102,6 +102,17 @@
       "declares": "core/person",
       "meta": [
         {
+          "name": "Main metadata block",
+          "declares": {"type":"core/person"},
+          "count": 1,
+          "data": {
+            "firstName": {"optional":true},
+            "lastName": {"optional":true},
+            "employer": {"optional":true},
+            "title": {"optional":true}
+          }
+        },
+        {
           "declares": {"type":"core/contact-info"},
           "data": {}
         }
