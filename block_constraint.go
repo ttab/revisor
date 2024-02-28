@@ -90,6 +90,7 @@ type BlockConstraint struct {
 	Attributes  ConstraintMap      `json:"attributes,omitempty"`
 	Data        ConstraintMap      `json:"data,omitempty"`
 	BlocksFrom  []BlocksFrom       `json:"blocksFrom,omitempty"`
+	Deprecated  *Deprecation       `json:"deprecated,omitempty"`
 }
 
 // BlockConstraints implements the BlockConstraintsSet interface.

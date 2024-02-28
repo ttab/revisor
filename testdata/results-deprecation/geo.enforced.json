@@ -1,0 +1,62 @@
+[
+  {
+    "error": "enforced deprecation: nope, can't have \"place-document\"",
+    "enforcedDeprecation": true
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "role"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "type": "core/place"
+      }
+    ],
+    "error": "enforced deprecation: nope, can't have \"absurdity\"",
+    "enforcedDeprecation": true
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "position_3d"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "type": "core/place"
+      }
+    ],
+    "error": "enforced deprecation: nope, can't have \"3d-points\"",
+    "enforcedDeprecation": true
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "position_3d"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "index": 1,
+        "type": "core/place"
+      }
+    ],
+    "error": "enforced deprecation: nope, can't have \"3d-points\"",
+    "enforcedDeprecation": true
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "title"
+      }
+    ],
+    "error": "enforced deprecation: nope, can't have \"genii-loci\"",
+    "enforcedDeprecation": true
+  }
+]

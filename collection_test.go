@@ -25,9 +25,7 @@ func TestCollection(t *testing.T) {
 	)
 
 	testValidator, err := revisor.NewValidator(testConstraints...)
-	if err != nil {
-		t.Fatalf("failed to create test validator: %v", err)
-	}
+	must(t, err, "failed to create test validator")
 
 	tests := []validatorTest{
 		{
@@ -38,9 +36,7 @@ func TestCollection(t *testing.T) {
 	}
 
 	paths, err := filepath.Glob(filepath.Join("testdata", "results-collection", "*.json"))
-	if err != nil {
-		t.Fatalf("failed to glob for collection result files: %v", err)
-	}
+	must(t, err, "failed to glob for collection result files")
 
 	for j := range tests {
 		testCase := tests[j]
@@ -78,9 +74,7 @@ func testCollectionAgainstGolden(
 		var document newsdoc.Document // want     []revisor.ValidationResult
 
 		err := internal.UnmarshalFile(sourceDocPath, &document)
-		if err != nil {
-			t.Fatalf("failed to load document: %v", err)
-		}
+		must(t, err, "failed to load document")
 
 		collector := revisor.NewValueCollector()
 
@@ -129,9 +123,7 @@ func testCollectionAgainstGolden(
 		var want map[string]collectedValues
 
 		err = internal.UnmarshalFile(goldenPath, &want)
-		if err != nil {
-			t.Fatalf("failed to load expected result: %v", err)
-		}
+		must(t, err, "failed to load expected result")
 
 		if diff := cmp.Diff(want, collected); diff != "" {
 			t.Fatalf("collection mismatch (-want +got):\n%s",
@@ -140,6 +132,7 @@ func testCollectionAgainstGolden(
 	})
 }
 
+//nolint:unparam
 func must(t *testing.T, err error, format string, a ...any) {
 	t.Helper()
 

@@ -20,6 +20,7 @@ type DocumentConstraint struct {
 	Meta       []*BlockConstraint `json:"meta,omitempty"`
 	Content    []*BlockConstraint `json:"content,omitempty"`
 	Attributes ConstraintMap      `json:"attributes,omitempty"`
+	Deprecated *Deprecation       `json:"deprecated,omitempty"`
 }
 
 // BlockConstraints implements the BlockConstraintsSet interface.

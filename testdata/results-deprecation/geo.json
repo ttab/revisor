@@ -1,0 +1,90 @@
+[
+  {
+    "Deprecation": {
+      "label": "place-document",
+      "doc": "Stop sending these plz"
+    },
+    "Context": {}
+  },
+  {
+    "Deprecation": {
+      "label": "absurdity",
+      "doc": "Why did we ever think this was a good idea?"
+    },
+    "Context": {
+      "entity": {
+        "refType": "attribute",
+        "name": "role"
+      },
+      "block": {
+        "type": "core/place",
+        "data": {
+          "area": "POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))",
+          "position": "POINT(12 15)",
+          "position_3d": "POINT Z (12 15 14)",
+          "road": "LINESTRING (30.123 10.15, 10.66 30.23, 40.23 40.66)"
+        },
+        "role": "absurd"
+      },
+      "value": "absurd"
+    }
+  },
+  {
+    "Deprecation": {
+      "label": "3d-points",
+      "doc": "Too ambitious, don't want"
+    },
+    "Context": {
+      "entity": {
+        "refType": "data attribute",
+        "name": "position_3d"
+      },
+      "block": {
+        "type": "core/place",
+        "data": {
+          "area": "POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))",
+          "position": "POINT(12 15)",
+          "position_3d": "POINT Z (12 15 14)",
+          "road": "LINESTRING (30.123 10.15, 10.66 30.23, 40.23 40.66)"
+        },
+        "role": "absurd"
+      },
+      "value": "POINT Z (12 15 14)"
+    }
+  },
+  {
+    "Deprecation": {
+      "label": "3d-points",
+      "doc": "Too ambitious, don't want"
+    },
+    "Context": {
+      "entity": {
+        "refType": "data attribute",
+        "name": "position_3d"
+      },
+      "block": {
+        "type": "core/place",
+        "data": {
+          "area": "POLYGON Z((30 10 10, 40 40 20, 20 40 30, 10 20 40, 30 10 50))",
+          "position": "POINT(12 15 14)",
+          "position_3d": "POINT(12 15)",
+          "road": "LINESTRING Z(30.123 10.15 11.22, 10.66 30.23 22.33, 40.23 40.66 44.44)"
+        }
+      },
+      "value": "POINT(12 15)"
+    }
+  },
+  {
+    "Deprecation": {
+      "label": "genii-loci",
+      "doc": "What places need names anyway?"
+    },
+    "Context": {
+      "entity": {
+        "refType": "attribute",
+        "name": "title"
+      },
+      "value": "Some place"
+    }
+  }
+]

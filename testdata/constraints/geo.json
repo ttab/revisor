@@ -5,9 +5,25 @@
     {
       "name": "Place",
       "declares": "core/place",
+      "deprecated": {
+        "label": "place-document",
+        "doc": "Stop sending these plz"
+      },
+      "attributes": {
+        "title": {
+          "allowEmpty": true,
+          "deprecated": {
+            "label": "genii-loci",
+            "doc": "What places need names anyway?"
+          }
+        }
+      },
       "meta": [
         {
           "declares": {"type":"core/place"},
+          "attributes": {
+            "role": {"optional":true}
+          },
           "data": {
             "position": {
               "format": "wkt",
@@ -17,7 +33,11 @@
             "position_3d": {
               "format": "wkt",
               "geometry": "point-z",
-              "optional": true
+              "optional": true,
+              "deprecated": {
+                "label": "3d-points",
+                "doc": "Too ambitious, don't want"
+              }
             },
             "area": {
               "format": "wkt",
@@ -28,6 +48,21 @@
               "format": "wkt",
               "geometry": "linestring",
               "optional": true
+            }
+          }
+        },
+        {
+          "match": {
+            "type": {"const":"core/place"},
+            "role": {"const":"absurd"}
+          },
+          "attributes": {
+            "role": {
+              "allowEmpty": true,
+              "deprecated": {
+                "label": "absurdity",
+                "doc": "Why did we ever think this was a good idea?"
+              }
             }
           }
         }

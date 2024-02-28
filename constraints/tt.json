@@ -223,6 +223,10 @@
             "value": {
               "labels": ["keyword"]
             }
+          },
+          "deprecated": {
+            "label": "tt-sector",
+            "doc": "Use core/section instead"
           }
         }
       ]

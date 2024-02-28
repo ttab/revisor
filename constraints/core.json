@@ -83,7 +83,7 @@
     },
     {
       "name": "Section",
-      "description": "An section for content",
+      "description": "A section for content",
       "declares": "core/section"
     },
     {
@@ -552,7 +552,11 @@
           "declares": {"type": "core/section", "rel":"subject"},
           "attributes": {
             "uuid": {},
-            "title": {"allowEmpty":true}
+            "title": {"allowEmpty":true},
+            "value": {
+              "allowEmpty": true,
+              "labels": ["keyword"]
+            }
           }
         },
         {
@@ -1003,6 +1007,10 @@
           "attributes": {
             "title": {},
             "value": {}
+          },
+          "deprecated": {
+            "label": "tt-sector",
+            "doc": "Use core/section instead"
           }
         }
       ]

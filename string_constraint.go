@@ -73,6 +73,7 @@ type StringConstraint struct {
 	Time        string       `json:"time,omitempty"`
 	Geometry    string       `json:"geometry,omitempty"`
 	HTMLPolicy  string       `json:"htmlPolicy,omitempty"`
+	Deprecated  *Deprecation `json:"deprecated,omitempty"`
 
 	// Labels (and hints) are not constraints per se, but should be seen as
 	// labels on the value that can be used by systems that process data
@@ -121,6 +122,7 @@ func (sc *StringConstraint) Requirement() string {
 
 type ValidationContext struct {
 	coll ValueCollector
+	depr DeprecationHandlerFunc
 
 	ValidateHTML func(policyName, value string) error
 }
