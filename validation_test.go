@@ -2,6 +2,7 @@ package revisor_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"os"
 	"path/filepath"
@@ -57,7 +58,9 @@ func FuzzValidationDocuments(f *testing.F) {
 			return
 		}
 
-		_ = validator.ValidateDocument(&document)
+		ctx := context.Background()
+
+		_ = validator.ValidateDocument(ctx, &document)
 	})
 }
 
@@ -105,7 +108,9 @@ func FuzzValidationWide(f *testing.F) {
 			return
 		}
 
-		_ = validator.ValidateDocument(&document)
+		ctx := context.Background()
+
+		_ = validator.ValidateDocument(ctx, &document)
 	})
 }
 
@@ -155,8 +160,10 @@ func FuzzValidationConstraints(f *testing.F) {
 			return
 		}
 
+		ctx := context.Background()
+
 		for _, document := range documents {
-			_ = validator.ValidateDocument(document)
+			_ = validator.ValidateDocument(ctx, document)
 		}
 	})
 }
@@ -300,7 +307,9 @@ func testAgainstGolden(t *testing.T, goldenPath string, testCase validatorTest) 
 			t.Fatalf("failed to load expected result: %v", err)
 		}
 
-		got := testCase.Validator.ValidateDocument(&document)
+		ctx := context.Background()
+
+		got := testCase.Validator.ValidateDocument(ctx, &document)
 
 		for i := range got {
 			if !resultHas(want, got[i]) {

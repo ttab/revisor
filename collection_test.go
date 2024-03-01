@@ -1,6 +1,7 @@
 package revisor_test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -78,7 +79,9 @@ func testCollectionAgainstGolden(
 
 		collector := revisor.NewValueCollector()
 
-		_ = testCase.Validator.ValidateDocument(&document,
+		ctx := context.Background()
+
+		_ = testCase.Validator.ValidateDocument(ctx, &document,
 			revisor.WithValueCollector(collector))
 
 		collected := make(map[string]collectedValues)

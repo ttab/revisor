@@ -153,6 +153,8 @@ func serveCommand(c *cli.Context) error {
 	}
 
 	srv.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+
 		if r.Method != http.MethodPost {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 
@@ -177,7 +179,7 @@ func serveCommand(c *cli.Context) error {
 			return
 		}
 
-		errors := validator.ValidateDocument(&d)
+		errors := validator.ValidateDocument(ctx, &d)
 		sort.Slice(errors, func(i, j int) bool {
 			return errors[i].String() < errors[j].String()
 		})
@@ -244,7 +246,7 @@ func documentCommand(c *cli.Context) error {
 				path, err)
 		}
 
-		errors := validator.ValidateDocument(&d)
+		errors := validator.ValidateDocument(c.Context, &d)
 
 		switch {
 		case jsonOut:

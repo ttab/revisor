@@ -1,6 +1,7 @@
 package revisor_test
 
 import (
+	"context"
 	"fmt"
 	"testing"
 
@@ -40,7 +41,9 @@ func BenchmarkValidateDocument(b *testing.B) {
 		panic(fmt.Errorf("failed to create validator: %w", err))
 	}
 
+	ctx := context.Background()
+
 	for n := 0; n < b.N; n++ {
-		_ = validator.ValidateDocument(&document)
+		_ = validator.ValidateDocument(ctx, &document)
 	}
 }
