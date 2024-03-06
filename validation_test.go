@@ -3,7 +3,9 @@ package revisor_test
 import (
 	"bytes"
 	"context"
+	"embed"
 	"encoding/json"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -11,8 +13,8 @@ import (
 
 	"github.com/ttab/newsdoc"
 	"github.com/ttab/revisor"
-	"github.com/ttab/revisor/constraints"
 	"github.com/ttab/revisor/internal"
+	"github.com/ttab/revisorschemas"
 )
 
 func FuzzValidationDocuments(f *testing.F) {
@@ -21,12 +23,14 @@ func FuzzValidationDocuments(f *testing.F) {
 		extraConstraints revisor.ConstraintSet
 	)
 
-	err := internal.UnmarshalFile("constraints/core.json", &constraints)
+	sFS := revisorschemas.Files()
+
+	err := internal.UnmarshalFileFS(sFS, "core.json", &constraints)
 	if err != nil {
 		f.Fatalf("failed to unmarshal base constraints: %v", err)
 	}
 
-	err = internal.UnmarshalFile("constraints/tt.json", &extraConstraints)
+	err = internal.UnmarshalFileFS(sFS, "tt.json", &extraConstraints)
 	if err != nil {
 		f.Fatalf("failed to unmarshal example constraints: %v", err)
 	}
@@ -65,12 +69,14 @@ func FuzzValidationDocuments(f *testing.F) {
 }
 
 func FuzzValidationWide(f *testing.F) {
-	baseConstraints, err := os.ReadFile("constraints/core.json")
+	sFS := revisorschemas.Files()
+
+	baseConstraints, err := sFS.ReadFile("core.json")
 	if err != nil {
 		f.Fatalf("failed to read base constraints: %v", err)
 	}
 
-	exampleConstraints, err := os.ReadFile("constraints/tt.json")
+	exampleConstraints, err := sFS.ReadFile("tt.json")
 	if err != nil {
 		f.Fatalf("failed to read example constraints: %v", err)
 	}
@@ -115,13 +121,15 @@ func FuzzValidationWide(f *testing.F) {
 }
 
 func FuzzValidationConstraints(f *testing.F) {
-	constraintPaths, err := filepath.Glob(filepath.Join("constraints", "*.json"))
+	sFS := revisorschemas.Files()
+
+	constraintPaths, err := fs.Glob(sFS, filepath.Join("constraints", "*.json"))
 	if err != nil {
 		f.Fatalf("failed to glob for constraint files: %v", err)
 	}
 
 	for i := range constraintPaths {
-		data, err := os.ReadFile(constraintPaths[i])
+		data, err := sFS.ReadFile(constraintPaths[i])
 		if err != nil {
 			f.Fatalf("failed to read constraints from %q: %v", constraintPaths[i], err)
 		}
@@ -211,19 +219,44 @@ func decodeConstraintSets(
 	return constraints
 }
 
-func TestValidateDocument(t *testing.T) {
-	core, err := constraints.CoreSchema()
-	if err != nil {
-		t.Fatalf("failed to load base constraints: %v", err)
+func decodeConstraintSetsFS(
+	t *testing.T, sFS embed.FS, names ...string,
+) []revisor.ConstraintSet {
+	t.Helper()
+
+	var constraints []revisor.ConstraintSet
+
+	for _, n := range names {
+		data, err := sFS.ReadFile(n)
+		if err != nil {
+			t.Fatalf("failed to load constraints from %q: %v",
+				n, err)
+		}
+
+		var c revisor.ConstraintSet
+
+		decodeBytes(t, data, &c)
+
+		constraints = append(constraints, c)
 	}
+
+	return constraints
+}
+
+func TestValidateDocument(t *testing.T) {
+	sFS := revisorschemas.Files()
+
+	core := decodeConstraintSetsFS(t, sFS,
+		"core.json", "core-planning.json",
+	)
 
 	baseValidator, err := revisor.NewValidator(core...)
 	if err != nil {
 		t.Fatalf("failed to create base validator: %v", err)
 	}
 
-	extraConstraints := decodeConstraintSets(t,
-		"constraints/tt.json", "constraints/tt_planning.json",
+	extraConstraints := decodeConstraintSetsFS(t, sFS,
+		"tt.json", "tt-planning.json",
 	)
 
 	orgValidator, err := baseValidator.WithConstraints(extraConstraints...)

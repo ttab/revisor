@@ -1,6 +1,9 @@
 GOROOT ?= $(shell go env GOROOT)
 SOURCES := $(shell find . -name '*.go')
 
+spec.schema.json: go.mod $(SOURCES)
+	go run ./cmd/revisor jsonschema > spec.schema.json
+
 .PHONY: wasm
 wasm: public_html/wasm.wasm public_html/* public_html/data/*
 

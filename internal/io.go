@@ -2,6 +2,7 @@ package internal
 
 import (
 	"bytes"
+	"embed"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -11,6 +12,24 @@ import (
 
 func UnmarshalFile(path string, o interface{}) error {
 	contents, err := os.ReadFile(path)
+	if err != nil {
+		return fmt.Errorf("failed to read file: %w", err)
+	}
+
+	dec := json.NewDecoder(bytes.NewReader(contents))
+
+	dec.DisallowUnknownFields()
+
+	err = dec.Decode(o)
+	if err != nil {
+		return fmt.Errorf("failed to unmarshal JSON: %w", err)
+	}
+
+	return nil
+}
+
+func UnmarshalFileFS(fs embed.FS, path string, o interface{}) error {
+	contents, err := fs.ReadFile(path)
 	if err != nil {
 		return fmt.Errorf("failed to read file: %w", err)
 	}

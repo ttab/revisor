@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -10,10 +11,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/invopop/jsonschema"
 	"github.com/ttab/newsdoc"
 	"github.com/ttab/revisor"
-	"github.com/ttab/revisor/constraints"
 	"github.com/ttab/revisor/internal"
+	"github.com/ttab/revisorschemas"
 	"github.com/urfave/cli/v2"
 )
 
@@ -68,6 +70,33 @@ func main() {
 					},
 				},
 			},
+			{
+				Name:  "jsonschema",
+				Usage: "generates a JSON schema for revisor specifications",
+				Action: func(_ *cli.Context) error {
+					schema := jsonschema.Reflect(&revisor.ConstraintSet{})
+
+					enc := json.NewEncoder(os.Stdout)
+
+					enc.SetIndent("", "  ")
+
+					err := enc.Encode(schema)
+					if err != nil {
+						return fmt.Errorf("failed to encode schema: %w", err)
+					}
+
+					return nil
+				},
+			},
+			{
+				Name:  "spec-version",
+				Usage: "prints the version of the embedded specifications",
+				Action: func(_ *cli.Context) error {
+					_, _ = fmt.Fprintln(os.Stdout, revisorschemas.Version())
+
+					return nil
+				},
+			},
 		},
 	}
 
@@ -83,7 +112,8 @@ func loadConstraints(
 	var list []revisor.ConstraintSet
 
 	if coreSpec {
-		core, err := constraints.CoreSchema()
+		core, err := decodeConstraintSetsFS(revisorschemas.Files(),
+			"core.json", "core-planning.json")
 		if err != nil {
 			return nil, fmt.Errorf(
 				"failed to load built in core schema: %w", err)
@@ -111,6 +141,26 @@ func loadConstraints(
 	}
 
 	return list, nil
+}
+
+func decodeConstraintSetsFS(
+	sFS embed.FS, names ...string,
+) ([]revisor.ConstraintSet, error) {
+	var constraints []revisor.ConstraintSet
+
+	for _, n := range names {
+		var c revisor.ConstraintSet
+
+		err := internal.UnmarshalFileFS(sFS, n, &c)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read schema %q: %w",
+				n, err)
+		}
+
+		constraints = append(constraints, c)
+	}
+
+	return constraints, nil
 }
 
 type loaderFunc func(ref string, o interface{}) error

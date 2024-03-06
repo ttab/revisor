@@ -3,6 +3,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -143,7 +144,7 @@ func validateDocument(_ js.Value, args []js.Value) any {
 				"invalid document: %w", err)
 		}
 
-		result := validator.ValidateDocument(&d)
+		result := validator.ValidateDocument(context.Background(), &d)
 
 		returnData, err := json.Marshal(result)
 		if err != nil {

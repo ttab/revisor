@@ -1,0 +1,330 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ttab/revisor/constraint-set",
+  "$ref": "#/$defs/ConstraintSet",
+  "$defs": {
+    "BlockConstraint": {
+      "properties": {
+        "declares": {
+          "$ref": "#/$defs/BlockSignature"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "match": {
+          "$ref": "#/$defs/ConstraintMap"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "maxCount": {
+          "type": "integer"
+        },
+        "minCount": {
+          "type": "integer"
+        },
+        "links": {
+          "items": {
+            "$ref": "#/$defs/BlockConstraint"
+          },
+          "type": "array"
+        },
+        "meta": {
+          "items": {
+            "$ref": "#/$defs/BlockConstraint"
+          },
+          "type": "array"
+        },
+        "content": {
+          "items": {
+            "$ref": "#/$defs/BlockConstraint"
+          },
+          "type": "array"
+        },
+        "attributes": {
+          "$ref": "#/$defs/ConstraintMap"
+        },
+        "data": {
+          "$ref": "#/$defs/ConstraintMap"
+        },
+        "blocksFrom": {
+          "items": {
+            "$ref": "#/$defs/BlocksFrom"
+          },
+          "type": "array"
+        },
+        "deprecated": {
+          "$ref": "#/$defs/Deprecation"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "BlockSignature": {
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "rel": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "BlocksFrom": {
+      "properties": {
+        "docType": {
+          "type": "string"
+        },
+        "global": {
+          "type": "boolean"
+        },
+        "kind": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "kind"
+      ]
+    },
+    "ConstraintMap": {
+      "additionalProperties": {
+        "$ref": "#/$defs/StringConstraint"
+      },
+      "type": "object"
+    },
+    "ConstraintSet": {
+      "properties": {
+        "version": {
+          "type": "integer"
+        },
+        "$schema": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "documents": {
+          "items": {
+            "$ref": "#/$defs/DocumentConstraint"
+          },
+          "type": "array"
+        },
+        "links": {
+          "items": {
+            "$ref": "#/$defs/BlockConstraint"
+          },
+          "type": "array"
+        },
+        "meta": {
+          "items": {
+            "$ref": "#/$defs/BlockConstraint"
+          },
+          "type": "array"
+        },
+        "content": {
+          "items": {
+            "$ref": "#/$defs/BlockConstraint"
+          },
+          "type": "array"
+        },
+        "attributes": {
+          "$ref": "#/$defs/ConstraintMap"
+        },
+        "htmlPolicies": {
+          "items": {
+            "$ref": "#/$defs/HTMLPolicy"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name"
+      ]
+    },
+    "Deprecation": {
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "doc": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "label",
+        "doc"
+      ]
+    },
+    "DocumentConstraint": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "declares": {
+          "type": "string"
+        },
+        "match": {
+          "$ref": "#/$defs/ConstraintMap"
+        },
+        "links": {
+          "items": {
+            "$ref": "#/$defs/BlockConstraint"
+          },
+          "type": "array"
+        },
+        "meta": {
+          "items": {
+            "$ref": "#/$defs/BlockConstraint"
+          },
+          "type": "array"
+        },
+        "content": {
+          "items": {
+            "$ref": "#/$defs/BlockConstraint"
+          },
+          "type": "array"
+        },
+        "attributes": {
+          "$ref": "#/$defs/ConstraintMap"
+        },
+        "deprecated": {
+          "$ref": "#/$defs/Deprecation"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Glob": {
+      "properties": {},
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "GlobList": {
+      "items": {
+        "$ref": "#/$defs/Glob"
+      },
+      "type": "array"
+    },
+    "HTMLElement": {
+      "properties": {
+        "attributes": {
+          "$ref": "#/$defs/ConstraintMap"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "HTMLPolicy": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "uses": {
+          "type": "string"
+        },
+        "extends": {
+          "type": "string"
+        },
+        "elements": {
+          "additionalProperties": {
+            "$ref": "#/$defs/HTMLElement"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "elements"
+      ]
+    },
+    "Regexp": {
+      "properties": {},
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "StringConstraint": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "optional": {
+          "type": "boolean"
+        },
+        "allowEmpty": {
+          "type": "boolean"
+        },
+        "const": {
+          "type": "string"
+        },
+        "enum": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "pattern": {
+          "$ref": "#/$defs/Regexp"
+        },
+        "glob": {
+          "$ref": "#/$defs/GlobList"
+        },
+        "format": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string"
+        },
+        "geometry": {
+          "type": "string"
+        },
+        "htmlPolicy": {
+          "type": "string"
+        },
+        "deprecated": {
+          "$ref": "#/$defs/Deprecation"
+        },
+        "labels": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "hints": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    }
+  }
+}
