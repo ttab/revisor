@@ -229,7 +229,14 @@ func serveCommand(c *cli.Context) error {
 			return
 		}
 
-		errors := validator.ValidateDocument(ctx, &d)
+		errors, err := validator.ValidateDocument(ctx, &d)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			_, _ = w.Write([]byte(err.Error()))
+
+			return
+		}
+
 		sort.Slice(errors, func(i, j int) bool {
 			return errors[i].String() < errors[j].String()
 		})
@@ -296,7 +303,10 @@ func documentCommand(c *cli.Context) error {
 				path, err)
 		}
 
-		errors := validator.ValidateDocument(c.Context, &d)
+		errors, err := validator.ValidateDocument(c.Context, &d)
+		if err != nil {
+			return fmt.Errorf("failed to validate document: %w", err)
+		}
 
 		switch {
 		case jsonOut:

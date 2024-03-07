@@ -1,6 +1,6 @@
 [
   {
-    "error": "enforced deprecation: nope, can't have \"place-document\"",
+    "error": "enforced deprecation \"place-document\": Stop sending these plz",
     "enforcedDeprecation": true
   },
   {
@@ -15,7 +15,7 @@
         "type": "core/place"
       }
     ],
-    "error": "enforced deprecation: nope, can't have \"absurdity\"",
+    "error": "enforced deprecation \"absurdity\": Why did we ever think this was a good idea?",
     "enforcedDeprecation": true
   },
   {
@@ -30,7 +30,7 @@
         "type": "core/place"
       }
     ],
-    "error": "enforced deprecation: nope, can't have \"3d-points\"",
+    "error": "enforced deprecation \"3d-points\": Too ambitious, don't want",
     "enforcedDeprecation": true
   },
   {
@@ -46,7 +46,7 @@
         "type": "core/place"
       }
     ],
-    "error": "enforced deprecation: nope, can't have \"3d-points\"",
+    "error": "enforced deprecation \"3d-points\": Too ambitious, don't want",
     "enforcedDeprecation": true
   },
   {
@@ -56,7 +56,7 @@
         "name": "title"
       }
     ],
-    "error": "enforced deprecation: nope, can't have \"genii-loci\"",
+    "error": "enforced deprecation \"genii-loci\": What places need names anyway?",
     "enforcedDeprecation": true
   }
 ]

@@ -81,8 +81,9 @@ func testCollectionAgainstGolden(
 
 		ctx := context.Background()
 
-		_ = testCase.Validator.ValidateDocument(ctx, &document,
+		_, err = testCase.Validator.ValidateDocument(ctx, &document,
 			revisor.WithValueCollector(collector))
+		must(t, err, "validate document")
 
 		collected := make(map[string]collectedValues)
 

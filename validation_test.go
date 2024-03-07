@@ -64,7 +64,7 @@ func FuzzValidationDocuments(f *testing.F) {
 
 		ctx := context.Background()
 
-		_ = validator.ValidateDocument(ctx, &document)
+		_, _ = validator.ValidateDocument(ctx, &document)
 	})
 }
 
@@ -116,7 +116,7 @@ func FuzzValidationWide(f *testing.F) {
 
 		ctx := context.Background()
 
-		_ = validator.ValidateDocument(ctx, &document)
+		_, _ = validator.ValidateDocument(ctx, &document)
 	})
 }
 
@@ -171,7 +171,7 @@ func FuzzValidationConstraints(f *testing.F) {
 		ctx := context.Background()
 
 		for _, document := range documents {
-			_ = validator.ValidateDocument(ctx, document)
+			_, _ = validator.ValidateDocument(ctx, document)
 		}
 	})
 }
@@ -331,18 +331,15 @@ func testAgainstGolden(t *testing.T, goldenPath string, testCase validatorTest) 
 		)
 
 		err := internal.UnmarshalFile(sourceDocPath, &document)
-		if err != nil {
-			t.Fatalf("failed to load document: %v", err)
-		}
+		must(t, err, "failed to load document")
 
 		err = internal.UnmarshalFile(goldenPath, &want)
-		if err != nil {
-			t.Fatalf("failed to load expected result: %v", err)
-		}
+		must(t, err, "failed to load expected result")
 
 		ctx := context.Background()
 
-		got := testCase.Validator.ValidateDocument(ctx, &document)
+		got, err := testCase.Validator.ValidateDocument(ctx, &document)
+		must(t, err, "validate document")
 
 		for i := range got {
 			if !resultHas(want, got[i]) {

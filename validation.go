@@ -216,12 +216,18 @@ type DeprecationContext struct {
 	Value *string `json:"value,omitempty"`
 }
 
+// DeprecationDecision tells revisor how to handle the deprecation.
+type DeprecationDecision struct {
+	Enforce bool
+	Message string
+}
+
 // DeprecationHandlerFunc can handle a deprecation, and should return an error
 // if the deprecation should be enforced (treated as a validation error).
 type DeprecationHandlerFunc func(
 	ctx context.Context,
 	doc *newsdoc.Document, deprecation Deprecation, c DeprecationContext,
-) error
+) (DeprecationDecision, error)
 
 func WithDeprecationHandler(
 	fn DeprecationHandlerFunc,
@@ -234,7 +240,7 @@ func WithDeprecationHandler(
 func (v *Validator) ValidateDocument(
 	ctx context.Context,
 	document *newsdoc.Document, opts ...ValidationOptionFunc,
-) []ValidationResult {
+) ([]ValidationResult, error) {
 	var res []ValidationResult
 
 	blockConstraints := append([]BlockConstraintSet{}, v.blockConstraints...)
@@ -274,19 +280,11 @@ func (v *Validator) ValidateDocument(
 			declared = true
 		}
 
-		if v.documents[i].Deprecated != nil && vCtx.depr != nil {
-			err := vCtx.depr(
-				ctx, document,
-				*v.documents[i].Deprecated,
-				DeprecationContext{},
-			)
-			if err != nil {
-				res = append(res, ValidationResult{
-					Error: fmt.Sprintf(
-						"enforced deprecation: %v", err),
-					EnforcedDeprecation: true,
-				})
-			}
+		res, err = checkDeprecation(
+			ctx, vCtx, res, document,
+			v.documents[i].Deprecated, DeprecationContext{})
+		if err != nil {
+			return nil, err
 		}
 
 		res = v.documents[i].checkAttributes(document, res, &vCtx)
@@ -301,23 +299,75 @@ func (v *Validator) ValidateDocument(
 		})
 	}
 
-	res = v.validateBlocks(
+	res, err = v.validateBlocks(
 		ctx, document,
 		NewDocumentBlocks(document),
 		blockConstraints, res, vCtx,
 	)
+	if err != nil {
+		return nil, err
+	}
 
-	res = validateDocumentAttributes(
+	res, err = validateDocumentAttributes(
 		ctx, attributeConstraints, document, res, vCtx)
+	if err != nil {
+		return nil, err
+	}
 
-	return res
+	return res, nil
+}
+
+func checkDeprecation(
+	ctx context.Context,
+	vCtx ValidationContext,
+	res []ValidationResult,
+	doc *newsdoc.Document,
+	depr *Deprecation,
+	dCtx DeprecationContext,
+) ([]ValidationResult, error) {
+	if depr == nil || vCtx.depr == nil {
+		return res, nil
+	}
+
+	d, err := vCtx.depr(
+		ctx, doc,
+		*depr,
+		dCtx,
+	)
+	if err != nil {
+		return nil, fmt.Errorf(
+			"deprecation handler failure: %w", err)
+	}
+
+	if d.Enforce {
+		msg := d.Message
+		if msg == "" {
+			msg = depr.Doc
+		}
+
+		var entity []EntityRef
+
+		if dCtx.Entity != nil {
+			entity = append(entity, *dCtx.Entity)
+		}
+
+		res = append(res, ValidationResult{
+			Entity: entity,
+			Error: fmt.Sprintf(
+				"enforced deprecation %q: %s",
+				depr.Label, msg),
+			EnforcedDeprecation: true,
+		})
+	}
+
+	return res, nil
 }
 
 func validateDocumentAttributes(
 	ctx context.Context,
 	constraints []ConstraintMap, d *newsdoc.Document,
 	res []ValidationResult, vCtx ValidationContext,
-) []ValidationResult {
+) ([]ValidationResult, error) {
 	for i := range constraints {
 		for k, check := range constraints[i] {
 			value, ok := documentAttribute(d, k)
@@ -335,23 +385,14 @@ func validateDocumentAttributes(
 				})
 			}
 
-			if value != "" && check.Deprecated != nil && vCtx.depr != nil {
-				err := vCtx.depr(
-					ctx, d,
-					*check.Deprecated,
-					DeprecationContext{
-						Entity: &ref,
-						Value:  &value,
-					},
-				)
-				if err != nil {
-					res = append(res, ValidationResult{
-						Entity: []EntityRef{ref},
-						Error: fmt.Sprintf(
-							"enforced deprecation: %v", err),
-						EnforcedDeprecation: true,
-					})
-				}
+			res, err = checkDeprecation(
+				ctx, vCtx, res, d,
+				check.Deprecated, DeprecationContext{
+					Entity: &ref,
+					Value:  &value,
+				})
+			if err != nil {
+				return nil, err
 			}
 
 			vCtx.coll.CollectValue(ValueAnnotation{
@@ -361,7 +402,7 @@ func validateDocumentAttributes(
 		}
 	}
 
-	return res
+	return res, nil
 }
 
 func (v *Validator) validateBlocks(
@@ -369,21 +410,26 @@ func (v *Validator) validateBlocks(
 	blocks BlockSource,
 	constraints []BlockConstraintSet, res []ValidationResult,
 	vCtx ValidationContext,
-) []ValidationResult {
+) ([]ValidationResult, error) {
 	c := vCtx
 
 	c.ValidateHTML = v.validateHTML
 
+	var err error
+
 	for i := range blockKinds {
-		res = v.validateBlockSlice(
+		res, err = v.validateBlockSlice(
 			ctx, doc,
 			blocks.GetBlocks(blockKinds[i]), vCtx,
 			constraints, blockKinds[i],
 			res,
 		)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	return res
+	return res, nil
 }
 
 func (v *Validator) validateBlockSlice(
@@ -391,7 +437,7 @@ func (v *Validator) validateBlockSlice(
 	blocks []newsdoc.Block, vCtx ValidationContext,
 	constraints []BlockConstraintSet, kind BlockKind,
 	res []ValidationResult,
-) []ValidationResult {
+) ([]ValidationResult, error) {
 	matches := make(map[*BlockConstraint]int)
 
 	for i := range blocks {
@@ -407,10 +453,13 @@ func (v *Validator) validateBlockSlice(
 
 		childCtx.coll = vCtx.coll.With(entity)
 
-		r := v.validateBlock(
+		r, err := v.validateBlock(
 			ctx, doc,
 			&blocks[i], childCtx, constraints, entity, matches, nil,
 		)
+		if err != nil {
+			return nil, err
+		}
 
 		for j := range r {
 			r[j].Entity = append(r[j].Entity, entity)
@@ -434,7 +483,7 @@ func (v *Validator) validateBlockSlice(
 		}
 	}
 
-	return res
+	return res, nil
 }
 
 func nilOrEqual(t *int, n int) bool {
@@ -466,7 +515,7 @@ func (v *Validator) validateBlock(
 	b *newsdoc.Block, vCtx ValidationContext,
 	constraintSets []BlockConstraintSet, entity EntityRef,
 	matches map[*BlockConstraint]int, res []ValidationResult,
-) []ValidationResult {
+) ([]ValidationResult, error) {
 	var (
 		defined                     bool
 		matchedConstraints          []BlockConstraintSet
@@ -504,23 +553,17 @@ func (v *Validator) validateBlock(
 				defined = true
 			}
 
-			if constraint.Deprecated != nil && vCtx.depr != nil {
-				err := vCtx.depr(
-					ctx, doc,
-					*constraint.Deprecated,
-					DeprecationContext{
-						Entity: &entity,
-						Block:  b,
-					},
-				)
-				if err != nil {
-					res = append(res, ValidationResult{
-						Error: fmt.Sprintf(
-							"enforced deprecation: %v", err),
-						EnforcedDeprecation: true,
-					})
-				}
+			r, err := checkDeprecation(
+				ctx, vCtx, res, doc, constraint.Deprecated,
+				DeprecationContext{
+					Entity: &entity,
+					Block:  b,
+				})
+			if err != nil {
+				return nil, err
 			}
+
+			res = r
 
 			for i := range attributes {
 				declaredAttributes[blockAttributeKey(attributes[i])] = true
@@ -567,20 +610,32 @@ func (v *Validator) validateBlock(
 		})
 	}
 
-	res = validateBlockAttributes(
+	var err error
+
+	res, err = validateBlockAttributes(
 		ctx, doc,
 		declaredAttributes,
 		matchedAttributeConstraints, b, vCtx, res)
-	res = validateBlockData(
-		ctx, doc, b.Data, vCtx, b, matchedDataConstraints, res)
+	if err != nil {
+		return nil, err
+	}
 
-	res = v.validateBlocks(
+	res, err = validateBlockData(
+		ctx, doc, b.Data, vCtx, b, matchedDataConstraints, res)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err = v.validateBlocks(
 		ctx, doc,
 		NewNestedBlocks(b),
 		matchedConstraints, res, vCtx,
 	)
+	if err != nil {
+		return nil, err
+	}
 
-	return res
+	return res, nil
 }
 
 func (v *Validator) borrowedBlockConstraints(
@@ -630,7 +685,7 @@ func validateBlockAttributes(
 	declaredAttributes map[blockAttributeKey]bool,
 	constraints []ConstraintMap, b *newsdoc.Block, vCtx ValidationContext,
 	res []ValidationResult,
-) []ValidationResult {
+) ([]ValidationResult, error) {
 	if b.UUID != "" {
 		_, err := uuid.Parse(b.UUID)
 		if err != nil {
@@ -664,24 +719,14 @@ func validateBlockAttributes(
 				})
 			}
 
-			if value != "" && check.Deprecated != nil && vCtx.depr != nil {
-				err := vCtx.depr(
-					ctx, doc,
-					*check.Deprecated,
-					DeprecationContext{
-						Entity: &ref,
-						Block:  b,
-						Value:  &value,
-					},
-				)
-				if err != nil {
-					res = append(res, ValidationResult{
-						Entity: []EntityRef{ref},
-						Error: fmt.Sprintf(
-							"enforced deprecation: %v", err),
-						EnforcedDeprecation: true,
-					})
-				}
+			res, err = checkDeprecation(
+				ctx, vCtx, res, doc, check.Deprecated, DeprecationContext{
+					Entity: &ref,
+					Block:  b,
+					Value:  &value,
+				})
+			if err != nil {
+				return nil, err
 			}
 
 			vCtx.coll.CollectValue(ValueAnnotation{
@@ -713,14 +758,14 @@ func validateBlockAttributes(
 		}
 	}
 
-	return res
+	return res, nil
 }
 
 func validateBlockData(
 	ctx context.Context, doc *newsdoc.Document,
 	data map[string]string, vCtx ValidationContext, b *newsdoc.Block,
 	constraints []ConstraintMap, res []ValidationResult,
-) []ValidationResult {
+) ([]ValidationResult, error) {
 	known := make(map[string]bool)
 
 	for i := range constraints {
@@ -752,27 +797,20 @@ func validateBlockData(
 				continue
 			}
 
-			if check.Deprecated != nil && vCtx.depr != nil {
-				err := vCtx.depr(
-					ctx, doc,
-					*check.Deprecated,
-					DeprecationContext{
-						Entity: &ref,
-						Block:  b,
-						Value:  &v,
-					},
-				)
-				if err != nil {
-					res = append(res, ValidationResult{
-						Entity: []EntityRef{ref},
-						Error: fmt.Sprintf(
-							"enforced deprecation: %v", err),
-						EnforcedDeprecation: true,
-					})
-				}
+			r, err := checkDeprecation(
+				ctx, vCtx, res, doc, check.Deprecated,
+				DeprecationContext{
+					Entity: &ref,
+					Block:  b,
+					Value:  &v,
+				})
+			if err != nil {
+				return nil, err
 			}
 
-			err := check.Validate(v, true, &vCtx)
+			res = r
+
+			err = check.Validate(v, true, &vCtx)
 			if err != nil {
 				res = append(res, ValidationResult{
 					Entity: []EntityRef{ref},
@@ -802,7 +840,7 @@ func validateBlockData(
 		})
 	}
 
-	return res
+	return res, nil
 }
 
 type BlockConstraintSet interface {

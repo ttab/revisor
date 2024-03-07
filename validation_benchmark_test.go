@@ -44,6 +44,6 @@ func BenchmarkValidateDocument(b *testing.B) {
 	ctx := context.Background()
 
 	for n := 0; n < b.N; n++ {
-		_ = validator.ValidateDocument(ctx, &document)
+		_, _ = validator.ValidateDocument(ctx, &document)
 	}
 }

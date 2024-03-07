@@ -3,7 +3,6 @@ package revisor_test
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"os"
 	"testing"
 
@@ -42,7 +41,7 @@ func TestDeprecation(t *testing.T) {
 		_ context.Context, _ *newsdoc.Document,
 		deprecation revisor.Deprecation,
 		c revisor.DeprecationContext,
-	) error {
+	) (revisor.DeprecationDecision, error) {
 		got = append(got, deprecationEntry{
 			Deprecation: deprecation,
 			Context:     c,
@@ -50,13 +49,16 @@ func TestDeprecation(t *testing.T) {
 
 		counts[deprecation.Label]++
 
-		return fmt.Errorf("nope, can't have %q", deprecation.Label)
+		return revisor.DeprecationDecision{
+			Enforce: true,
+		}, nil
 	}
 
 	ctx := context.Background()
 
-	res := testValidator.ValidateDocument(ctx, &document,
+	res, err := testValidator.ValidateDocument(ctx, &document,
 		revisor.WithDeprecationHandler(dfn))
+	must(t, err, "validate document")
 
 	t.Run("FoundDeprecations", func(t *testing.T) {
 		var (
