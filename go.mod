@@ -8,7 +8,7 @@ require (
 	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
 	github.com/invopop/jsonschema v0.12.0
-	github.com/ttab/newsdoc v0.4.2
+	github.com/ttab/newsdoc v0.5.0
 	github.com/ttab/revisorschemas v0.0.2
 	github.com/urfave/cli/v2 v2.27.1
 	golang.org/x/net v0.21.0

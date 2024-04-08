@@ -17,6 +17,10 @@ import (
 	"github.com/ttab/revisorschemas"
 )
 
+func regenerateGoldenFiles() bool {
+	return os.Getenv("REGENERATE") == "true"
+}
+
 func FuzzValidationDocuments(f *testing.F) {
 	var (
 		constraints      revisor.ConstraintSet
@@ -244,6 +248,8 @@ func decodeConstraintSetsFS(
 }
 
 func TestValidateDocument(t *testing.T) {
+	regenerate := regenerateGoldenFiles()
+
 	sFS := revisorschemas.Files()
 
 	core := decodeConstraintSetsFS(t, sFS,
@@ -267,6 +273,7 @@ func TestValidateDocument(t *testing.T) {
 	testConstraints := decodeConstraintSets(t,
 		"testdata/constraints/geo.json",
 		"testdata/constraints/labels-hints.json",
+		"testdata/constraints/transcript.json",
 	)
 
 	testValidator, err := revisor.NewValidator(testConstraints...)
@@ -310,13 +317,15 @@ func TestValidateDocument(t *testing.T) {
 					continue
 				}
 
-				testAgainstGolden(t, goldenPath, testCase)
+				testAgainstGolden(t, goldenPath, testCase, regenerate)
 			}
 		})
 	}
 }
 
-func testAgainstGolden(t *testing.T, goldenPath string, testCase validatorTest) {
+func testAgainstGolden(
+	t *testing.T, goldenPath string, testCase validatorTest, regenerate bool,
+) {
 	t.Helper()
 
 	sourceDocPath := filepath.Join(
@@ -333,13 +342,21 @@ func testAgainstGolden(t *testing.T, goldenPath string, testCase validatorTest) 
 		err := internal.UnmarshalFile(sourceDocPath, &document)
 		must(t, err, "failed to load document")
 
-		err = internal.UnmarshalFile(goldenPath, &want)
-		must(t, err, "failed to load expected result")
-
 		ctx := context.Background()
 
 		got, err := testCase.Validator.ValidateDocument(ctx, &document)
 		must(t, err, "validate document")
+
+		if regenerate {
+			goldie, err := json.MarshalIndent(got, "", "  ")
+			must(t, err, "marshal new golden results")
+
+			err = os.WriteFile(goldenPath, goldie, 0o600)
+			must(t, err, "write updated golden file")
+		}
+
+		err = internal.UnmarshalFile(goldenPath, &want)
+		must(t, err, "failed to load expected result")
 
 		for i := range got {
 			if !resultHas(want, got[i]) {

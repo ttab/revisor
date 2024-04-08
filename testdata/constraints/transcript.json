@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "name": "transcripts",
+  "documents": [
+    {
+      "name": "Transcript",
+      "description": "A transcript of an interview, talk, or similar voice content",
+      "declares": "core/transcript",
+      "links": [
+        {
+          "name": "Source audio",
+          "description": "A reference to the source audio file",
+          "declares": {
+            "rel": "source-audio"
+          },
+          "count": 1,
+          "attributes": {
+            "type": {"glob":["audio/*"]},
+            "uri": {"glob":["object://audio/**"]}
+          }
+        }
+      ],
+      "meta": [
+        {
+          "name": "Speaker",
+          "description": "A speaker that has been identified in the audio",
+          "declares": {
+            "type": "core/person",
+            "rel": "speaker"
+          },
+          "attributes": {
+            "uuid": {
+              "name": "Speaker entity UUID",
+              "format": "uuid",
+              "optional": true
+            },
+            "id": {
+              "name": "Local ID",
+              "description": "The ID used to reference the speaker within this transcript",
+              "format":"int"
+            },
+            "title": {}
+          }
+        }
+      ],
+      "content": [
+        {
+          "name": "Transcribed segment",
+          "declares": {
+            "type": "core/transcription-segment"
+          },
+          "attributes": {
+            "id": {
+              "name": "ID used to identify the segment within the transcript"
+            },
+            "sensitivity": {
+              "enum": ["internal", "public"]
+            }
+          },
+          "links": [
+            {
+              "name": "Source audio",
+              "description": "A reference to the source audio file",
+              "declares": {
+                "rel": "source-audio"
+              },
+              "count": 1,
+              "attributes": {
+                "type": {"glob":["audio/*"]},
+                "uri": {"glob":["object://audio/**"]}
+              }
+            }
+          ],
+          "data": {
+            "speaker": {
+              "format":"int",
+              "optional": true
+            },
+            "text": {},
+            "start_sec": {"format":"float"},
+            "end_sec": {"format":"float"},
+            "proofread": {"format":"bool"}
+          }
+        }
+      ]
+    }
+  ]
+}

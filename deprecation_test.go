@@ -18,7 +18,7 @@ type deprecationEntry struct {
 }
 
 func TestDeprecation(t *testing.T) {
-	regenerate := os.Getenv("REGENERATE") == "true"
+	regenerate := regenerateGoldenFiles()
 
 	testConstraints := decodeConstraintSets(t,
 		"testdata/constraints/geo.json",

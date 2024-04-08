@@ -190,13 +190,14 @@ const (
 	blockAttrValue       blockAttributeKey = "value"
 	blockAttrContentType blockAttributeKey = "contenttype"
 	blockAttrRole        blockAttributeKey = "role"
+	blockAttrSensitivity blockAttributeKey = "sensitivity"
 )
 
 var allBlockAttributes = []blockAttributeKey{
 	blockAttrUUID, blockAttrType, blockAttrURI,
 	blockAttrURL, blockAttrTitle, blockAttrRel,
 	blockAttrName, blockAttrValue, blockAttrContentType,
-	blockAttrRole,
+	blockAttrRole, blockAttrSensitivity,
 }
 
 func blockMatchAttribute(block *newsdoc.Block, name string) (string, bool) {
@@ -218,6 +219,8 @@ func blockMatchAttribute(block *newsdoc.Block, name string) (string, bool) {
 		return block.Contenttype, true
 	case blockAttrRole:
 		return block.Role, true
+	case blockAttrSensitivity:
+		return block.Sensitivity, true
 	}
 
 	return "", false
@@ -247,6 +250,8 @@ func blockAttribute(block *newsdoc.Block, name string) (string, bool) {
 		return block.Contenttype, true
 	case blockAttrRole:
 		return block.Role, true
+	case blockAttrSensitivity:
+		return block.Sensitivity, true
 	}
 
 	return "", false

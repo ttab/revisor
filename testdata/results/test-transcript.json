@@ -1,0 +1,17 @@
+[
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "sensitivity"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 2,
+        "type": "core/transcription-segment"
+      }
+    ],
+    "error": "must be one of: internal, public"
+  }
+]

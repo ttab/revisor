@@ -1,0 +1,78 @@
+{
+  "uuid": "7da69b2a-e05e-4578-a290-fa73bc952433",
+  "type": "core/transcript",
+  "links": [
+    {
+      "rel": "source-audio",
+      "type": "audio/mp4",
+      "uri": "object://audio/7da69b2a-e05e-4578-a290-fa73bc952433/master.mp4"
+    }
+  ],
+  "meta": [
+    {
+      "rel": "speaker",
+      "type": "core/person",
+      "id": "1",
+      "title": "Speaker A"
+    }
+  ],
+  "content": [
+    {
+      "type": "core/transcription-segment",
+      "id": "1",
+      "sensitivity": "public",
+      "links": [
+        {
+          "rel": "source-audio",
+          "type": "audio/mp4",
+          "uri": "object://audio/7da69b2a-e05e-4578-a290-fa73bc952433/1.mp4"
+        }
+      ],
+      "data": {
+        "speaker": "1",
+        "text": "This is the thing that was said",
+        "start_sec": "2.1",
+        "end_sec": "4.2",
+        "proofread": "true"
+      }
+    },
+    {
+      "type": "core/transcription-segment",
+      "id": "2",
+      "sensitivity": "internal",
+      "links": [
+        {
+          "rel": "source-audio",
+          "type": "audio/mp4",
+          "uri": "object://audio/7da69b2a-e05e-4578-a290-fa73bc952433/2.mp4"
+        }
+      ],
+      "data": {
+        "speaker": "1",
+        "text": "My phone number is 070-1212123",
+        "start_sec": "4.3",
+        "end_sec": "8.2",
+        "proofread": "true"
+      }
+    },
+    {
+      "type": "core/transcription-segment",
+      "id": "3",
+      "sensitivity": "huh-what?",
+      "links": [
+        {
+          "rel": "source-audio",
+          "type": "audio/mp4",
+          "uri": "object://audio/7da69b2a-e05e-4578-a290-fa73bc952433/3.mp4"
+        }
+      ],
+      "data": {
+        "speaker": "1",
+        "text": "[incoherent mumbling]",
+        "start_sec": "9.0",
+        "end_sec": "11.0",
+        "proofread": "false"
+      }
+    }
+  ]
+}

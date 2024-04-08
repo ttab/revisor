@@ -18,7 +18,7 @@ import (
 )
 
 func TestCollection(t *testing.T) {
-	regenerate := os.Getenv("REGENERATE") == "true"
+	regenerate := regenerateGoldenFiles()
 
 	testConstraints := decodeConstraintSets(t,
 		"testdata/constraints/geo.json",
