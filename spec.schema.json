@@ -140,6 +140,12 @@
         "attributes": {
           "$ref": "#/$defs/ConstraintMap"
         },
+        "enums": {
+          "items": {
+            "$ref": "#/$defs/Enum"
+          },
+          "type": "array"
+        },
         "htmlPolicies": {
           "items": {
             "$ref": "#/$defs/HTMLPolicy"
@@ -203,6 +209,45 @@
         },
         "attributes": {
           "$ref": "#/$defs/ConstraintMap"
+        },
+        "deprecated": {
+          "$ref": "#/$defs/Deprecation"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Enum": {
+      "properties": {
+        "declare": {
+          "type": "string"
+        },
+        "match": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "values": {
+          "additionalProperties": {
+            "$ref": "#/$defs/EnumConstraint"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "values"
+      ]
+    },
+    "EnumConstraint": {
+      "properties": {
+        "forbidden": {
+          "type": "boolean"
         },
         "deprecated": {
           "$ref": "#/$defs/Deprecation"
@@ -285,6 +330,9 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "enumReference": {
+          "type": "string"
         },
         "pattern": {
           "$ref": "#/$defs/Regexp"
