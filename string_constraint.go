@@ -134,14 +134,14 @@ func (sc *StringConstraint) Validate(
 ) (*Deprecation, error) {
 	if !exists {
 		if sc.Optional {
-			return nil, nil
+			return nil, nil //nolint: nilnil
 		}
 
 		return nil, errors.New("required value")
 	}
 
 	if sc.AllowEmpty && value == "" {
-		return nil, nil
+		return nil, nil //nolint: nilnil
 	}
 
 	if sc.Const != nil && value != *sc.Const {
