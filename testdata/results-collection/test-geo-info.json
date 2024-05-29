@@ -2,7 +2,8 @@
   "meta.core_place.data.position": {
     "format": "wkt",
     "values": [
-      "POINT(12 15)"
+      "POINT(12 15)",
+      "LINESTRING(30.123 10.15)"
     ],
     "labels": [
       "document-position"
@@ -16,6 +17,11 @@
   "meta.core_place.type": {
     "values": [
       "core/place"
+    ]
+  },
+  "meta.core_place.uri": {
+    "values": [
+      "place://old"
     ]
   },
   "meta.extra_entity_info.data.description": {

@@ -1,8 +1,6 @@
 package revisor
 
 import (
-	"fmt"
-
 	"github.com/ttab/newsdoc"
 )
 
@@ -55,7 +53,7 @@ func (dc DocumentConstraint) Matches(
 			return NoMatch
 		}
 
-		err := check.Validate(value, ok, vCtx)
+		_, err := check.Validate(value, ok, vCtx)
 		if err != nil {
 			return NoMatch
 		}
@@ -70,43 +68,6 @@ func (dc DocumentConstraint) Matches(
 	}
 
 	return Matches
-}
-
-func (dc DocumentConstraint) checkAttributes(
-	d *newsdoc.Document, res []ValidationResult, vCtx *ValidationContext,
-) []ValidationResult {
-	for k, check := range dc.Attributes {
-		value, ok := documentAttribute(d, k)
-		if !ok {
-			res = append(res, ValidationResult{
-				Error: fmt.Sprintf("unknown document attribute %q", k),
-			})
-
-			continue
-		}
-
-		// Optional attributes are empty strings.
-		check.AllowEmpty = check.AllowEmpty || check.Optional
-
-		err := check.Validate(value, ok, vCtx)
-		if err != nil {
-			res = append(res, ValidationResult{
-				Error: fmt.Sprintf("invalid %q: %v", k, err),
-			})
-
-			continue
-		}
-
-		vCtx.coll.CollectValue(ValueAnnotation{
-			Ref: []EntityRef{{
-				RefType: RefTypeAttribute,
-				Name:    k,
-			}},
-			Value: value,
-		})
-	}
-
-	return res
 }
 
 type documentAttributeKey string

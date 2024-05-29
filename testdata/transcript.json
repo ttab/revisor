@@ -5,7 +5,8 @@
     {
       "rel": "source-audio",
       "type": "audio/mp4",
-      "uri": "object://audio/7da69b2a-e05e-4578-a290-fa73bc952433/master.mp4"
+      "uri": "object://audio/7da69b2a-e05e-4578-a290-fa73bc952433/master.mp4",
+      "url": "https://example.com/vacation-pictures"
     }
   ],
   "meta": [

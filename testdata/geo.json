@@ -24,6 +24,7 @@
     },
     {
       "type": "core/place",
+      "uri": "place://old",
       "data": {
         "position": "LINESTRING(30.123 10.15)"
       }

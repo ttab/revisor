@@ -1,11 +1,44 @@
 {
   "version": 1,
   "name": "transcripts",
+  "enums": [
+    {
+      "declare": "example/valid-urls",
+      "name": "Dummy example",
+      "values": {
+        "https://example.com/transcript": {},
+        "https://example.com/transcipt": {
+          "deprecated": {
+            "label": "oops",
+            "doc": "Fix typo!"
+          }
+        },
+        "https://example.com/vacation-pictures": {}
+      }
+    },
+    {
+      "description": "this would be in another specification obviously",
+      "match": "example/valid-urls",
+      "values": {
+        "https://example.com/vacation-pictures": {
+          "forbidden": true
+        }
+      }
+    }
+  ],
   "documents": [
     {
       "name": "Transcript",
       "description": "A transcript of an interview, talk, or similar voice content",
       "declares": "core/transcript",
+      "attributes": {
+        "uri": {
+          "glob": ["transcript://**"]
+        },
+        "url": {
+          "enumReference": "example/valid-urls"
+        }
+      },
       "links": [
         {
           "name": "Source audio",
@@ -16,7 +49,11 @@
           "count": 1,
           "attributes": {
             "type": {"glob":["audio/*"]},
-            "uri": {"glob":["object://audio/**"]}
+            "uri": {"glob":["object://audio/**"]},
+            "url": {
+              "optional": true,
+              "enumReference": "example/valid-urls"
+            }
           }
         }
       ],

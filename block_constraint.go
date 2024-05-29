@@ -131,7 +131,7 @@ func (bc BlockConstraint) Matches(b *newsdoc.Block) (Match, []string) {
 		// Optional attributes are empty strings.
 		check.AllowEmpty = check.AllowEmpty || check.Optional
 
-		err := check.Validate(value, ok, nil)
+		_, err := check.Validate(value, ok, nil)
 		if err != nil {
 			return NoMatch, nil
 		}

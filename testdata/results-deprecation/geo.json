@@ -76,6 +76,26 @@
   },
   {
     "Deprecation": {
+      "label": "old-place-uri",
+      "doc": "Use new place URIs"
+    },
+    "Context": {
+      "entity": {
+        "refType": "attribute",
+        "name": "uri"
+      },
+      "block": {
+        "uri": "place://old",
+        "type": "core/place",
+        "data": {
+          "position": "LINESTRING(30.123 10.15)"
+        }
+      },
+      "value": "place://old"
+    }
+  },
+  {
+    "Deprecation": {
       "label": "genii-loci",
       "doc": "What places need names anyway?"
     },
