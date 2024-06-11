@@ -1,8 +1,10 @@
 package revisor
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -46,18 +48,46 @@ func (f StringFormat) Describe() string {
 	return ""
 }
 
-type ConstraintMap map[string]StringConstraint
+type ConstraintMap struct {
+	Keys        []string
+	Constraints map[string]StringConstraint
+}
 
 func (cm ConstraintMap) Requirements() string {
 	var requirements []string
 
-	for k, v := range cm {
+	for _, k := range cm.Keys {
 		requirements = append(requirements,
-			fmt.Sprintf("%s %s", k, v.Requirement()),
+			fmt.Sprintf("%s %s", k, cm.Constraints[k].Requirement()),
 		)
 	}
 
 	return strings.Join(requirements, "; and ")
+}
+
+func (cm *ConstraintMap) UnmarshalJSON(data []byte) error {
+	clear(cm.Constraints)
+
+	err := json.Unmarshal(data, &cm.Constraints)
+	if err != nil {
+		return fmt.Errorf("unmarshal map: %w", err)
+	}
+
+	keys := make([]string, 0, len(cm.Constraints))
+
+	for k := range cm.Constraints {
+		keys = append(keys, k)
+	}
+
+	slices.Sort(keys)
+
+	cm.Keys = keys
+
+	return nil
+}
+
+func (cm *ConstraintMap) MarshalJSON() ([]byte, error) {
+	return json.Marshal(cm.Constraints)
 }
 
 type StringConstraint struct {
@@ -83,7 +113,7 @@ type StringConstraint struct {
 	Hints  map[string][]string `json:"hints,omitempty"`
 }
 
-func (sc *StringConstraint) Requirement() string {
+func (sc StringConstraint) Requirement() string {
 	var reqs []string
 
 	if sc.Const != nil {

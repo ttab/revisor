@@ -389,13 +389,15 @@ func validateDocumentAttributes(
 	res []ValidationResult, vCtx ValidationContext,
 ) ([]ValidationResult, error) {
 	for i := range constraints {
-		for k, check := range constraints[i] {
+		for _, k := range constraints[i].Keys {
 			value, ok := documentAttribute(d, k)
 
 			ref := EntityRef{
 				RefType: RefTypeAttribute,
 				Name:    k,
 			}
+
+			check := constraints[i].Constraints[k]
 
 			depr, err := check.Validate(value, ok, &vCtx)
 			if err != nil {
@@ -561,6 +563,7 @@ func (v *Validator) validateBlock(
 	}
 
 	declaredAttributes := make(map[blockAttributeKey]bool)
+	var declaredKeys []blockAttributeKey
 
 	for _, set := range constraintSets {
 		constraints := set.BlockConstraints(entity.BlockKind)
@@ -588,7 +591,12 @@ func (v *Validator) validateBlock(
 			res = r
 
 			for i := range attributes {
-				declaredAttributes[blockAttributeKey(attributes[i])] = true
+				k := blockAttributeKey(attributes[i])
+
+				if !declaredAttributes[k] {
+					declaredAttributes[k] = true
+					declaredKeys = append(declaredKeys, k)
+				}
 			}
 
 			matches[constraint]++
@@ -617,7 +625,9 @@ func (v *Validator) validateBlock(
 		})
 	}
 
-	for k := range declaredAttributes {
+	slices.Sort(declaredKeys)
+
+	for _, k := range declaredKeys {
 		value, _ := blockMatchAttribute(b, string(k))
 
 		vCtx.coll.CollectValue(ValueAnnotation{
@@ -722,13 +732,15 @@ func validateBlockAttributes(
 	}
 
 	for i := range constraints {
-		for k, check := range constraints[i] {
+		for _, k := range constraints[i].Keys {
 			value, ok := blockAttribute(b, k)
 
 			ref := EntityRef{
 				RefType: RefTypeAttribute,
 				Name:    k,
 			}
+
+			check := constraints[i].Constraints[k]
 
 			// Optional attributes are empty strings.
 			check.AllowEmpty = check.AllowEmpty || check.Optional
@@ -793,17 +805,21 @@ func validateBlockData(
 	known := make(map[string]bool)
 
 	for i := range constraints {
-		for k, check := range constraints[i] {
+		for _, k := range constraints[i].Keys {
 			var (
 				v  string
 				ok bool
 			)
 
+			check := constraints[i].Constraints[k]
+
 			if data != nil {
 				v, ok = data[k]
 			}
 
-			known[k] = known[k] || ok
+			if ok && !known[k] {
+				known[k] = true
+			}
 
 			ref := EntityRef{
 				RefType: RefTypeData,
@@ -850,11 +866,19 @@ func validateBlockData(
 		}
 	}
 
+	var unknownKeys []string
+
 	for k := range data {
 		if known[k] {
 			continue
 		}
 
+		unknownKeys = append(unknownKeys, k)
+	}
+
+	slices.Sort(unknownKeys)
+
+	for _, k := range unknownKeys {
 		res = append(res, ValidationResult{
 			Entity: []EntityRef{{
 				RefType: RefTypeData,

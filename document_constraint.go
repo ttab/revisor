@@ -47,11 +47,13 @@ func (dc DocumentConstraint) Matches(
 		return NoMatch
 	}
 
-	for k, check := range dc.Match {
+	for _, k := range dc.Match.Keys {
 		value, ok := documentMatchAttribute(d, k)
 		if !ok {
 			return NoMatch
 		}
+
+		check := dc.Match.Constraints[k]
 
 		_, err := check.Validate(value, ok, vCtx)
 		if err != nil {

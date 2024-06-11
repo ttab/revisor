@@ -12,30 +12,37 @@ type policyTestCase struct {
 	ShouldFail bool
 }
 
+func cm(
+	key string, constraint revisor.StringConstraint,
+) revisor.ConstraintMap {
+	return revisor.ConstraintMap{
+		Keys: []string{key},
+		Constraints: map[string]revisor.StringConstraint{
+			key: constraint,
+		},
+	}
+}
+
 func TestHTMLPolicy(t *testing.T) {
 	policy := revisor.HTMLPolicy{
 		Elements: map[string]revisor.HTMLElement{
 			"em": {
-				Attributes: revisor.ConstraintMap{
-					"id": {Optional: true},
-				},
+				Attributes: cm("id", revisor.StringConstraint{
+					Optional: true,
+				}),
 			},
 			"strong": {
-				Attributes: revisor.ConstraintMap{
-					"id": {Optional: true},
-				},
+				Attributes: cm("id", revisor.StringConstraint{
+					Optional: true,
+				}),
 			},
 			"a": {
-				Attributes: revisor.ConstraintMap{
-					"href": {},
-				},
+				Attributes: cm("href", revisor.StringConstraint{}),
 			},
 			"custommark": {
-				Attributes: revisor.ConstraintMap{
-					"count": {
-						Format: "int",
-					},
-				},
+				Attributes: cm("count", revisor.StringConstraint{
+					Format: "int",
+				}),
 			},
 		},
 	}
