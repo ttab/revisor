@@ -87,7 +87,7 @@ func (cm *ConstraintMap) UnmarshalJSON(data []byte) error {
 }
 
 func (cm *ConstraintMap) MarshalJSON() ([]byte, error) {
-	return json.Marshal(cm.Constraints)
+	return json.Marshal(cm.Constraints) //nolint: wrapcheck
 }
 
 type StringConstraint struct {

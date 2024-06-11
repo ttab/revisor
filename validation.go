@@ -563,6 +563,7 @@ func (v *Validator) validateBlock(
 	}
 
 	declaredAttributes := make(map[blockAttributeKey]bool)
+
 	var declaredKeys []blockAttributeKey
 
 	for _, set := range constraintSets {
@@ -595,6 +596,7 @@ func (v *Validator) validateBlock(
 
 				if !declaredAttributes[k] {
 					declaredAttributes[k] = true
+
 					declaredKeys = append(declaredKeys, k)
 				}
 			}
