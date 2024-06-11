@@ -53,6 +53,22 @@
     "entity": [
       {
         "refType": "attribute",
+        "name": "uri"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "index": 2,
+        "type": "core/place"
+      }
+    ],
+    "error": "enforced deprecation \"old-place-uri\": Use new place URIs",
+    "enforcedDeprecation": true
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
         "name": "title"
       }
     ],

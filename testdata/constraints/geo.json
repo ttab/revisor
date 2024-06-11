@@ -1,6 +1,20 @@
 {
   "version": 1,
   "name": "test",
+  "enums": [
+    {
+      "declare": "core/place-uris",
+      "values": {
+        "place://old": {
+          "deprecated": {
+            "label": "old-place-uri",
+            "doc": "Use new place URIs"
+          }
+        },
+        "place://new": {}
+      }
+    }
+  ],
   "documents": [
     {
       "name": "Place",
@@ -22,7 +36,11 @@
         {
           "declares": {"type":"core/place"},
           "attributes": {
-            "role": {"optional":true}
+            "role": {"optional":true},
+            "uri": {
+              "optional": true,
+              "enumReference": "core/place-uris"
+            }
           },
           "data": {
             "position": {

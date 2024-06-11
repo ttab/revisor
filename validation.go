@@ -17,6 +17,7 @@ type Validator struct {
 	blockConstraints     []BlockConstraintSet
 	attributeConstraints []ConstraintMap
 	htmlPolicies         map[string]*HTMLPolicy
+	enums                *enumSet
 }
 
 func NewValidator(
@@ -25,10 +26,10 @@ func NewValidator(
 	v := Validator{
 		constraints:  constraints,
 		htmlPolicies: make(map[string]*HTMLPolicy),
+		enums:        newEnumSet(),
 	}
 
 	docDeclared := make(map[string]bool)
-
 	policySet := NewHTMLPolicySet()
 
 	for _, constraint := range constraints {
@@ -63,6 +64,19 @@ func NewValidator(
 			return nil, fmt.Errorf("failed to add HTML policies for %q: %w",
 				constraint.Name, err)
 		}
+
+		for _, e := range constraint.Enums {
+			err := v.enums.Register(e)
+			if err != nil {
+				return nil, fmt.Errorf("failed to add enum for %q: %w",
+					constraint.Name, err)
+			}
+		}
+	}
+
+	err := v.enums.Resolve()
+	if err != nil {
+		return nil, fmt.Errorf("invalid enums: %w", err)
 	}
 
 	htmlPolicies, err := policySet.Resolve()
@@ -251,6 +265,7 @@ func (v *Validator) ValidateDocument(
 	vCtx := ValidationContext{
 		coll:         ValueDiscarder{},
 		ValidateHTML: v.validateHTML,
+		ValidateEnum: v.enums.ValidValue,
 	}
 
 	for i := range opts {
@@ -282,12 +297,11 @@ func (v *Validator) ValidateDocument(
 
 		res, err = checkDeprecation(
 			ctx, vCtx, res, document,
-			v.documents[i].Deprecated, DeprecationContext{})
+			DeprecationContext{},
+			v.documents[i].Deprecated)
 		if err != nil {
 			return nil, err
 		}
-
-		res = v.documents[i].checkAttributes(document, res, &vCtx)
 
 		blockConstraints = append(blockConstraints, v.documents[i])
 		attributeConstraints = append(attributeConstraints, v.documents[i].Attributes)
@@ -322,42 +336,48 @@ func checkDeprecation(
 	vCtx ValidationContext,
 	res []ValidationResult,
 	doc *newsdoc.Document,
-	depr *Deprecation,
 	dCtx DeprecationContext,
+	deprecations ...*Deprecation,
 ) ([]ValidationResult, error) {
-	if depr == nil || vCtx.depr == nil {
+	if len(deprecations) == 0 || vCtx.depr == nil {
 		return res, nil
 	}
 
-	d, err := vCtx.depr(
-		ctx, doc,
-		*depr,
-		dCtx,
-	)
-	if err != nil {
-		return nil, fmt.Errorf(
-			"deprecation handler failure: %w", err)
-	}
-
-	if d.Enforce {
-		msg := d.Message
-		if msg == "" {
-			msg = depr.Doc
+	for _, depr := range deprecations {
+		if depr == nil {
+			continue
 		}
 
-		var entity []EntityRef
-
-		if dCtx.Entity != nil {
-			entity = append(entity, *dCtx.Entity)
+		d, err := vCtx.depr(
+			ctx, doc,
+			*depr,
+			dCtx,
+		)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"deprecation handler failure: %w", err)
 		}
 
-		res = append(res, ValidationResult{
-			Entity: entity,
-			Error: fmt.Sprintf(
-				"enforced deprecation %q: %s",
-				depr.Label, msg),
-			EnforcedDeprecation: true,
-		})
+		if d.Enforce {
+			msg := d.Message
+			if msg == "" {
+				msg = depr.Doc
+			}
+
+			var entity []EntityRef
+
+			if dCtx.Entity != nil {
+				entity = append(entity, *dCtx.Entity)
+			}
+
+			res = append(res, ValidationResult{
+				Entity: entity,
+				Error: fmt.Sprintf(
+					"enforced deprecation %q: %s",
+					depr.Label, msg),
+				EnforcedDeprecation: true,
+			})
+		}
 	}
 
 	return res, nil
@@ -377,7 +397,7 @@ func validateDocumentAttributes(
 				Name:    k,
 			}
 
-			err := check.Validate(value, ok, &vCtx)
+			depr, err := check.Validate(value, ok, &vCtx)
 			if err != nil {
 				res = append(res, ValidationResult{
 					Entity: []EntityRef{ref},
@@ -387,18 +407,20 @@ func validateDocumentAttributes(
 
 			res, err = checkDeprecation(
 				ctx, vCtx, res, d,
-				check.Deprecated, DeprecationContext{
+				DeprecationContext{
 					Entity: &ref,
 					Value:  &value,
-				})
+				}, depr, check.Deprecated)
 			if err != nil {
 				return nil, err
 			}
 
-			vCtx.coll.CollectValue(ValueAnnotation{
-				Ref:   []EntityRef{ref},
-				Value: value,
-			})
+			if value != "" {
+				vCtx.coll.CollectValue(ValueAnnotation{
+					Ref:   []EntityRef{ref},
+					Value: value,
+				})
+			}
 		}
 	}
 
@@ -554,11 +576,11 @@ func (v *Validator) validateBlock(
 			}
 
 			r, err := checkDeprecation(
-				ctx, vCtx, res, doc, constraint.Deprecated,
+				ctx, vCtx, res, doc,
 				DeprecationContext{
 					Entity: &entity,
 					Block:  b,
-				})
+				}, constraint.Deprecated)
 			if err != nil {
 				return nil, err
 			}
@@ -711,7 +733,7 @@ func validateBlockAttributes(
 			// Optional attributes are empty strings.
 			check.AllowEmpty = check.AllowEmpty || check.Optional
 
-			err := check.Validate(value, ok, &vCtx)
+			depr, err := check.Validate(value, ok, &vCtx)
 			if err != nil {
 				res = append(res, ValidationResult{
 					Entity: []EntityRef{ref},
@@ -720,20 +742,22 @@ func validateBlockAttributes(
 			}
 
 			res, err = checkDeprecation(
-				ctx, vCtx, res, doc, check.Deprecated, DeprecationContext{
+				ctx, vCtx, res, doc, DeprecationContext{
 					Entity: &ref,
 					Block:  b,
 					Value:  &value,
-				})
+				}, check.Deprecated, depr)
 			if err != nil {
 				return nil, err
 			}
 
-			vCtx.coll.CollectValue(ValueAnnotation{
-				Ref:        []EntityRef{ref},
-				Constraint: check,
-				Value:      value,
-			})
+			if value != "" {
+				vCtx.coll.CollectValue(ValueAnnotation{
+					Ref:        []EntityRef{ref},
+					Constraint: check,
+					Value:      value,
+				})
+			}
 
 			declaredAttributes[blockAttributeKey(k)] = true
 		}
@@ -797,26 +821,26 @@ func validateBlockData(
 				continue
 			}
 
-			r, err := checkDeprecation(
-				ctx, vCtx, res, doc, check.Deprecated,
-				DeprecationContext{
-					Entity: &ref,
-					Block:  b,
-					Value:  &v,
-				})
-			if err != nil {
-				return nil, err
-			}
-
-			res = r
-
-			err = check.Validate(v, true, &vCtx)
+			depr, err := check.Validate(v, true, &vCtx)
 			if err != nil {
 				res = append(res, ValidationResult{
 					Entity: []EntityRef{ref},
 					Error:  err.Error(),
 				})
 			}
+
+			r, err := checkDeprecation(
+				ctx, vCtx, res, doc,
+				DeprecationContext{
+					Entity: &ref,
+					Block:  b,
+					Value:  &v,
+				}, check.Deprecated, depr)
+			if err != nil {
+				return nil, err
+			}
+
+			res = r
 
 			vCtx.coll.CollectValue(ValueAnnotation{
 				Ref:        []EntityRef{ref},
@@ -862,6 +886,7 @@ type ConstraintSet struct {
 	Meta         []*BlockConstraint   `json:"meta,omitempty"`
 	Content      []*BlockConstraint   `json:"content,omitempty"`
 	Attributes   ConstraintMap        `json:"attributes,omitempty"`
+	Enums        []Enum               `json:"enums,omitempty"`
 	HTMLPolicies []HTMLPolicy         `json:"htmlPolicies,omitempty"`
 }
 

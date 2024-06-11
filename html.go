@@ -116,7 +116,8 @@ func (hp *HTMLPolicy) handleToken(z *html.Tokenizer, tagStack []string) ([]strin
 				)
 			}
 
-			err := constraint.Validate(string(v), true, nil)
+			// TODO: Handle deprecation of HTML attribute values.
+			_, err := constraint.Validate(string(v), true, nil)
 			if err != nil {
 				return nil, fmt.Errorf(
 					"<%s> attribute %q: %w",

@@ -67,6 +67,7 @@ type StringConstraint struct {
 	AllowEmpty  bool         `json:"allowEmpty,omitempty"`
 	Const       *string      `json:"const,omitempty"`
 	Enum        []string     `json:"enum,omitempty"`
+	EnumRef     string       `json:"enumReference,omitempty"`
 	Pattern     *Regexp      `json:"pattern,omitempty"`
 	Glob        GlobList     `json:"glob,omitempty"`
 	Format      StringFormat `json:"format,omitempty"`
@@ -125,25 +126,26 @@ type ValidationContext struct {
 	depr DeprecationHandlerFunc
 
 	ValidateHTML func(policyName, value string) error
+	ValidateEnum func(enum string, value string) (*Deprecation, error)
 }
 
 func (sc *StringConstraint) Validate(
 	value string, exists bool, vCtx *ValidationContext,
-) error {
+) (*Deprecation, error) {
 	if !exists {
 		if sc.Optional {
-			return nil
+			return nil, nil //nolint: nilnil
 		}
 
-		return errors.New("required value")
+		return nil, errors.New("required value")
 	}
 
 	if sc.AllowEmpty && value == "" {
-		return nil
+		return nil, nil //nolint: nilnil
 	}
 
 	if sc.Const != nil && value != *sc.Const {
-		return fmt.Errorf("must be %q", *sc.Const)
+		return nil, fmt.Errorf("must be %q", *sc.Const)
 	}
 
 	if len(sc.Enum) > 0 {
@@ -154,23 +156,34 @@ func (sc *StringConstraint) Validate(
 		}
 
 		if !match {
-			return fmt.Errorf("must be one of: %s",
+			return nil, fmt.Errorf("must be one of: %s",
 				strings.Join(sc.Enum, ", "))
 		}
 	}
 
+	var deprecation *Deprecation
+
+	if sc.EnumRef != "" {
+		depr, err := vCtx.ValidateEnum(sc.EnumRef, value)
+		if err != nil {
+			return nil, err
+		}
+
+		deprecation = depr
+	}
+
 	if !sc.Glob.MatchOrEmpty(value) {
-		return errors.New(sc.Glob.String())
+		return nil, errors.New(sc.Glob.String())
 	}
 
 	if sc.Pattern != nil && !sc.Pattern.Match(value) {
-		return fmt.Errorf("%q must match %q", value, sc.Pattern.String())
+		return nil, fmt.Errorf("%q must match %q", value, sc.Pattern.String())
 	}
 
 	if sc.Time != "" {
 		_, err := time.Parse(sc.Time, value)
 		if err != nil {
-			return fmt.Errorf("invalid timestamp: %w", err)
+			return nil, fmt.Errorf("invalid timestamp: %w", err)
 		}
 	}
 
@@ -179,46 +192,46 @@ func (sc *StringConstraint) Validate(
 	case StringFormatRFC3339:
 		_, err := time.Parse(time.RFC3339, value)
 		if err != nil {
-			return fmt.Errorf("invalid RFC3339 value: %w", err)
+			return nil, fmt.Errorf("invalid RFC3339 value: %w", err)
 		}
 	case StringFormatInt:
 		_, err := strconv.Atoi(value)
 		if err != nil {
-			return errors.New("invalid integer value")
+			return nil, errors.New("invalid integer value")
 		}
 	case StringFormatFloat:
 		_, err := strconv.ParseFloat(value, 64)
 		if err != nil {
-			return errors.New("invalid float value")
+			return nil, errors.New("invalid float value")
 		}
 	case StringFormatBoolean:
 		_, err := strconv.ParseBool(value)
 		if err != nil {
-			return errors.New("invalid boolean value")
+			return nil, errors.New("invalid boolean value")
 		}
 	case StringFormatHTML:
 		if vCtx == nil || vCtx.ValidateHTML == nil {
-			return errors.New("html validation is not available in this context")
+			return nil, errors.New("html validation is not available in this context")
 		}
 
-		return vCtx.ValidateHTML(sc.HTMLPolicy, value)
+		return nil, vCtx.ValidateHTML(sc.HTMLPolicy, value)
 	case StringFormatUUID:
 		_, err := uuid.Parse(value)
 		if err != nil {
-			return errors.New("invalid uuid value")
+			return nil, errors.New("invalid uuid value")
 		}
 	case StringFormatWKT:
 		err := validateWKT(sc.Geometry, value)
 		if err != nil {
-			return fmt.Errorf("WKT validation: %w", err)
+			return nil, fmt.Errorf("WKT validation: %w", err)
 		}
 	default:
-		return fmt.Errorf("unknown string format %q", sc.Format)
+		return nil, fmt.Errorf("unknown string format %q", sc.Format)
 	}
 
 	if !sc.AllowEmpty && value == "" {
-		return fmt.Errorf("cannot be empty")
+		return nil, fmt.Errorf("cannot be empty")
 	}
 
-	return nil
+	return deprecation, nil
 }

@@ -3,6 +3,21 @@
     "entity": [
       {
         "refType": "attribute",
+        "name": "url"
+      },
+      {
+        "refType": "block",
+        "kind": "link",
+        "type": "audio/mp4",
+        "rel": "source-audio"
+      }
+    ],
+    "error": "\"https://example.com/vacation-pictures\" is no longer allowed"
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
         "name": "sensitivity"
       },
       {
@@ -13,5 +28,23 @@
       }
     ],
     "error": "must be one of: internal, public"
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "uri"
+      }
+    ],
+    "error": "must match \"transcript://**\""
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "url"
+      }
+    ],
+    "error": "must be one of: \"https://example.com/transcript\", \"https://example.com/transcipt\" (deprecated)"
   }
 ]

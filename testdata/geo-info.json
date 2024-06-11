@@ -16,6 +16,13 @@
         "shortcode": "someplace",
         "description": "A place where things are"
       }
+    },
+    {
+      "type": "core/place",
+      "uri": "place://old",
+      "data": {
+        "position": "LINESTRING(30.123 10.15)"
+      }
     }
   ]
 }
