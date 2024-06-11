@@ -33,21 +33,6 @@
     "entity": [
       {
         "refType": "data attribute",
-        "name": "position"
-      },
-      {
-        "refType": "block",
-        "kind": "meta",
-        "index": 2,
-        "type": "core/place"
-      }
-    ],
-    "error": "WKT validation: geometry is not a point"
-  },
-  {
-    "entity": [
-      {
-        "refType": "data attribute",
         "name": "position_3d"
       },
       {
@@ -73,5 +58,20 @@
       }
     ],
     "error": "WKT validation: unexpected coordinate type \"z\" where none was expected"
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "position"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "index": 2,
+        "type": "core/place"
+      }
+    ],
+    "error": "WKT validation: geometry is not a point"
   }
 ]
