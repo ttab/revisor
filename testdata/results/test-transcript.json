@@ -45,6 +45,6 @@
         "name": "url"
       }
     ],
-    "error": "must be one of: \"https://example.com/transcript\", \"https://example.com/transcipt\" (deprecated)"
+    "error": "must be one of: \"https://example.com/transcipt\" (deprecated), \"https://example.com/transcript\""
   }
 ]

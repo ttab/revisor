@@ -125,8 +125,10 @@ func (bc BlockConstraint) Matches(b *newsdoc.Block) (Match, []string) {
 		return NoMatch, nil
 	}
 
-	for k, check := range bc.Match {
+	for _, k := range bc.Match.Keys {
 		value, ok := blockMatchAttribute(b, k)
+
+		check := bc.Match.Constraints[k]
 
 		// Optional attributes are empty strings.
 		check.AllowEmpty = check.AllowEmpty || check.Optional
@@ -285,7 +287,7 @@ func (bc BlockConstraint) DescribeCountConstraint(kind BlockKind) string {
 		)
 	}
 
-	if len(bc.Match) > 0 {
+	if len(bc.Match.Keys) > 0 {
 		s.WriteString(" where ")
 		s.WriteString(bc.Match.Requirements())
 	}

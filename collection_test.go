@@ -120,6 +120,8 @@ func testCollectionAgainstGolden(
 			data, err := json.MarshalIndent(collected, "", "  ")
 			must(t, err, "marshal for golden reference file")
 
+			data = append(data, '\n')
+
 			err = os.WriteFile(goldenPath, data, 0o600)
 			must(t, err, "write golden reference file")
 		}

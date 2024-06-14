@@ -3,6 +3,7 @@ package revisor
 import (
 	"errors"
 	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -51,6 +52,8 @@ func mergedEnumAllowedValues(m *mergedEnum) []string {
 			vals = append(vals, s)
 		}
 	}
+
+	slices.Sort(vals)
 
 	return vals
 }

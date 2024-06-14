@@ -3,48 +3,28 @@
     "entity": [
       {
         "refType": "attribute",
-        "name": "rel"
+        "name": "uuid"
       },
       {
         "refType": "block",
         "kind": "link",
-        "index": 1,
-        "type": "core/articlesource",
-        "rel": "articlesource"
-      }
-    ],
-    "error": "undeclared block attribute"
-  },
-  {
-    "entity": [
-      {
-        "refType": "attribute",
-        "name": "title"
-      },
-      {
-        "refType": "block",
-        "kind": "link",
-        "index": 1,
-        "type": "core/articlesource",
-        "rel": "articlesource"
-      }
-    ],
-    "error": "undeclared block attribute"
-  },
-  {
-    "entity": [
-      {
-        "refType": "attribute",
-        "name": "title"
-      },
-      {
-        "refType": "block",
-        "kind": "meta",
-        "index": 1,
-        "type": "core/teaser"
+        "type": "core/section",
+        "rel": "subject"
       }
     ],
     "error": "cannot be empty"
+  },
+  {
+    "entity": [
+      {
+        "refType": "block",
+        "kind": "link",
+        "index": 1,
+        "type": "core/articlesource",
+        "rel": "articlesource"
+      }
+    ],
+    "error": "undeclared block type or rel"
   },
   {
     "entity": [
@@ -82,57 +62,33 @@
     "entity": [
       {
         "refType": "attribute",
-        "name": "uuid"
-      },
-      {
-        "refType": "block",
-        "kind": "content",
-        "index": 3,
-        "type": "core/image"
-      }
-    ],
-    "error": "invalid UUID length: 8"
-  },
-  {
-    "entity": [
-      {
-        "refType": "attribute",
-        "name": "uuid"
-      },
-      {
-        "refType": "block",
-        "kind": "content",
-        "index": 3,
-        "type": "core/image"
-      }
-    ],
-    "error": "not a valid UUID: invalid UUID length: 8"
-  },
-  {
-    "entity": [
-      {
-        "refType": "attribute",
-        "name": "uuid"
+        "name": "title"
       },
       {
         "refType": "block",
         "kind": "link",
-        "type": "core/section",
-        "rel": "subject"
+        "index": 1,
+        "type": "core/articlesource",
+        "rel": "articlesource"
       }
     ],
-    "error": "cannot be empty"
+    "error": "undeclared block attribute"
   },
   {
     "entity": [
       {
+        "refType": "attribute",
+        "name": "rel"
+      },
+      {
         "refType": "block",
-        "kind": "content",
-        "index": 3,
-        "type": "core/image"
+        "kind": "link",
+        "index": 1,
+        "type": "core/articlesource",
+        "rel": "articlesource"
       }
     ],
-    "error": "there must be 1 link where type is \"core/image\" and rel is \"self\""
+    "error": "undeclared block attribute"
   },
   {
     "entity": [
@@ -151,6 +107,36 @@
   {
     "entity": [
       {
+        "refType": "attribute",
+        "name": "title"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "index": 1,
+        "type": "core/teaser"
+      }
+    ],
+    "error": "cannot be empty"
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "text"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "index": 1,
+        "type": "core/teaser"
+      }
+    ],
+    "error": "missing required attribute"
+  },
+  {
+    "entity": [
+      {
         "refType": "data attribute",
         "name": "text"
       },
@@ -160,7 +146,7 @@
         "type": "core/heading-1"
       }
     ],
-    "error": "unclosed tag <em>"
+    "error": "unclosed tag \u003cem\u003e"
   },
   {
     "entity": [
@@ -190,33 +176,47 @@
         "type": "core/paragraph"
       }
     ],
-    "error": "invalid html after line 1 char 0: invalid html entity: unknown character entity &orci;"
+    "error": "invalid html after line 1 char 0: invalid html entity: unknown character entity \u0026orci;"
   },
   {
     "entity": [
       {
-        "refType": "data attribute",
-        "name": "text"
+        "refType": "attribute",
+        "name": "uuid"
       },
       {
         "refType": "block",
-        "kind": "meta",
-        "index": 1,
-        "type": "core/teaser"
+        "kind": "content",
+        "index": 3,
+        "type": "core/image"
       }
     ],
-    "error": "missing required attribute"
+    "error": "not a valid UUID: invalid UUID length: 8"
+  },
+  {
+    "entity": [
+      {
+        "refType": "attribute",
+        "name": "uuid"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 3,
+        "type": "core/image"
+      }
+    ],
+    "error": "invalid UUID length: 8"
   },
   {
     "entity": [
       {
         "refType": "block",
-        "kind": "link",
-        "index": 1,
-        "type": "core/articlesource",
-        "rel": "articlesource"
+        "kind": "content",
+        "index": 3,
+        "type": "core/image"
       }
     ],
-    "error": "undeclared block type or rel"
+    "error": "there must be 1 link where type is \"core/image\" and rel is \"self\""
   }
 ]

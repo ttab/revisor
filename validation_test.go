@@ -351,6 +351,8 @@ func testAgainstGolden(
 			goldie, err := json.MarshalIndent(got, "", "  ")
 			must(t, err, "marshal new golden results")
 
+			goldie = append(goldie, '\n')
+
 			err = os.WriteFile(goldenPath, goldie, 0o600)
 			must(t, err, "write updated golden file")
 		}

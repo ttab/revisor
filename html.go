@@ -103,13 +103,13 @@ func (hp *HTMLPolicy) handleToken(z *html.Tokenizer, tagStack []string) ([]strin
 
 			attrName := string(k)
 
-			if spec.Attributes == nil {
+			if spec.Attributes.Constraints == nil {
 				return nil, fmt.Errorf("no attributes allowed for <%s>",
 					name,
 				)
 			}
 
-			constraint, ok := spec.Attributes[attrName]
+			constraint, ok := spec.Attributes.Constraints[attrName]
 			if !ok {
 				return nil, fmt.Errorf("unsupported <%s> attribute %q",
 					name, attrName,
@@ -130,9 +130,9 @@ func (hp *HTMLPolicy) handleToken(z *html.Tokenizer, tagStack []string) ([]strin
 			hasAttr = more
 		}
 
-		for attrName := range spec.Attributes {
+		for _, attrName := range spec.Attributes.Keys {
 			ok := attrs[attrName]
-			if !ok && !spec.Attributes[attrName].Optional {
+			if !ok && !spec.Attributes.Constraints[attrName].Optional {
 				return nil, fmt.Errorf(
 					"missing required <%s> attribute %q",
 					name, attrName)
@@ -284,12 +284,13 @@ func extendHTMLPolicy(extending *HTMLPolicy, policy HTMLPolicy) error {
 	for eName, eDef := range policy.Elements {
 		eCurrent := extending.Elements[eName]
 
-		if eCurrent.Attributes == nil && eDef.Attributes != nil {
-			eCurrent.Attributes = make(ConstraintMap)
+		if eCurrent.Attributes.Constraints == nil &&
+			eDef.Attributes.Constraints != nil {
+			eCurrent.Attributes.Constraints = make(map[string]StringConstraint)
 		}
 
-		for attrName := range eDef.Attributes {
-			_, aExists := eCurrent.Attributes[attrName]
+		for _, attrName := range eDef.Attributes.Keys {
+			_, aExists := eCurrent.Attributes.Constraints[attrName]
 			if aExists {
 				return fmt.Errorf(
 					"attribute %q of <%s> in the policy %q was redeclared",
@@ -297,7 +298,8 @@ func extendHTMLPolicy(extending *HTMLPolicy, policy HTMLPolicy) error {
 				)
 			}
 
-			eCurrent.Attributes[attrName] = eDef.Attributes[attrName]
+			eCurrent.Attributes.Constraints[attrName] = eDef.Attributes.Constraints[attrName]
+			eCurrent.Attributes.Keys = append(eCurrent.Attributes.Keys, attrName)
 		}
 
 		extending.Elements[eName] = eCurrent
