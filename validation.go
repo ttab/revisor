@@ -1,7 +1,10 @@
 package revisor
 
 import (
+	"bytes"
 	"context"
+	"embed"
+	"encoding/json"
 	"fmt"
 	"slices"
 	"strings"
@@ -901,6 +904,48 @@ type BlockConstraintSet interface {
 type Deprecation struct {
 	Label string `json:"label"`
 	Doc   string `json:"doc"`
+}
+
+// DecodeConstraintSetsFS decodes a set of constraints from a embedded
+// filesystem.
+func DecodeConstraintSetsFS(
+	sFS embed.FS, names ...string,
+) ([]ConstraintSet, error) {
+	var constraints []ConstraintSet
+
+	for _, n := range names {
+		data, err := sFS.ReadFile(n)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"load constraints from %q: %w",
+				n, err)
+		}
+
+		var c ConstraintSet
+
+		err = decodeBytes(data, &c)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"parse constraints in %q: %w",
+				n, err)
+		}
+
+		constraints = append(constraints, c)
+	}
+
+	return constraints, nil
+}
+
+func decodeBytes(data []byte, o interface{}) error {
+	dec := json.NewDecoder(bytes.NewReader(data))
+	dec.DisallowUnknownFields()
+
+	err := dec.Decode(o)
+	if err != nil {
+		return fmt.Errorf("invalid JSON: %w", err)
+	}
+
+	return nil
 }
 
 type ConstraintSet struct {
