@@ -3,7 +3,6 @@ package revisor_test
 import (
 	"bytes"
 	"context"
-	"embed"
 	"encoding/json"
 	"io/fs"
 	"os"
@@ -22,24 +21,13 @@ func regenerateGoldenFiles() bool {
 }
 
 func FuzzValidationDocuments(f *testing.F) {
-	var (
-		constraints      revisor.ConstraintSet
-		extraConstraints revisor.ConstraintSet
-	)
-
-	sFS := revisorschemas.Files()
-
-	err := internal.UnmarshalFileFS(sFS, "core.json", &constraints)
+	constraints, err := revisor.DecodeConstraintSetsFS(revisorschemas.Files(),
+		"core.json", "tt.json")
 	if err != nil {
-		f.Fatalf("failed to unmarshal base constraints: %v", err)
+		f.Fatalf("failed to decode constraint sets")
 	}
 
-	err = internal.UnmarshalFileFS(sFS, "tt.json", &extraConstraints)
-	if err != nil {
-		f.Fatalf("failed to unmarshal example constraints: %v", err)
-	}
-
-	validator, err := revisor.NewValidator(constraints, extraConstraints)
+	validator, err := revisor.NewValidator(constraints...)
 	if err != nil {
 		f.Fatalf("failed to create validator: %v", err)
 	}
@@ -223,28 +211,32 @@ func decodeConstraintSets(
 	return constraints
 }
 
-func decodeConstraintSetsFS(
-	t *testing.T, sFS embed.FS, names ...string,
-) []revisor.ConstraintSet {
-	t.Helper()
+func TestMarshalConstraintSetRoundtrip(t *testing.T) {
+	sFS := revisorschemas.Files()
 
-	var constraints []revisor.ConstraintSet
-
-	for _, n := range names {
-		data, err := sFS.ReadFile(n)
-		if err != nil {
-			t.Fatalf("failed to load constraints from %q: %v",
-				n, err)
-		}
-
-		var c revisor.ConstraintSet
-
-		decodeBytes(t, data, &c)
-
-		constraints = append(constraints, c)
+	names := []string{
+		"core.json", "core-planning.json",
+		"tt.json", "tt-planning.json",
 	}
 
-	return constraints
+	sets, err := revisor.DecodeConstraintSetsFS(sFS, names...)
+	if err != nil {
+		t.Fatalf("failed to decode schemas: %v", err)
+	}
+
+	for i, name := range names {
+		data, err := json.Marshal(sets[i])
+		if err != nil {
+			t.Fatalf("failed to marshal schema %q: %v", name, err)
+		}
+
+		var cs revisor.ConstraintSet
+
+		err = json.Unmarshal(data, &cs)
+		if err != nil {
+			t.Fatalf("failed to unmarshal schema %q: %v", name, err)
+		}
+	}
 }
 
 func TestValidateDocument(t *testing.T) {
@@ -252,18 +244,24 @@ func TestValidateDocument(t *testing.T) {
 
 	sFS := revisorschemas.Files()
 
-	core := decodeConstraintSetsFS(t, sFS,
+	core, err := revisor.DecodeConstraintSetsFS(sFS,
 		"core.json", "core-planning.json",
 	)
+	if err != nil {
+		t.Fatalf("failed to decode extended schemas: %v", err)
+	}
 
 	baseValidator, err := revisor.NewValidator(core...)
 	if err != nil {
 		t.Fatalf("failed to create base validator: %v", err)
 	}
 
-	extraConstraints := decodeConstraintSetsFS(t, sFS,
+	extraConstraints, err := revisor.DecodeConstraintSetsFS(sFS,
 		"tt.json", "tt-planning.json",
 	)
+	if err != nil {
+		t.Fatalf("failed to decode extended schemas: %v", err)
+	}
 
 	orgValidator, err := baseValidator.WithConstraints(extraConstraints...)
 	if err != nil {

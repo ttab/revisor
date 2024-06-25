@@ -15,12 +15,9 @@ type policyTestCase struct {
 func cm(
 	key string, constraint revisor.StringConstraint,
 ) revisor.ConstraintMap {
-	return revisor.ConstraintMap{
-		Keys: []string{key},
-		Constraints: map[string]revisor.StringConstraint{
-			key: constraint,
-		},
-	}
+	return revisor.MakeConstraintMap(map[string]revisor.StringConstraint{
+		key: constraint,
+	})
 }
 
 func TestHTMLPolicy(t *testing.T) {

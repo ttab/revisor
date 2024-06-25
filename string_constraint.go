@@ -53,6 +53,21 @@ type ConstraintMap struct {
 	Constraints map[string]StringConstraint
 }
 
+func MakeConstraintMap(constraints map[string]StringConstraint) ConstraintMap {
+	keys := make([]string, 0, len(constraints))
+
+	for k := range constraints {
+		keys = append(keys, k)
+	}
+
+	slices.Sort(keys)
+
+	return ConstraintMap{
+		Keys:        keys,
+		Constraints: constraints,
+	}
+}
+
 func (cm ConstraintMap) Requirements() string {
 	var requirements []string
 
@@ -66,27 +81,19 @@ func (cm ConstraintMap) Requirements() string {
 }
 
 func (cm *ConstraintMap) UnmarshalJSON(data []byte) error {
-	clear(cm.Constraints)
+	var constraints map[string]StringConstraint
 
-	err := json.Unmarshal(data, &cm.Constraints)
+	err := json.Unmarshal(data, &constraints)
 	if err != nil {
 		return fmt.Errorf("unmarshal map: %w", err)
 	}
 
-	keys := make([]string, 0, len(cm.Constraints))
-
-	for k := range cm.Constraints {
-		keys = append(keys, k)
-	}
-
-	slices.Sort(keys)
-
-	cm.Keys = keys
+	*cm = MakeConstraintMap(constraints)
 
 	return nil
 }
 
-func (cm *ConstraintMap) MarshalJSON() ([]byte, error) {
+func (cm ConstraintMap) MarshalJSON() ([]byte, error) {
 	return json.Marshal(cm.Constraints) //nolint: wrapcheck
 }
 
