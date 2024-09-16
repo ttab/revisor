@@ -5,6 +5,9 @@
   "$defs": {
     "BlockConstraint": {
       "properties": {
+        "ref": {
+          "type": "string"
+        },
         "declares": {
           "$ref": "#/$defs/BlockSignature"
         },
@@ -15,7 +18,10 @@
           "type": "string"
         },
         "match": {
-          "$ref": "#/$defs/ConstraintMap"
+          "additionalProperties": {
+            "$ref": "#/$defs/StringConstraint"
+          },
+          "type": "object"
         },
         "count": {
           "type": "integer"
@@ -45,16 +51,16 @@
           "type": "array"
         },
         "attributes": {
-          "$ref": "#/$defs/ConstraintMap"
+          "additionalProperties": {
+            "$ref": "#/$defs/StringConstraint"
+          },
+          "type": "object"
         },
         "data": {
-          "$ref": "#/$defs/ConstraintMap"
-        },
-        "blocksFrom": {
-          "items": {
-            "$ref": "#/$defs/BlocksFrom"
+          "additionalProperties": {
+            "$ref": "#/$defs/StringConstraint"
           },
-          "type": "array"
+          "type": "object"
         },
         "deprecated": {
           "$ref": "#/$defs/Deprecation"
@@ -62,6 +68,22 @@
       },
       "additionalProperties": false,
       "type": "object"
+    },
+    "BlockDefinition": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "block": {
+          "$ref": "#/$defs/BlockConstraint"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "block"
+      ]
     },
     "BlockSignature": {
       "properties": {
@@ -76,30 +98,6 @@
         }
       },
       "additionalProperties": false,
-      "type": "object"
-    },
-    "BlocksFrom": {
-      "properties": {
-        "docType": {
-          "type": "string"
-        },
-        "global": {
-          "type": "boolean"
-        },
-        "kind": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "kind"
-      ]
-    },
-    "ConstraintMap": {
-      "additionalProperties": {
-        "$ref": "#/$defs/StringConstraint"
-      },
       "type": "object"
     },
     "ConstraintSet": {
@@ -121,24 +119,21 @@
         },
         "links": {
           "items": {
-            "$ref": "#/$defs/BlockConstraint"
+            "$ref": "#/$defs/BlockDefinition"
           },
           "type": "array"
         },
         "meta": {
           "items": {
-            "$ref": "#/$defs/BlockConstraint"
+            "$ref": "#/$defs/BlockDefinition"
           },
           "type": "array"
         },
         "content": {
           "items": {
-            "$ref": "#/$defs/BlockConstraint"
+            "$ref": "#/$defs/BlockDefinition"
           },
           "type": "array"
-        },
-        "attributes": {
-          "$ref": "#/$defs/ConstraintMap"
         },
         "enums": {
           "items": {
@@ -187,7 +182,10 @@
           "type": "string"
         },
         "match": {
-          "$ref": "#/$defs/ConstraintMap"
+          "additionalProperties": {
+            "$ref": "#/$defs/StringConstraint"
+          },
+          "type": "object"
         },
         "links": {
           "items": {
@@ -208,7 +206,10 @@
           "type": "array"
         },
         "attributes": {
-          "$ref": "#/$defs/ConstraintMap"
+          "additionalProperties": {
+            "$ref": "#/$defs/StringConstraint"
+          },
+          "type": "object"
         },
         "deprecated": {
           "$ref": "#/$defs/Deprecation"
@@ -270,7 +271,10 @@
     "HTMLElement": {
       "properties": {
         "attributes": {
-          "$ref": "#/$defs/ConstraintMap"
+          "additionalProperties": {
+            "$ref": "#/$defs/StringConstraint"
+          },
+          "type": "object"
         }
       },
       "additionalProperties": false,

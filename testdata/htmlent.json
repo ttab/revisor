@@ -6,7 +6,8 @@
  "content": [
   {
    "id": "headline-0",
-   "type": "core/heading-1",
+   "type": "core/text",
+   "role": "heading-1",
    "data": {
     "text": "S\u0026P 500 slumps into bear market, Dow dives again as 2022 losses accelerate"
    }
@@ -16,9 +17,9 @@
   {
    "id": "RYaudnAJj8gQ",
    "type": "core/newsvalue",
+   "value": "4",
    "data": {
-    "duration": "86400",
-    "score": "4"
+    "duration": "86400"
    }
   },
   {

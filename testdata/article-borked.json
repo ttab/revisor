@@ -5,19 +5,20 @@
   "title": "Phasellus purus.",
   "content": [
     {
-      "type": "core/heading-1",
+      "type": "core/text",
+      "role": "heading-1",
       "data": {
         "text": "Curabitur <em>vulputate vestibulum lorem."
       }
     },
     {
-      "type": "core/paragraph",
+      "type": "core/text",
       "data": {
         "text": "Praesent & augue."
       }
     },
     {
-      "type": "core/paragraph",
+      "type": "core/text",
       "data": {
         "text": "In id erat non &orci; commodo lobortis."
       }
@@ -31,9 +32,9 @@
     {
       "id": "RYaudnAJj8gQ",
       "type": "core/newsvalue",
+      "value": "3",
       "data": {
-        "duration": "604800s",
-        "score": "3"
+        "duration": "604800s"
       }
     },
     {
@@ -45,7 +46,7 @@
     {
       "type": "core/section",
       "title": "no topic",
-      "rel": "subject"
+      "rel": "section"
     },
     {
       "uri": "im://articlesource/N/A",

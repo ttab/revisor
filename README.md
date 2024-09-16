@@ -2,6 +2,89 @@
 
 Revisor allows you to define specifications for NewsDoc contents as a series of declarations and pattern matching extensions to existing declarations.
 
+## Breaking changes
+
+### v0.9.0
+
+I this release we remove the ability to define global blocks and attributes that automatically are available for all document types. Globals was a mistake and have now been replaced by block definitions:
+
+``` json
+{
+  "version": 1,
+  "name": "block-example",
+  "documents": [
+    {
+      "name": "Article",
+      "description": "An editorial article",
+      "declares": "core/article",
+      "content": [
+        {"ref": "core://text"}
+      ]
+    }
+  ],
+  "content": [
+    {
+      "id": "core://text",
+      "block": {
+        "description": "A standard text block",
+        "declares": {"type":"core/text"},
+        "attributes": {
+          "role": {
+            "optional":true,
+            "enum": ["heading-1", "heading-2", "preamble"]
+          }
+        },
+        "data": {
+          "text":{
+            "allowEmpty":true,
+            "format": "html"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+Inline blocks can still be declared as before.
+
+When using `ref` it's possible to extend the block in the same block constraint. Writing this:
+
+``` json
+{
+  "version": 1,
+  "name": "block-example",
+  "documents": [
+    {
+      "name": "Article",
+      ...
+      "meta": [
+        {
+          "ref": "core://newsvalue",
+          "count": 1
+        }
+      ]
+      ...
+```
+
+...is equivalent to:
+
+``` json
+      ...
+      "meta": [
+        {
+          "ref": "core://newsvalue"
+        },
+        {
+          "match": {"type": "core/newsvalue"},
+          "count": 1
+        }
+      ]
+      ...
+```
+
+...as any constraints will be treated as a block constraint with a `match` directive equivalent to the `declares` object of the referenced block.
+
 ## Local testing
 
 For running the actual tests and benchmarks, see the section on [Testing](#markdown-header-testing).

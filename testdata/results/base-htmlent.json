@@ -8,7 +8,7 @@
       {
         "refType": "block",
         "kind": "content",
-        "type": "core/heading-1"
+        "type": "core/text"
       }
     ],
     "error": "invalid html after line 1 char 0: invalid html entity: entity too long or unterminated"
