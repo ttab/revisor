@@ -272,6 +272,7 @@ func TestValidateDocument(t *testing.T) {
 		"testdata/constraints/geo.json",
 		"testdata/constraints/labels-hints.json",
 		"testdata/constraints/transcript.json",
+		"testdata/constraints/colour.json",
 	)
 
 	testValidator, err := revisor.NewValidator(testConstraints...)

@@ -1,0 +1,92 @@
+[
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "hexy"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 1,
+        "type": "test/colour"
+      }
+    ],
+    "error": "invalid colour value \"feqefe\": invalid hex code: encoding/hex: invalid byte: U+0071 'q'"
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "solid"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 1,
+        "type": "test/colour"
+      }
+    ],
+    "error": "invalid colour value \"rgb(-1,10,10)\": \"r\" out of range"
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "transparent"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 1,
+        "type": "test/colour"
+      }
+    ],
+    "error": "invalid colour value \"rgba(10, 10, 10, 2)\": \"alpha\" out of range"
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "hexy"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 2,
+        "type": "test/colour"
+      }
+    ],
+    "error": "invalid colour value \"fefefefe\": code length: expected 6 characters, got 8"
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "solid"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 2,
+        "type": "test/colour"
+      }
+    ],
+    "error": "invalid colour value \"rgba(10,10,10,0.3)\": expected \"rgb\" colour"
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "transparent"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 2,
+        "type": "test/colour"
+      }
+    ],
+    "error": "invalid colour value \"rgb(10, 10, 10)\": expected \"rgba\" colour"
+  }
+]

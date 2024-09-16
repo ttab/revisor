@@ -1,0 +1,30 @@
+{
+  "uuid": "67912d12-bea0-4ec3-a8d4-16d669bd35bc",
+  "type": "test/colour-doc",
+  "content": [
+    {
+      "type": "test/colour",
+      "data": {
+        "hexy": "fefefe",
+        "solid": "rgb(10,10,10)",
+        "transparent": "rgba(10, 10, 10, 0.5)"
+      }
+    },
+    {
+      "type": "test/colour",
+      "data": {
+        "hexy": "feqefe",
+        "solid": "rgb(-1,10,10)",
+        "transparent": "rgba(10, 10, 10, 2)"
+      }
+    },
+    {
+      "type": "test/colour",
+      "data": {
+        "hexy": "fefefefe",
+        "solid": "rgba(10,10,10,0.3)",
+        "transparent": "rgb(10, 10, 10)"
+      }
+    }
+  ]
+}

@@ -15,15 +15,17 @@ import (
 type StringFormat string
 
 const (
-	StringFormatNone    StringFormat = ""
-	StringFormatRFC3339 StringFormat = "RFC3339"
-	StringFormatInt     StringFormat = "int"
-	StringFormatFloat   StringFormat = "float"
-	StringFormatBoolean StringFormat = "bool"
-	StringFormatHTML    StringFormat = "html"
-	StringFormatUUID    StringFormat = "uuid"
-	StringFormatWKT     StringFormat = "wkt"
-	StringFormatColour  StringFormat = "colour"
+	StringFormatNone       StringFormat = ""
+	StringFormatRFC3339    StringFormat = "RFC3339"
+	StringFormatInt        StringFormat = "int"
+	StringFormatFloat      StringFormat = "float"
+	StringFormatBoolean    StringFormat = "bool"
+	StringFormatHTML       StringFormat = "html"
+	StringFormatUUID       StringFormat = "uuid"
+	StringFormatWKT        StringFormat = "wkt"
+	StringFormatColour     StringFormat = "colour"
+	StringFormatColourRGB  StringFormat = "colour_rgb"
+	StringFormatColourRGBA StringFormat = "colour_rgba"
 )
 
 func (f StringFormat) Describe() string {
@@ -44,6 +46,8 @@ func (f StringFormat) Describe() string {
 		return "a WKT geometry"
 	case StringFormatColour:
 		return "a hex RGB colour code"
+	case StringFormatColourRGB:
+		return "a rgb() or rgba() colour code"
 	case StringFormatNone:
 		return ""
 	}
@@ -265,10 +269,10 @@ func (sc *StringConstraint) Validate(
 		if err != nil {
 			return nil, fmt.Errorf("WKT validation: %w", err)
 		}
-	case StringFormatColour:
-		err := validateColour(value)
+	case StringFormatColour, StringFormatColourRGB, StringFormatColourRGBA:
+		err := validateColour(value, sc.Format)
 		if err != nil {
-			return nil, fmt.Errorf("invalid colour value: %w", err)
+			return nil, fmt.Errorf("invalid colour value %q: %w", value, err)
 		}
 	default:
 		return nil, fmt.Errorf("unknown string format %q", sc.Format)

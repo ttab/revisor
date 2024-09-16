@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "name": "colour",
+  "documents": [
+    {
+      "declares": "test/colour-doc",
+      "content": [
+        {
+          "declares": {"type": "test/colour"},
+          "data": {
+            "hexy": {
+              "format": "colour",
+              "optional": true
+            },
+            "solid": {
+              "format": "colour_rgb",
+              "optional": true
+            },
+            "transparent": {
+              "format": "colour_rgba",
+              "optional": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
