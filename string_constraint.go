@@ -23,6 +23,7 @@ const (
 	StringFormatHTML    StringFormat = "html"
 	StringFormatUUID    StringFormat = "uuid"
 	StringFormatWKT     StringFormat = "wkt"
+	StringFormatColour  StringFormat = "colour"
 )
 
 func (f StringFormat) Describe() string {
@@ -41,6 +42,8 @@ func (f StringFormat) Describe() string {
 		return "a uuid"
 	case StringFormatWKT:
 		return "a WKT geometry"
+	case StringFormatColour:
+		return "a hex RGB colour code"
 	case StringFormatNone:
 		return ""
 	}
@@ -261,6 +264,11 @@ func (sc *StringConstraint) Validate(
 		err := validateWKT(sc.Geometry, value)
 		if err != nil {
 			return nil, fmt.Errorf("WKT validation: %w", err)
+		}
+	case StringFormatColour:
+		err := validateColour(value)
+		if err != nil {
+			return nil, fmt.Errorf("invalid colour value: %w", err)
 		}
 	default:
 		return nil, fmt.Errorf("unknown string format %q", sc.Format)
