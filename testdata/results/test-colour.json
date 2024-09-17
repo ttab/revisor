@@ -12,7 +12,7 @@
         "type": "test/colour"
       }
     ],
-    "error": "invalid colour value \"feqefe\": invalid hex code: encoding/hex: invalid byte: U+0071 'q'"
+    "error": "invalid colour value \"#feqefe\": invalid hex code: encoding/hex: invalid byte: U+0071 'q'"
   },
   {
     "entity": [
@@ -57,7 +57,7 @@
         "type": "test/colour"
       }
     ],
-    "error": "invalid colour value \"fefefefe\": code length: expected 6 characters, got 8"
+    "error": "invalid colour value \"#fefefefe\": code length: expected 6 characters, got 8"
   },
   {
     "entity": [
@@ -72,7 +72,7 @@
         "type": "test/colour"
       }
     ],
-    "error": "invalid colour value \"rgba(10,10,10,0.3)\": expected \"rgb\" colour"
+    "error": "invalid colour value \"rgba(10,10,10,0.3)\": expected a colour in the format \"rgb\""
   },
   {
     "entity": [
@@ -87,6 +87,36 @@
         "type": "test/colour"
       }
     ],
-    "error": "invalid colour value \"rgb(10, 10, 10)\": expected \"rgba\" colour"
+    "error": "invalid colour value \"rgb(10, 10, 10)\": expected a colour in the format \"rgba\""
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "anycol"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 3,
+        "type": "test/colour"
+      }
+    ],
+    "error": "invalid colour value \"nope\": expected a colour in one of the formats \"rgba\", \"rgb\", \"hex\""
+  },
+  {
+    "entity": [
+      {
+        "refType": "data attribute",
+        "name": "hexy"
+      },
+      {
+        "refType": "block",
+        "kind": "content",
+        "index": 3,
+        "type": "test/colour"
+      }
+    ],
+    "error": "invalid colour value \"fefefe\": expected a colour in the format \"hex\""
   }
 ]

@@ -15,17 +15,15 @@ import (
 type StringFormat string
 
 const (
-	StringFormatNone       StringFormat = ""
-	StringFormatRFC3339    StringFormat = "RFC3339"
-	StringFormatInt        StringFormat = "int"
-	StringFormatFloat      StringFormat = "float"
-	StringFormatBoolean    StringFormat = "bool"
-	StringFormatHTML       StringFormat = "html"
-	StringFormatUUID       StringFormat = "uuid"
-	StringFormatWKT        StringFormat = "wkt"
-	StringFormatColour     StringFormat = "colour"
-	StringFormatColourRGB  StringFormat = "colour_rgb"
-	StringFormatColourRGBA StringFormat = "colour_rgba"
+	StringFormatNone    StringFormat = ""
+	StringFormatRFC3339 StringFormat = "RFC3339"
+	StringFormatInt     StringFormat = "int"
+	StringFormatFloat   StringFormat = "float"
+	StringFormatBoolean StringFormat = "bool"
+	StringFormatHTML    StringFormat = "html"
+	StringFormatUUID    StringFormat = "uuid"
+	StringFormatWKT     StringFormat = "wkt"
+	StringFormatColour  StringFormat = "colour"
 )
 
 func (f StringFormat) Describe() string {
@@ -45,11 +43,7 @@ func (f StringFormat) Describe() string {
 	case StringFormatWKT:
 		return "a WKT geometry"
 	case StringFormatColour:
-		return "a hex RGB colour code"
-	case StringFormatColourRGB:
-		return "a rgb() colour code"
-	case StringFormatColourRGBA:
-		return "a rgba() colour code"
+		return "a colour code"
 	case StringFormatNone:
 		return ""
 	}
@@ -107,20 +101,21 @@ func (cm ConstraintMap) MarshalJSON() ([]byte, error) {
 }
 
 type StringConstraint struct {
-	Name        string       `json:"name,omitempty"`
-	Description string       `json:"description,omitempty"`
-	Optional    bool         `json:"optional,omitempty"`
-	AllowEmpty  bool         `json:"allowEmpty,omitempty"`
-	Const       *string      `json:"const,omitempty"`
-	Enum        []string     `json:"enum,omitempty"`
-	EnumRef     string       `json:"enumReference,omitempty"`
-	Pattern     *Regexp      `json:"pattern,omitempty"`
-	Glob        GlobList     `json:"glob,omitempty"`
-	Format      StringFormat `json:"format,omitempty"`
-	Time        string       `json:"time,omitempty"`
-	Geometry    string       `json:"geometry,omitempty"`
-	HTMLPolicy  string       `json:"htmlPolicy,omitempty"`
-	Deprecated  *Deprecation `json:"deprecated,omitempty"`
+	Name          string         `json:"name,omitempty"`
+	Description   string         `json:"description,omitempty"`
+	Optional      bool           `json:"optional,omitempty"`
+	AllowEmpty    bool           `json:"allowEmpty,omitempty"`
+	Const         *string        `json:"const,omitempty"`
+	Enum          []string       `json:"enum,omitempty"`
+	EnumRef       string         `json:"enumReference,omitempty"`
+	Pattern       *Regexp        `json:"pattern,omitempty"`
+	Glob          GlobList       `json:"glob,omitempty"`
+	Format        StringFormat   `json:"format,omitempty"`
+	Time          string         `json:"time,omitempty"`
+	Geometry      string         `json:"geometry,omitempty"`
+	ColourFormats []ColourFormat `json:"colourFormats,omitempty"`
+	HTMLPolicy    string         `json:"htmlPolicy,omitempty"`
+	Deprecated    *Deprecation   `json:"deprecated,omitempty"`
 
 	// Labels (and hints) are not constraints per se, but should be seen as
 	// labels on the value that can be used by systems that process data
@@ -271,8 +266,8 @@ func (sc *StringConstraint) Validate(
 		if err != nil {
 			return nil, fmt.Errorf("WKT validation: %w", err)
 		}
-	case StringFormatColour, StringFormatColourRGB, StringFormatColourRGBA:
-		err := validateColour(value, sc.Format)
+	case StringFormatColour:
+		err := validateColour(value, sc.ColourFormats)
 		if err != nil {
 			return nil, fmt.Errorf("invalid colour value %q: %w", value, err)
 		}

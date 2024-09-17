@@ -5,25 +5,35 @@
     {
       "type": "test/colour",
       "data": {
-        "hexy": "fefefe",
+        "hexy": "#fefefe",
         "solid": "rgb(10,10,10)",
-        "transparent": "rgba(10, 10, 10, 0.5)"
+        "transparent": "rgba(10, 10, 10, 0.5)",
+        "anycol": "rgba(10, 10, 10, 0.5)"
       }
     },
     {
       "type": "test/colour",
       "data": {
-        "hexy": "feqefe",
+        "hexy": "#feqefe",
         "solid": "rgb(-1,10,10)",
-        "transparent": "rgba(10, 10, 10, 2)"
+        "transparent": "rgba(10, 10, 10, 2)",
+        "anycol": "rgb(10, 10, 10)"
       }
     },
     {
       "type": "test/colour",
       "data": {
-        "hexy": "fefefefe",
+        "hexy": "#fefefefe",
         "solid": "rgba(10,10,10,0.3)",
-        "transparent": "rgb(10, 10, 10)"
+        "transparent": "rgb(10, 10, 10)",
+        "anycol": "#ab332a"
+      }
+    },
+    {
+      "type": "test/colour",
+      "data": {
+        "hexy": "fefefe",
+        "anycol": "nope"
       }
     }
   ]

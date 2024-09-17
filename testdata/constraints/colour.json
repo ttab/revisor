@@ -10,14 +10,22 @@
           "data": {
             "hexy": {
               "format": "colour",
+              "colourFormats": ["hex"],
               "optional": true
             },
             "solid": {
-              "format": "colour_rgb",
+              "format": "colour",
+              "colourFormats": ["rgb"],
               "optional": true
             },
             "transparent": {
-              "format": "colour_rgba",
+              "format": "colour",
+              "colourFormats": ["rgba"],
+              "optional": true
+            },
+            "anycol": {
+              "format": "colour",
+              "colourFormats": ["rgba", "rgb", "hex"],
               "optional": true
             }
           }
