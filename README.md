@@ -85,63 +85,6 @@ When using `ref` it's possible to extend the block in the same block constraint.
 
 ...as any constraints will be treated as a block constraint with a `match` directive equivalent to the `declares` object of the referenced block.
 
-## Local testing
-
-For running the actual tests and benchmarks, see the section on [Testing](#markdown-header-testing).
-
-The easiest way to test specifications against documents is by running the "revisor" command like so:
-
-``` bash
-$ revisor document ./testdata/article-borked.json
-```
-
-That will validate the document using only the specifications in "./constraints/core.json".
-
-Try running the same validation against a document with organisation specific content:
-
-``` bash
-$ revisor document ./testdata/example-article.json
-meta block 2 (tt/slugline): undeclared block type or rel
-attribute "type" of meta block 2 (tt/slugline): undeclared block attribute
-attribute "value" of meta block 2 (tt/slugline): undeclared block attribute
-content block 2 (tt/visual): undeclared block type or rel
-attribute "type" of content block 2 (tt/visual): undeclared block attribute
-data attribute "caption" of content block 2 (tt/visual): unknown attribute
-link 1 self(tt/picture) of content block 2 (tt/visual): undeclared block type or rel
-attribute "type" of link 1 self(tt/picture) of content block 2 (tt/visual): undeclared block attribute
-attribute "uri" of link 1 self(tt/picture) of content block 2 (tt/visual): undeclared block attribute
-attribute "url" of link 1 self(tt/picture) of content block 2 (tt/visual): undeclared block attribute
-attribute "rel" of link 1 self(tt/picture) of content block 2 (tt/visual): undeclared block attribute
-data attribute "credit" of link 1 self(tt/picture) of content block 2 (tt/visual): unknown attribute
-data attribute "height" of link 1 self(tt/picture) of content block 2 (tt/visual): unknown attribute
-data attribute "hiresScale" of link 1 self(tt/picture) of content block 2 (tt/visual): unknown attribute
-data attribute "width" of link 1 self(tt/picture) of content block 2 (tt/visual): unknown attribute
-content block 3 (tt/dateline): undeclared block type or rel
-attribute "type" of content block 3 (tt/dateline): undeclared block attribute
-data attribute "text" of content block 3 (tt/dateline): unknown attribute
-documents had validation errors
-```
-
-Use the flag `-spec ./constraints/tt.json` to load the organisation specific constraints for TT.
-
-### Running a revisor server
-
-It's also possible to run revisor as a service with the `serve` command, it takes the same `--spec`/`--core-spec` as the `document` command, and adds `--addr` to control the address to listen to.
-
-Start the server in one shell:
-
-``` bash
-$ revisor serve
-```
-
-...and post the example article to it in another using `curl`:
-
-``` bash
-$ curl --data @testdata/example-article.json localhost:8000
-```
-
-You should get the same validation errors as in the previous example, but in JSON format. An empty array is returned for valid documents.
-
 ## Writing specifications
 
 The main entities points in a specification are documents, blocks and properties. Documents are declared by type, blocks by type, rel, and/or role, and properties by name. An entity is not valid if we don't have a matching declaration for it, regardless of whether somebody has pattern-matched against it.
