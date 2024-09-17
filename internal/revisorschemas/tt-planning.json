@@ -39,28 +39,6 @@
             }
           ]
         }
-      ],
-      "links": [
-        {
-          "name": "Article sector",
-          "declares": {
-            "rel": "sector",
-            "type": "tt/sector"
-          },
-          "maxCount": 1,
-          "attributes": {
-            "uuid": {},
-            "uri": {},
-            "title": {},
-            "value": {
-              "labels": ["keyword"]
-            }
-          },
-          "deprecated": {
-            "label": "planning_sector",
-            "doc": "Use core/section instead"
-          }
-        }
       ]
     }
   ]

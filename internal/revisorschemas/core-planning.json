@@ -56,6 +56,13 @@
       ],
       "meta": [
         {
+          "ref": "core://description"
+        },
+        {
+          "ref": "core://newsvalue",
+          "count": 1
+        },
+        {
           "name": "Main metadata block",
           "declares": {
             "type": "core/planning-item"
@@ -86,16 +93,6 @@
                 "label": "planning-item-priority",
                 "doc": "use the newsvalue block instead"
               }
-            }
-          }
-        },
-        {
-          "declares": {"type":"core/newsvalue"},
-          "maxCount": 1,
-          "attributes": {
-            "value": {
-              "description": "The assigned newsvalue, optional if score is used. Will become mandatory.",
-              "format": "int"
             }
           }
         },

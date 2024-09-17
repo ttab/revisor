@@ -57,7 +57,10 @@
     {
       "name": "Story",
       "description": "An ongoing story that gets reported on",
-      "declares": "core/story"
+      "declares": "core/story",
+      "meta": [
+        {"ref":"core://definition"}
+      ]
     },
     {
       "name": "Person",
@@ -437,6 +440,7 @@
       "description": "A useful contact",
       "declares": "core/contact",
       "meta": [
+        {"ref":"core://definition"},
         {
           "name": "Main metadata block",
           "declares": {"type":"core/contact"},
@@ -481,80 +485,6 @@
           "name": "Groups",
           "description": "The groups that the contact is assigned to",
           "declares": {"rel":"group", "type": "core/group"},
-          "attributes": {
-            "uuid": {},
-            "title": {}
-          }
-        }
-      ]
-    },
-    {
-      "name": "Assignment",
-      "description": "A work assignment",
-      "declares": "core/assignment",
-      "meta": [
-        {
-          "name": "Main metadata block",
-          "declares": {"type":"core/assignment"},
-          "count": 1,
-          "data": {
-            "dateGranularity": {"enum":["date", "datetime"]},
-            "start": {"format":"RFC3339"},
-            "startDate": {"time":"2006-01-02"},
-            "end": {"format":"RFC3339"},
-            "endDate": {"time":"2006-01-02"}
-          }
-        },
-        {
-          "name": "Assignment type",
-          "declares": {"type":"core/assignment-type"},
-          "minCount": 1,
-          "attributes": {
-            "value": {
-              "enum":[
-                "text", "picture", "video", "graphic"
-              ]
-            }
-          }
-        }
-      ],
-      "links": [
-        {
-          "name": "Assigned person",
-          "declares": {"rel":"assigned-to", "type": "core/author"},
-          "attributes": {
-            "uuid": {},
-            "title": {}
-          },
-          "data": {
-            "email": {
-              "optional":true,
-              "labels": ["keyword"]
-            },
-            "shortDescription": {"optional":true},
-            "firstName": {"optional":true},
-            "lastName": {"optional":true}
-          }
-        },
-        {
-          "name": "Article",
-          "declares": {"type": "core/article", "rel":"article"},
-          "attributes": {
-            "uuid": {},
-            "title": {"allowEmpty":true}
-          }
-        },
-        {
-          "name": "Channel",
-          "declares": {"type": "core/channel", "rel":"channel"},
-          "attributes": {
-            "uuid": {},
-            "title": {}
-          }
-        },
-        {
-          "name": "Content profile",
-          "declares": {"type": "core/content-profile", "rel":"content-profile"},
           "attributes": {
             "uuid": {},
             "title": {}
