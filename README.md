@@ -114,19 +114,20 @@ Here we declare that links with `rel` "broader" are valid for all blocks that ma
 
 ### String constraints
 
-| Name       | Use                                                                        |
-|:-----------|:---------------------------------------------------------------------------|
-| optional   | Set to `true` if the value doesn't have to be present                      |
-| allowEmpty | Set to `true` if an empty value is ok.                                     |
-| const      | A specific `"value"` that must match                                       |
-| enum       | A list `["of", "values"]` where one must match                             |
-| pattern    | A regular expression that the value must match                             |
-| glob       | A list of glob patterns `["http://**", "https://**"]` where one must match |
-| format     | A named format that the value must follow                                  |
-| time       | A time format specification                                                |
-| geometry   | The geometry and coordinate type that must be used for WKT strings.        |
-| labels     | Labels used to describe the value                                          |
-| hints      | Key value pairs used to describe the value                                 |
+| Name          | Use                                                                                                        |
+|:--------------|:-----------------------------------------------------------------------------------------------------------|
+| optional      | Set to `true` if the value doesn't have to be present                                                      |
+| allowEmpty    | Set to `true` if an empty value is ok.                                                                     |
+| const         | A specific `"value"` that must match                                                                       |
+| enum          | A list `["of", "values"]` where one must match                                                             |
+| pattern       | A regular expression that the value must match                                                             |
+| glob          | A list of glob patterns `["http://**", "https://**"]` where one must match                                 |
+| format        | A named format that the value must follow                                                                  |
+| time          | A time format specification                                                                                |
+| colourFormats | Controls the "colour" format. Any combination of  "hex", "rgb", and "rgba". Defaults to `["rgb", "rgba"]`. |
+| geometry      | The geometry and coordinate type that must be used for WKT strings.                                        |
+| labels        | Labels used to describe the value                                                                          |
+| hints         | Key value pairs used to describe the value                                                                 |
 
 The distinction between optional and allowEmpty is only relevant for data attributes. The document and block attributes defined in the NewsDoc schema always exist, so `optional` and `allowEmpty` will be treated as equivalent. 
 
@@ -141,6 +142,7 @@ The following formats are available:
 * `html`: validate the contents as HTML
 * `uuid`: validate the string as a UUID
 * `wkt`: validate the string as a [WKT geometry](#wkt-geometry).
+* `colour`: a colour in one of the formats specified in `colourFormats`.
 
 When using the format "html" it's also possible to use `htmlPolicy` to use a specific HTML policy. See the section on [HTML policies](#markdown-header-html-policies).
 
