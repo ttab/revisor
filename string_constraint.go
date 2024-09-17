@@ -53,6 +53,10 @@ type ConstraintMap struct {
 	Constraints map[string]StringConstraint
 }
 
+func (cm ConstraintMap) JSONSchemaAlias() any {
+	return cm.Constraints
+}
+
 func MakeConstraintMap(constraints map[string]StringConstraint) ConstraintMap {
 	keys := make([]string, 0, len(constraints))
 
@@ -66,6 +70,21 @@ func MakeConstraintMap(constraints map[string]StringConstraint) ConstraintMap {
 		Keys:        keys,
 		Constraints: constraints,
 	}
+}
+
+func (cm ConstraintMap) Copy() ConstraintMap {
+	c := ConstraintMap{
+		Keys:        make([]string, len(cm.Keys)),
+		Constraints: make(map[string]StringConstraint, len(cm.Constraints)),
+	}
+
+	copy(c.Keys, cm.Keys)
+
+	for k := range cm.Constraints {
+		c.Constraints[k] = cm.Constraints[k]
+	}
+
+	return c
 }
 
 func (cm ConstraintMap) Requirements() string {

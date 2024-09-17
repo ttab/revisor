@@ -35,6 +35,18 @@ func (dc DocumentConstraint) BlockConstraints(kind BlockKind) []*BlockConstraint
 	return nil
 }
 
+// SetBlockConstraints implements the BlockConstraintsSet interface.
+func (dc *DocumentConstraint) SetBlockConstraints(kind BlockKind, blocks []*BlockConstraint) {
+	switch kind {
+	case BlockKindLink:
+		dc.Links = blocks
+	case BlockKindMeta:
+		dc.Meta = blocks
+	case BlockKindContent:
+		dc.Content = blocks
+	}
+}
+
 // Matches checks if the given document matches the constraint.
 func (dc DocumentConstraint) Matches(
 	d *newsdoc.Document, vCtx *ValidationContext,

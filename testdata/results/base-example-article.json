@@ -269,42 +269,16 @@
   {
     "entity": [
       {
-        "refType": "block",
-        "kind": "content",
-        "index": 2,
-        "type": "tt/dateline"
-      }
-    ],
-    "error": "undeclared block type or rel"
-  },
-  {
-    "entity": [
-      {
         "refType": "attribute",
-        "name": "type"
+        "name": "role"
       },
       {
         "refType": "block",
         "kind": "content",
         "index": 2,
-        "type": "tt/dateline"
+        "type": "core/text"
       }
     ],
-    "error": "undeclared block attribute"
-  },
-  {
-    "entity": [
-      {
-        "refType": "data attribute",
-        "name": "text"
-      },
-      {
-        "refType": "block",
-        "kind": "content",
-        "index": 2,
-        "type": "tt/dateline"
-      }
-    ],
-    "error": "unknown attribute"
+    "error": "must be one of: \"blockquote\", \"heading-1\", \"heading-2\", \"heading-3\", \"heading-4\", \"preamble\""
   }
 ]

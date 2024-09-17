@@ -28,10 +28,6 @@ github.com/stretchr/testify v1.8.1 h1:w7B6lhMri9wdJUVmEZPGGhZzrYTPvgJArz7wNPgYKs
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/ttab/newsdoc v0.5.0 h1:b4rvvQMiiaU0WUqYKPVP5p4kUlwN6X6HUcEn+isbDAQ=
 github.com/ttab/newsdoc v0.5.0/go.mod h1:a+D/6F/zNhIvNB7+JJMPx0HNm+146y68TCfVYo6H8WY=
-github.com/ttab/revisorschemas v0.2.0 h1:VDjwozJW+JB+5v0nxJ2MRC7SZ+p0emRNqiciWYC7BCc=
-github.com/ttab/revisorschemas v0.2.0/go.mod h1:aar8L038YwOri7FsapvOHeeEG5alN4fWBZ8phZ2hQdw=
-github.com/ttab/revisorschemas v0.3.4 h1:tCiKABoahf7sT/D/7uFgNFFEtdRubOPXrAbeXEH8nC4=
-github.com/ttab/revisorschemas v0.3.4/go.mod h1:hDKtwfA0m/1iVEB8pe6kqaDNb9LswUTzwEb7EXeRKbM=
 github.com/urfave/cli/v2 v2.27.2 h1:6e0H+AkS+zDckwPCUrZkKX38mRaau4nL2uipkJpbkcI=
 github.com/urfave/cli/v2 v2.27.2/go.mod h1:g0+79LmHHATl7DAcHO99smiR/T7uGLw84w8Y42x+4eM=
 github.com/wk8/go-ordered-map/v2 v2.1.8 h1:5h/BUHu93oj4gIdvHHHGsScSTMijfx5PeYkE/fJgbpc=
