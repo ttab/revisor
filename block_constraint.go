@@ -45,29 +45,6 @@ func (bk BlockKind) Description(n int) string {
 	return "blocks"
 }
 
-// BlocksFrom allows a block to borrow definitions for its child blocks from a
-// document type.
-type BlocksFrom struct {
-	DocType string    `json:"docType,omitempty"`
-	Global  bool      `json:"global,omitempty"`
-	Kind    BlockKind `json:"kind"`
-}
-
-// BorrowedBlocks wraps a block constraint set that has been borrowed.
-type BorrowedBlocks struct {
-	Kind   BlockKind
-	Source BlockConstraintSet
-}
-
-// BlockConstraints implements the BlockConstraintsSet interface.
-func (bb BorrowedBlocks) BlockConstraints(kind BlockKind) []*BlockConstraint {
-	if bb.Kind != kind {
-		return nil
-	}
-
-	return bb.Source.BlockConstraints(kind)
-}
-
 // BlockSignature is the signature of a block declaration.
 type BlockSignature struct {
 	Type string `json:"type,omitempty"`
@@ -75,8 +52,42 @@ type BlockSignature struct {
 	Role string `json:"role,omitempty"`
 }
 
+func (bs BlockSignature) AsConstraint() ConstraintMap {
+	m := make(map[string]StringConstraint)
+
+	if bs.Type != "" {
+		m[string(blockAttrType)] = StringConstraint{
+			Const: strPtr(bs.Type),
+		}
+	}
+
+	if bs.Rel != "" {
+		m[string(blockAttrRel)] = StringConstraint{
+			Const: strPtr(bs.Rel),
+		}
+	}
+
+	if bs.Role != "" {
+		m[string(blockAttrRole)] = StringConstraint{
+			Const: strPtr(bs.Role),
+		}
+	}
+
+	return MakeConstraintMap(m)
+}
+
+func strPtr(v string) *string {
+	return &v
+}
+
+type BlockDefinition struct {
+	ID    string          `json:"id"`
+	Block BlockConstraint `json:"block"`
+}
+
 // BlockConstraint is a specification for a block.
 type BlockConstraint struct {
+	Ref         string             `json:"ref,omitempty"`
 	Declares    *BlockSignature    `json:"declares,omitempty"`
 	Name        string             `json:"name,omitempty"`
 	Description string             `json:"description,omitempty"`
@@ -89,8 +100,79 @@ type BlockConstraint struct {
 	Content     []*BlockConstraint `json:"content,omitempty"`
 	Attributes  ConstraintMap      `json:"attributes,omitempty"`
 	Data        ConstraintMap      `json:"data,omitempty"`
-	BlocksFrom  []BlocksFrom       `json:"blocksFrom,omitempty"`
 	Deprecated  *Deprecation       `json:"deprecated,omitempty"`
+}
+
+// IsNoop returns true if the constraint doesn't affect anything.
+func (bc BlockConstraint) IsNoop() bool {
+	return bc.Ref == "" && bc.Declares == nil && bc.Count == nil &&
+		bc.MaxCount == nil && bc.MinCount == nil &&
+		len(bc.Links) == 0 && len(bc.Meta) == 0 && len(bc.Content) == 0 &&
+		len(bc.Attributes.Keys) == 0 && len(bc.Data.Keys) == 0 &&
+		bc.Deprecated == nil
+}
+
+func (bc BlockConstraint) Copy() *BlockConstraint {
+	return &BlockConstraint{
+		Ref:         bc.Ref,
+		Declares:    bSigCopy(bc.Declares),
+		Name:        bc.Name,
+		Description: bc.Description,
+		Match:       bc.Match.Copy(),
+		Count:       intPtrCopy(bc.Count),
+		MaxCount:    intPtrCopy(bc.MaxCount),
+		MinCount:    intPtrCopy(bc.MinCount),
+		Links:       bsListCopy(bc.Links),
+		Meta:        bsListCopy(bc.Meta),
+		Content:     bsListCopy(bc.Content),
+		Attributes:  bc.Attributes.Copy(),
+		Data:        bc.Data.Copy(),
+		Deprecated:  deprCopy(bc.Deprecated),
+	}
+}
+
+func bSigCopy(v *BlockSignature) *BlockSignature {
+	if v == nil {
+		return nil
+	}
+
+	s := *v
+
+	return &s
+}
+
+func intPtrCopy(v *int) *int {
+	if v == nil {
+		return nil
+	}
+
+	n := *v
+
+	return &n
+}
+
+func bsListCopy(b []*BlockConstraint) []*BlockConstraint {
+	if len(b) == 0 {
+		return nil
+	}
+
+	s := make([]*BlockConstraint, len(b))
+
+	for i := range b {
+		s[i] = b[i].Copy()
+	}
+
+	return s
+}
+
+func deprCopy(v *Deprecation) *Deprecation {
+	if v == nil {
+		return nil
+	}
+
+	d := *v
+
+	return &d
 }
 
 // BlockConstraints implements the BlockConstraintsSet interface.
@@ -105,6 +187,18 @@ func (bc BlockConstraint) BlockConstraints(kind BlockKind) []*BlockConstraint {
 	}
 
 	return nil
+}
+
+// SetBlockConstraints implements the BlockConstraintsSet interface.
+func (bc *BlockConstraint) SetBlockConstraints(kind BlockKind, blocks []*BlockConstraint) {
+	switch kind {
+	case BlockKindLink:
+		bc.Links = blocks
+	case BlockKindMeta:
+		bc.Meta = blocks
+	case BlockKindContent:
+		bc.Content = blocks
+	}
 }
 
 // Match describes if and how a block constraint matches a block.

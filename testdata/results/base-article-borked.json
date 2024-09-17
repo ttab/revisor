@@ -9,7 +9,7 @@
         "refType": "block",
         "kind": "link",
         "type": "core/section",
-        "rel": "subject"
+        "rel": "section"
       }
     ],
     "error": "cannot be empty"
@@ -143,7 +143,7 @@
       {
         "refType": "block",
         "kind": "content",
-        "type": "core/heading-1"
+        "type": "core/text"
       }
     ],
     "error": "unclosed tag \u003cem\u003e"
@@ -158,7 +158,7 @@
         "refType": "block",
         "kind": "content",
         "index": 1,
-        "type": "core/paragraph"
+        "type": "core/text"
       }
     ],
     "error": "invalid html after line 1 char 0: invalid html entity: entity too long or unterminated"
@@ -173,7 +173,7 @@
         "refType": "block",
         "kind": "content",
         "index": 2,
-        "type": "core/paragraph"
+        "type": "core/text"
       }
     ],
     "error": "invalid html after line 1 char 0: invalid html entity: unknown character entity \u0026orci;"

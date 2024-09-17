@@ -16,17 +16,21 @@ import (
 type Validator struct {
 	constraints []ConstraintSet
 
-	documents            []*DocumentConstraint
-	blockConstraints     []BlockConstraintSet
-	attributeConstraints []ConstraintMap
-	htmlPolicies         map[string]*HTMLPolicy
-	enums                *enumSet
+	blocks       map[BlockKind]map[string]*BlockConstraint
+	documents    []*DocumentConstraint
+	htmlPolicies map[string]*HTMLPolicy
+	enums        *enumSet
 }
 
 func NewValidator(
 	constraints ...ConstraintSet,
 ) (*Validator, error) {
 	v := Validator{
+		blocks: map[BlockKind]map[string]*BlockConstraint{
+			BlockKindContent: make(map[string]*BlockConstraint),
+			BlockKindLink:    make(map[string]*BlockConstraint),
+			BlockKindMeta:    make(map[string]*BlockConstraint),
+		},
 		constraints:  constraints,
 		htmlPolicies: make(map[string]*HTMLPolicy),
 		enums:        newEnumSet(),
@@ -42,8 +46,23 @@ func NewValidator(
 				constraint.Name, err)
 		}
 
-		v.blockConstraints = append(v.blockConstraints, constraint)
-		v.attributeConstraints = append(v.attributeConstraints, constraint.Attributes)
+		err = collectBlockDeclarations(v.blocks, BlockKindLink, constraint.Links)
+		if err != nil {
+			return nil, fmt.Errorf("constraint set %q links: %w",
+				constraint.Name, err)
+		}
+
+		err = collectBlockDeclarations(v.blocks, BlockKindMeta, constraint.Meta)
+		if err != nil {
+			return nil, fmt.Errorf("constraint set %q meta blocks: %w",
+				constraint.Name, err)
+		}
+
+		err = collectBlockDeclarations(v.blocks, BlockKindContent, constraint.Content)
+		if err != nil {
+			return nil, fmt.Errorf("constraint set %q content blocks: %w",
+				constraint.Name, err)
+		}
 
 		for j := range constraint.Documents {
 			doc := constraint.Documents[j]
@@ -77,7 +96,12 @@ func NewValidator(
 		}
 	}
 
-	err := v.enums.Resolve()
+	err := v.resolveDocumentBlockRefs()
+	if err != nil {
+		return nil, fmt.Errorf("invalid block reference: %w", err)
+	}
+
+	err = v.enums.Resolve()
 	if err != nil {
 		return nil, fmt.Errorf("invalid enums: %w", err)
 	}
@@ -90,6 +114,83 @@ func NewValidator(
 	v.htmlPolicies = htmlPolicies
 
 	return &v, nil
+}
+
+func (v *Validator) resolveDocumentBlockRefs() error {
+	for i, d := range v.documents {
+		err := v.resolveBlockRefs(d)
+		if err != nil {
+			return fmt.Errorf("document %d: %w", i+1, err)
+		}
+	}
+
+	return nil
+}
+
+func (v *Validator) resolveBlockRefs(
+	source BlockConstraintSet,
+) error {
+	for _, kind := range blockKinds {
+		var res []*BlockConstraint
+
+		for i, b := range source.BlockConstraints(kind) {
+			if b.Ref == "" {
+				res = append(res, b)
+
+				continue
+			}
+
+			def, ok := v.blocks[kind][b.Ref]
+			if !ok {
+				return fmt.Errorf("%s block %d references unknown block %q",
+					kind, i+1, b.Ref)
+			}
+
+			res = append(res, def.Copy())
+
+			b = b.Copy()
+
+			b.Ref = ""
+
+			// If the block constraint has constraints of its own we
+			// add it to the constraints list with a match statement
+			// matching the declaration of the referenced
+			// constraint.
+			if !b.IsNoop() {
+				b.Match = def.Declares.AsConstraint()
+
+				res = append(res, b)
+			}
+		}
+
+		for i, b := range res {
+			err := v.resolveBlockRefs(b)
+			if err != nil {
+				return fmt.Errorf("%s block %d: %w",
+					kind, i+1, err)
+			}
+		}
+
+		source.SetBlockConstraints(kind, res)
+	}
+
+	return nil
+}
+
+func collectBlockDeclarations(
+	dir map[BlockKind]map[string]*BlockConstraint,
+	kind BlockKind, defs []*BlockDefinition,
+) error {
+	for _, def := range defs {
+		_, exists := dir[kind][def.ID]
+		if exists {
+			return fmt.Errorf("%q has already been declared", def.ID)
+		}
+
+		dir[kind][def.ID] = &def.Block
+	}
+
+	return nil
 }
 
 // WithConstraints returns a new Validator that uses an additional set of
@@ -260,8 +361,10 @@ func (v *Validator) ValidateDocument(
 ) ([]ValidationResult, error) {
 	var res []ValidationResult
 
-	blockConstraints := append([]BlockConstraintSet{}, v.blockConstraints...)
-	attributeConstraints := append([]ConstraintMap{}, v.attributeConstraints...)
+	var (
+		blockConstraints     []BlockConstraintSet
+		attributeConstraints []ConstraintMap
+	)
 
 	var declared bool
 
@@ -438,10 +541,6 @@ func (v *Validator) validateBlocks(
 	constraints []BlockConstraintSet, res []ValidationResult,
 	vCtx ValidationContext,
 ) ([]ValidationResult, error) {
-	c := vCtx
-
-	c.ValidateHTML = v.validateHTML
-
 	var err error
 
 	for i := range blockKinds {
@@ -609,13 +708,6 @@ func (v *Validator) validateBlock(
 			matchedConstraints = append(
 				matchedConstraints, constraint)
 
-			if len(constraint.BlocksFrom) > 0 {
-				matchedConstraints = append(
-					matchedConstraints,
-					v.borrowedBlockConstraints(constraint.BlocksFrom, vCtx)...,
-				)
-			}
-
 			matchedDataConstraints = append(
 				matchedDataConstraints, constraint.Data)
 
@@ -673,48 +765,6 @@ func (v *Validator) validateBlock(
 	}
 
 	return res, nil
-}
-
-func (v *Validator) borrowedBlockConstraints(
-	list []BlocksFrom, vCtx ValidationContext,
-) []BlockConstraintSet {
-	var match []BlockConstraintSet
-
-	for _, borrow := range list {
-		if borrow.Global {
-			for _, c := range v.blockConstraints {
-				match = append(
-					match,
-					BorrowedBlocks{
-						Kind:   borrow.Kind,
-						Source: c,
-					},
-				)
-			}
-		}
-
-		if borrow.DocType != "" {
-			dummyArt := newsdoc.Document{
-				Type: borrow.DocType,
-			}
-
-			for _, d := range v.documents {
-				if d.Matches(&dummyArt, &vCtx) == NoMatch {
-					continue
-				}
-
-				match = append(
-					match,
-					BorrowedBlocks{
-						Kind:   borrow.Kind,
-						Source: d,
-					},
-				)
-			}
-		}
-	}
-
-	return match
 }
 
 func validateBlockAttributes(
@@ -899,6 +949,7 @@ func validateBlockData(
 type BlockConstraintSet interface {
 	// BlockConstraints returns the constraints of the specified kind.
 	BlockConstraints(kind BlockKind) []*BlockConstraint
+	SetBlockConstraints(kind BlockKind, blocks []*BlockConstraint)
 }
 
 type Deprecation struct {
@@ -953,20 +1004,25 @@ type ConstraintSet struct {
 	Schema       string               `json:"$schema,omitempty"`
 	Name         string               `json:"name"`
 	Documents    []DocumentConstraint `json:"documents,omitempty"`
-	Links        []*BlockConstraint   `json:"links,omitempty"`
-	Meta         []*BlockConstraint   `json:"meta,omitempty"`
-	Content      []*BlockConstraint   `json:"content,omitempty"`
-	Attributes   ConstraintMap        `json:"attributes,omitempty"`
+	Links        []*BlockDefinition   `json:"links,omitempty"`
+	Meta         []*BlockDefinition   `json:"meta,omitempty"`
+	Content      []*BlockDefinition   `json:"content,omitempty"`
 	Enums        []Enum               `json:"enums,omitempty"`
 	HTMLPolicies []HTMLPolicy         `json:"htmlPolicies,omitempty"`
 }
 
 func (cs ConstraintSet) Validate() error {
-	err := validateBlockConstraints(map[string][]*BlockConstraint{
-		"link":    cs.Links,
-		"meta":    cs.Meta,
-		"content": cs.Content,
-	})
+	err := validateBlockDeclarations(BlockKindLink, cs.Links)
+	if err != nil {
+		return err
+	}
+
+	err = validateBlockDeclarations(BlockKindMeta, cs.Meta)
+	if err != nil {
+		return err
+	}
+
+	err = validateBlockDeclarations(BlockKindContent, cs.Content)
 	if err != nil {
 		return err
 	}
@@ -979,6 +1035,29 @@ func (cs ConstraintSet) Validate() error {
 		})
 		if err != nil {
 			return fmt.Errorf("document %d: %w", i+1, err)
+		}
+	}
+
+	return nil
+}
+
+func validateBlockDeclarations(kind BlockKind, defs []*BlockDefinition) error {
+	for i, def := range defs {
+		if def == nil {
+			return fmt.Errorf("%s block definition %d must not be nil/null", kind, i+1)
+		}
+
+		if def.ID == "" {
+			return fmt.Errorf("%s block definition %d must have an ID", kind, i+1)
+		}
+
+		err := validateBlockConstraints(map[string][]*BlockConstraint{
+			"link":    def.Block.Links,
+			"meta":    def.Block.Meta,
+			"content": def.Block.Content,
+		})
+		if err != nil {
+			return fmt.Errorf("%s block definition %s: %w", kind, def.ID, err)
 		}
 	}
 
@@ -1001,19 +1080,6 @@ func validateBlockConstraints(c map[string][]*BlockConstraint) error {
 				return fmt.Errorf("%s block %d: %w", k, i+1, err)
 			}
 		}
-	}
-
-	return nil
-}
-
-func (cs ConstraintSet) BlockConstraints(kind BlockKind) []*BlockConstraint {
-	switch kind {
-	case BlockKindLink:
-		return cs.Links
-	case BlockKindMeta:
-		return cs.Meta
-	case BlockKindContent:
-		return cs.Content
 	}
 
 	return nil

@@ -6,7 +6,8 @@
   "content": [
     {
       "id": "NzUsMjQ2LDIwOCwxNTE",
-      "type": "core/heading-1",
+      "type": "core/text",
+      "role": "heading-1",
       "data": {
         "text": "Pånyttfödd stjärna vill skjuta Inter till final"
       }
@@ -34,49 +35,54 @@
     },
     {
       "id": "pagedateline-5b8149a71b05cef3c73af71ca95c555d",
-      "type": "tt/dateline",
+      "type": "core/text",
+      "role": "vignette",
       "data": {
         "text": "Fotboll"
       }
     },
     {
       "id": "preamble-a516335827925ef7573589968e87e6ed",
-      "type": "core/preamble",
+      "type": "core/text",
+      "role": "preamble",
       "data": {
         "text": "Skador och ett VM-fiasko såg länge ut att prägla Romelu Lukakus säsong."
       }
     },
     {
       "id": "preamble-606c08bdfc665b45ae1a771ec3c94164",
-      "type": "core/preamble",
+      "type": "core/text",
+      "role": "preamble",
       "data": {
         "text": "Men den belgiske anfallsstjärnan har återuppstått."
       }
     },
     {
       "id": "preamble-a3775318ca3d05815028f9fcdc432c41",
-      "type": "core/preamble",
+      "type": "core/text",
+      "role": "preamble",
       "data": {
         "text": "Nu vill han skjuta sitt Inter till Champions League-final."
       }
     },
     {
       "id": "MjEwLDQyLDI3LDgy",
-      "type": "core/paragraph",
+      "type": "core/text",
       "data": {
         "text": "Det var nog inte många som trodde på en framgångsrik Champions League-säsong för Inter, eller ens avancemang till slutspel, efter den första matchen i september. 0–2 hemma mot Bayern München var precis den start man inte önskade i grupp C, som också innehöll ett stjärnspäckat Barcelona."
       }
     },
     {
       "id": "NTcsMTkwLDE1OCwxMTA",
-      "type": "core/heading-2",
+      "type": "core/text",
+      "role": "heading-2",
       "data": {
         "text": "Lukaku i målform"
       }
     },
     {
       "id": "paragraph-05add01557d5b0c4d5cb814676aea424",
-      "type": "core/paragraph",
+      "type": "core/text",
       "data": {
         "text": "En 1–0-seger hemma mot Barcelona och 3–3 på bortaplan mot samma lag lade sedan grunden till avancemanget. I slutspelet har dubbla portugisiska hinder passerats – Porto i åttondel, Benfica i kvartsfinal – innan man nu skaffat sig ett ypperligt utgångsläge inför tisdagens semifinalretur mot Milan."
       }
@@ -85,9 +91,9 @@
   "meta": [
     {
       "type": "core/newsvalue",
+      "value": "3",
       "data": {
-        "duration": "86400",
-        "score": "3"
+        "duration": "86400"
       }
     },
     {
@@ -115,7 +121,7 @@
       "uuid": "0730efa9-43f2-468d-979a-aaffc74d7582",
       "type": "core/section",
       "title": "Sport",
-      "rel": "subject"
+      "rel": "section"
     },
     {
       "uri": "tt://content-source/tt",

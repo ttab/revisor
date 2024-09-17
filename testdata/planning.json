@@ -15,6 +15,10 @@
       }
     },
     {
+      "type": "core/newsvalue",
+      "value": "4"
+    },
+    {
       "id": "34244f38-dc72-40f5-a471-407dc6ea31e1",
       "type": "core/assignment",
       "title": "Fullängdstext med fakta",
@@ -56,11 +60,9 @@
   "links": [
     {
       "uuid": "2c4bd9ba-8f59-5172-890b-bdb693d9c3fe",
-      "uri": "sector://eko",
-      "type": "tt/sector",
+      "type": "core/section",
       "title": "Ekonomi",
-      "rel": "sector",
-      "value": "EKO"
+      "rel": "section"
     },
     {
       "uuid": "df76e035-7b92-5d1d-a3b0-77e2fb56b9df",

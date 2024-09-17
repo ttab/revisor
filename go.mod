@@ -1,6 +1,6 @@
 module github.com/ttab/revisor
 
-go 1.22.3
+go 1.23.0
 
 require (
 	github.com/IvanZagoskin/wkt v0.0.1
@@ -9,7 +9,6 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/invopop/jsonschema v0.12.0
 	github.com/ttab/newsdoc v0.5.0
-	github.com/ttab/revisorschemas v0.3.4
 	github.com/urfave/cli/v2 v2.27.2
 	golang.org/x/net v0.25.0
 )

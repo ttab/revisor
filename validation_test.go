@@ -13,7 +13,7 @@ import (
 	"github.com/ttab/newsdoc"
 	"github.com/ttab/revisor"
 	"github.com/ttab/revisor/internal"
-	"github.com/ttab/revisorschemas"
+	"github.com/ttab/revisor/internal/revisorschemas"
 )
 
 func regenerateGoldenFiles() bool {
