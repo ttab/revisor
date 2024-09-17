@@ -18,6 +18,7 @@ var (
 )
 
 func validateColour(value string, format StringFormat) error {
+	//nolint: exhaustive
 	switch format {
 	case StringFormatColour:
 		if len(value) != colourLength {

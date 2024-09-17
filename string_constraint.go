@@ -47,7 +47,9 @@ func (f StringFormat) Describe() string {
 	case StringFormatColour:
 		return "a hex RGB colour code"
 	case StringFormatColourRGB:
-		return "a rgb() or rgba() colour code"
+		return "a rgb() colour code"
+	case StringFormatColourRGBA:
+		return "a rgba() colour code"
 	case StringFormatNone:
 		return ""
 	}
