@@ -513,17 +513,20 @@ func validateDocumentAttributes(
 				})
 			}
 
-			res, err = checkDeprecation(
-				ctx, vCtx, res, d,
-				DeprecationContext{
-					Entity: &ref,
-					Value:  &value,
-				}, depr, check.Deprecated)
-			if err != nil {
-				return nil, err
-			}
-
 			if value != "" {
+				// As attributes always exist we only want to
+				// trigger a deprecation warning if they
+				// actually have a value.
+				res, err = checkDeprecation(
+					ctx, vCtx, res, d,
+					DeprecationContext{
+						Entity: &ref,
+						Value:  &value,
+					}, depr, check.Deprecated)
+				if err != nil {
+					return nil, err
+				}
+
 				vCtx.coll.CollectValue(ValueAnnotation{
 					Ref:   []EntityRef{ref},
 					Value: value,
@@ -808,17 +811,20 @@ func validateBlockAttributes(
 				})
 			}
 
-			res, err = checkDeprecation(
-				ctx, vCtx, res, doc, DeprecationContext{
-					Entity: &ref,
-					Block:  b,
-					Value:  &value,
-				}, check.Deprecated, depr)
-			if err != nil {
-				return nil, err
-			}
-
 			if value != "" {
+				// As attributes always exist we only want to
+				// trigger a deprecation warning if they
+				// actually have a value.
+				res, err = checkDeprecation(
+					ctx, vCtx, res, doc, DeprecationContext{
+						Entity: &ref,
+						Block:  b,
+						Value:  &value,
+					}, check.Deprecated, depr)
+				if err != nil {
+					return nil, err
+				}
+
 				vCtx.coll.CollectValue(ValueAnnotation{
 					Ref:        []EntityRef{ref},
 					Constraint: check,

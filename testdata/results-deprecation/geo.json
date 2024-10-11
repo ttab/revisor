@@ -31,6 +31,29 @@
   },
   {
     "Deprecation": {
+      "label": "no-roles",
+      "doc": "Let's just skip roles"
+    },
+    "Context": {
+      "entity": {
+        "refType": "attribute",
+        "name": "role"
+      },
+      "block": {
+        "type": "core/place",
+        "data": {
+          "area": "POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))",
+          "position": "POINT(12 15)",
+          "position_3d": "POINT Z (12 15 14)",
+          "road": "LINESTRING (30.123 10.15, 10.66 30.23, 40.23 40.66)"
+        },
+        "role": "absurd"
+      },
+      "value": "absurd"
+    }
+  },
+  {
+    "Deprecation": {
       "label": "3d-points",
       "doc": "Too ambitious, don't want"
     },

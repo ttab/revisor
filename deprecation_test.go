@@ -37,7 +37,7 @@ func TestDeprecation(t *testing.T) {
 		counts = make(map[string]int)
 	)
 
-	dfn := func(
+	deprecationHandler := func(
 		_ context.Context, _ *newsdoc.Document,
 		deprecation revisor.Deprecation,
 		c revisor.DeprecationContext,
@@ -57,7 +57,7 @@ func TestDeprecation(t *testing.T) {
 	ctx := context.Background()
 
 	res, err := testValidator.ValidateDocument(ctx, &document,
-		revisor.WithDeprecationHandler(dfn))
+		revisor.WithDeprecationHandler(deprecationHandler))
 	must(t, err, "validate document")
 
 	t.Run("FoundDeprecations", func(t *testing.T) {
