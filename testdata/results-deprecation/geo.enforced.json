@@ -21,6 +21,21 @@
   {
     "entity": [
       {
+        "refType": "attribute",
+        "name": "role"
+      },
+      {
+        "refType": "block",
+        "kind": "meta",
+        "type": "core/place"
+      }
+    ],
+    "error": "enforced deprecation \"no-roles\": Let's just skip roles",
+    "enforcedDeprecation": true
+  },
+  {
+    "entity": [
+      {
         "refType": "data attribute",
         "name": "position_3d"
       },

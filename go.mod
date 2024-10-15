@@ -1,6 +1,6 @@
 module github.com/ttab/revisor
 
-go 1.23.0
+go 1.23.2
 
 require (
 	github.com/IvanZagoskin/wkt v0.0.1
@@ -8,9 +8,9 @@ require (
 	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
 	github.com/invopop/jsonschema v0.12.0
-	github.com/ttab/newsdoc v0.5.0
-	github.com/urfave/cli/v2 v2.27.2
-	golang.org/x/net v0.25.0
+	github.com/ttab/newsdoc v0.6.0
+	github.com/urfave/cli/v2 v2.27.4
+	golang.org/x/net v0.30.0
 )
 
 require (
@@ -20,6 +20,6 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
-	github.com/xrash/smetrics v0.0.0-20240312152122-5f08fbb34913 // indirect
+	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

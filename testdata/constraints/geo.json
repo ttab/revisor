@@ -83,6 +83,20 @@
               }
             }
           }
+        },
+        {
+          "match": {
+            "type": {"const":"core/place"}
+          },
+          "attributes": {
+            "role": {
+              "allowEmpty": true,
+              "deprecated": {
+                "label": "no-roles",
+                "doc": "Let's just skip roles"
+              }
+            }
+          }
         }
       ]
     }
