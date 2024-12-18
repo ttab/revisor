@@ -8,15 +8,15 @@ require (
 	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
 	github.com/invopop/jsonschema v0.12.0
-	github.com/ttab/newsdoc v0.6.0
-	github.com/urfave/cli/v2 v2.27.4
-	golang.org/x/net v0.30.0
+	github.com/ttab/newsdoc v0.7.0
+	github.com/urfave/cli/v2 v2.27.5
+	golang.org/x/net v0.32.0
 )
 
 require (
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.4 // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.5 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
