@@ -16,8 +16,9 @@ type Enum struct {
 }
 
 type EnumConstraint struct {
-	Forbidden  bool         `json:"forbidden,omitempty"`
-	Deprecated *Deprecation `json:"deprecated,omitempty"`
+	Forbidden   bool         `json:"forbidden,omitempty"`
+	Deprecated  *Deprecation `json:"deprecated,omitempty"`
+	Description string       `json:"description,omitempty"`
 }
 
 type mergedEnum struct {
