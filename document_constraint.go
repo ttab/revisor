@@ -1,6 +1,9 @@
 package revisor
 
 import (
+	"slices"
+	"strings"
+
 	"github.com/ttab/newsdoc"
 )
 
@@ -52,7 +55,7 @@ func (dc DocumentConstraint) Matches(
 	d *newsdoc.Document, vCtx *ValidationContext,
 ) Match {
 	if dc.Declares != "" {
-		if d.Type == dc.Declares {
+		if d.Type == dc.Declares || resolveVariant(d.Type, vCtx.variants) == dc.Declares {
 			return MatchDeclaration
 		}
 
@@ -60,7 +63,7 @@ func (dc DocumentConstraint) Matches(
 	}
 
 	for _, k := range dc.Match.Keys {
-		value, ok := documentMatchAttribute(d, k)
+		value, ok := documentMatchAttribute(d, k, vCtx.variants)
 		if !ok {
 			return NoMatch
 		}
@@ -95,9 +98,9 @@ const (
 	docAttrURL      documentAttributeKey = "url"
 )
 
-func documentMatchAttribute(d *newsdoc.Document, name string) (string, bool) {
+func documentMatchAttribute(d *newsdoc.Document, name string, variants []Variant) (string, bool) {
 	if documentAttributeKey(name) == docAttrType {
-		return d.Type, true
+		return resolveVariant(d.Type, variants), true
 	}
 
 	return "", false
@@ -120,4 +123,42 @@ func documentAttribute(d *newsdoc.Document, name string) (string, bool) {
 	}
 
 	return "", false
+}
+
+// Variant defines a document type variant suffix. When a document type
+// contains a "+" separator (e.g. "core/article+template"), the part after the
+// last "+" is matched against configured variants. If Types is empty, the
+// variant applies to all declared document types.
+type Variant struct {
+	Name  string   `json:"name"`
+	Types []string `json:"types,omitempty"`
+}
+
+// resolveVariant returns the base document type if the suffix after the last
+// "+" matches a configured variant (and the base type is allowed for that
+// variant). Returns docType unchanged if no variant matches.
+func resolveVariant(docType string, variants []Variant) string {
+	idx := strings.LastIndex(docType, "+")
+	if idx == -1 {
+		return docType
+	}
+
+	base := docType[:idx]
+	suffix := docType[idx+1:]
+
+	for i := range variants {
+		if variants[i].Name != suffix {
+			continue
+		}
+
+		if len(variants[i].Types) == 0 {
+			return base
+		}
+
+		if slices.Contains(variants[i].Types, base) {
+			return base
+		}
+	}
+
+	return docType
 }

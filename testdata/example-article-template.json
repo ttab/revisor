@@ -1,0 +1,133 @@
+{
+  "uuid": "98cedf81-ce8d-4dc4-bcbc-6091a756cc5c",
+  "type": "core/article+template",
+  "uri": "core://article/98cedf81-ce8d-4dc4-bcbc-6091a756cc5c",
+  "title": "champ-inter",
+  "content": [
+    {
+      "id": "NzUsMjQ2LDIwOCwxNTE",
+      "type": "core/text",
+      "role": "heading-1",
+      "data": {
+        "text": "Pånyttfödd stjärna vill skjuta Inter till final"
+      }
+    },
+    {
+      "id": "MTQ1LDE5OSwyMzMsMjE3",
+      "type": "tt/visual",
+      "data": {
+        "caption": "Inters Romelu Lukaku firar ett av sina två mål i helgens ligamatch (4–2) mot Sassuolo."
+      },
+      "links": [
+        {
+          "uri": "http://tt.se/media/image/sdlAh_UuIyXsC0",
+          "url": "https://tt.se/media/image/sdlAh_UuIyXsC0_NormalPreview.jpg",
+          "type": "tt/picture",
+          "data": {
+            "credit": "Spada/AP/TT",
+            "height": "683",
+            "hiresScale": "2.9052734375",
+            "width": "1024"
+          },
+          "rel": "self"
+        }
+      ]
+    },
+    {
+      "id": "pagedateline-5b8149a71b05cef3c73af71ca95c555d",
+      "type": "core/text",
+      "role": "vignette",
+      "data": {
+        "text": "Fotboll"
+      }
+    },
+    {
+      "id": "preamble-a516335827925ef7573589968e87e6ed",
+      "type": "core/text",
+      "role": "preamble",
+      "data": {
+        "text": "Skador och ett VM-fiasko såg länge ut att prägla Romelu Lukakus säsong."
+      }
+    },
+    {
+      "id": "preamble-606c08bdfc665b45ae1a771ec3c94164",
+      "type": "core/text",
+      "role": "preamble",
+      "data": {
+        "text": "Men den belgiske anfallsstjärnan har återuppstått."
+      }
+    },
+    {
+      "id": "preamble-a3775318ca3d05815028f9fcdc432c41",
+      "type": "core/text",
+      "role": "preamble",
+      "data": {
+        "text": "Nu vill han skjuta sitt Inter till Champions League-final."
+      }
+    },
+    {
+      "id": "MjEwLDQyLDI3LDgy",
+      "type": "core/text",
+      "data": {
+        "text": "Det var nog inte många som trodde på en framgångsrik Champions League-säsong för Inter, eller ens avancemang till slutspel, efter den första matchen i september. 0–2 hemma mot Bayern München var precis den start man inte önskade i grupp C, som också innehöll ett stjärnspäckat Barcelona."
+      }
+    },
+    {
+      "id": "NTcsMTkwLDE1OCwxMTA",
+      "type": "core/text",
+      "role": "heading-2",
+      "data": {
+        "text": "Lukaku i målform"
+      }
+    },
+    {
+      "id": "paragraph-05add01557d5b0c4d5cb814676aea424",
+      "type": "core/text",
+      "data": {
+        "text": "En 1–0-seger hemma mot Barcelona och 3–3 på bortaplan mot samma lag lade sedan grunden till avancemanget. I slutspelet har dubbla portugisiska hinder passerats – Porto i åttondel, Benfica i kvartsfinal – innan man nu skaffat sig ett ypperligt utgångsläge inför tisdagens semifinalretur mot Milan."
+      }
+    }
+  ],
+  "meta": [
+    {
+      "type": "core/newsvalue",
+      "value": "3",
+      "data": {
+        "duration": "86400"
+      }
+    },
+    {
+      "type": "tt/slugline",
+      "value": "champ-inter"
+    }
+  ],
+  "links": [
+    {
+      "uuid": "9187712c-a795-4cdc-bd4e-560e4f93dc4e",
+      "type": "core/author",
+      "title": "Lasse Mannheimer/TT",
+      "data": {
+        "email": "the-email-address@tt.se",
+        "shortDescription": "lma"
+      },
+      "rel": "author"
+    },
+    {
+      "uuid": "e42bcd66-9823-4895-9966-af50056ea933",
+      "type": "core/assignment",
+      "rel": "assignment"
+    },
+    {
+      "uuid": "0730efa9-43f2-468d-979a-aaffc74d7582",
+      "type": "core/section",
+      "title": "Sport",
+      "rel": "section"
+    },
+    {
+      "uri": "tt://content-source/tt",
+      "type": "core/content-source",
+      "rel": "source"
+    }
+  ],
+  "language": "sv"
+}

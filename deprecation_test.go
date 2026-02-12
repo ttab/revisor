@@ -25,12 +25,12 @@ func TestDeprecation(t *testing.T) {
 	)
 
 	testValidator, err := revisor.NewValidator(testConstraints...)
-	must(t, err, "failed to create test validator")
+	mustf(t, err, "failed to create test validator")
 
 	var document newsdoc.Document
 
 	err = internal.UnmarshalFile("testdata/geo.json", &document)
-	must(t, err, "unmarshal geo doc")
+	mustf(t, err, "unmarshal geo doc")
 
 	var (
 		got    []deprecationEntry
@@ -58,7 +58,7 @@ func TestDeprecation(t *testing.T) {
 
 	res, err := testValidator.ValidateDocument(ctx, &document,
 		revisor.WithDeprecationHandler(deprecationHandler))
-	must(t, err, "validate document")
+	mustf(t, err, "validate document")
 
 	t.Run("FoundDeprecations", func(t *testing.T) {
 		var (
@@ -68,14 +68,14 @@ func TestDeprecation(t *testing.T) {
 
 		if regenerate {
 			data, err := json.MarshalIndent(got, "", "  ")
-			must(t, err, "marshal for golden reference file")
+			mustf(t, err, "marshal for golden reference file")
 
 			err = os.WriteFile(goldenPath, data, 0o600)
-			must(t, err, "write golden reference file")
+			mustf(t, err, "write golden reference file")
 		}
 
 		err = internal.UnmarshalFile(goldenPath, &want)
-		must(t, err, "unmarshal golden file")
+		mustf(t, err, "unmarshal golden file")
 
 		if diff := cmp.Diff(want, got); diff != "" {
 			t.Fatalf("deprecation mismatch (-want +got):\n%s",
@@ -100,14 +100,14 @@ func TestDeprecation(t *testing.T) {
 
 		if regenerate {
 			data, err := json.MarshalIndent(got, "", "  ")
-			must(t, err, "marshal for golden reference file")
+			mustf(t, err, "marshal for golden reference file")
 
 			err = os.WriteFile(goldenPath, data, 0o600)
-			must(t, err, "write golden reference file")
+			mustf(t, err, "write golden reference file")
 		}
 
 		err = internal.UnmarshalFile(goldenPath, &want)
-		must(t, err, "unmarshal golden file")
+		mustf(t, err, "unmarshal golden file")
 
 		if diff := cmp.Diff(want, got); diff != "" {
 			t.Fatalf("enforcement mismatch (-want +got):\n%s",
