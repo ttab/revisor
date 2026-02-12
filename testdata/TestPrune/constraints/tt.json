@@ -1,0 +1,200 @@
+{
+  "version": 1,
+  "name": "tt",
+  "enums": [
+    {
+      "name": "Text roles",
+      "description": "Customises allowed text roles for TT content.",
+      "match": "core://text-roles",
+      "values": {
+        "heading-3": {"forbidden":true},
+        "heading-4": {"forbidden":true},
+        "vignette": {}
+      }
+    }
+  ],
+  "documents": [
+    {
+      "name": "Category",
+      "description": "Extensions for category documents using IPTC mediatopics.",
+      "match": {"type": {"const":"core/category"}},
+      "attributes": {
+        "uri": {
+          "glob": ["iptc://mediatopic/*"]
+        }
+      },
+      "links": [
+        {
+          "name": "IPTC mediatopic",
+          "description": "Same-as link to the IPTC mediatopic identifier.",
+          "declares": {"type":"iptc/mediatopic", "rel":"same-as"},
+          "attributes": {
+            "uri": {
+              "glob": ["iptc://mediatopic/*"]
+            }
+          },
+          "data": {
+            "id": {"format":"int"}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Flash",
+      "description": "Extensions for flash news documents.",
+      "match": {"type": {"const":"core/flash"}},
+      "links": [
+        {
+          "name": "Section",
+          "description": "Required section for flash documents.",
+          "match": {
+            "rel": {"const":"section"},
+            "type": {"const":"core/section"}
+          },
+          "count": 1
+        }
+      ]
+    },
+    {
+      "name": "Editorial info",
+      "description": "Extensions for editorial info documents.",
+      "match": {"type": {"const":"core/editorial-info"}},
+      "meta": [
+        {
+          "ref": "tt://slugline",
+          "count": 1
+        }
+      ],
+      "links": [
+        {
+          "name": "Section",
+          "description": "Required section for editorial info documents.",
+          "match": {
+            "rel": {"const":"section"},
+            "type": {"const":"core/section"}
+          },
+          "count": 1
+        },
+        {
+          "name": "Editorial-info type",
+          "description": "Specifies the editorial-info type",
+          "declares": {"type": "tt/editorial-info-type", "rel": "info-type"},
+          "attributes": {
+            "uuid": {}
+          }
+        }
+      ],
+      "content": [
+        {"ref": "tt://visual"}
+      ]
+    },
+    {
+      "name": "Article",
+      "description": "Extensions for article documents.",
+      "match": {"type": {"const":"core/article"}},
+      "links": [
+        {
+          "match": {
+            "type":{"const":"core/section"},
+            "rel":{"const":"section"}
+          },
+          "count": 1
+        },
+        {
+          "name": "Subtype",
+          "description": "Specifies the article subtype.",
+          "declares": {"rel":"subtype"},
+          "attributes": {
+            "uri": {"glob": ["tt://subtype/*"]}
+          }
+        },
+        {
+          "name": "Content size",
+          "description": "Specifies the content sizes we can use",
+          "match": {
+            "type": {"const":"core/content-size"}
+          },
+          "attributes": {
+            "uri": {"enum":[
+              "core://content-size/article/medium"
+            ]}
+          }
+        }
+      ],
+      "content": [
+        {"ref": "tt://visual"}
+      ],
+      "meta": [
+        {
+          "ref": "tt://slugline",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "meta": [
+    {
+      "id": "tt://slugline",
+      "block": {
+        "name": "Slugline",
+        "description": "A short keyword label used for identifying the story.",
+        "declares": {"type":"tt/slugline"},
+        "attributes": {
+          "value": {
+            "labels": ["keyword", "prefix"],
+            "hints": {"alias": ["slug"]}
+          }
+        }
+      }
+    }
+  ],
+  "content": [
+    {
+      "id": "tt://visual",
+      "block": {
+        "name": "TT visual element",
+        "description": "This can be either a picture or a graphic",
+        "declares": {"type":"tt/visual"},
+        "data": {
+          "caption": {"allowEmpty":true},
+          "html_caption": {
+            "format": "html",
+            "allowEmpty": true,
+            "optional": true
+          }
+        },
+        "meta": [
+          {"ref": "core://softcrop"}
+        ],
+        "links": [
+          {
+            "name": "Self-link",
+            "description": "Self-link pointing to the picture or graphic resource.",
+            "declares": {"rel":"self"},
+            "count": 1,
+            "attributes": {
+              "uri": {},
+              "url": {},
+              "type": {
+                "enum": ["tt/picture", "tt/graphic"]
+              }
+            },
+            "data": {
+              "credit": {"allowEmpty":true},
+              "height": {"format":"int"},
+              "width": {"format":"int"},
+              "hiresScale": {
+                "format": "float",
+                "optional": true,
+                "deprecated": {
+                  "label": "hires-scale",
+                  "doc": "Not supported anymore"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

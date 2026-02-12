@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "name": "core",
+  "meta": [
+    {
+      "id": "core://note",
+      "block": {
+        "name": "Note",
+        "description": "A public note",
+        "declares": {"type":"core/note"},
+        "attributes": {
+          "role": {"const": "public"}
+        },
+        "data": {
+          "text": {}
+        }
+      }
+    },
+    {
+      "id": "core://description",
+      "block": {
+        "name": "Description",
+        "description": "A public or internal description of the entity",
+        "declares": {"type":"core/description", "role": "public"},
+        "data": {
+          "text": {}
+        }
+      }
+    },
+    {
+      "id": "core://newsvalue",
+      "block": {
+        "name": "Newsvalue",
+        "description": "The editorial newsvalue score and lifetime",
+        "declares": {"type":"core/newsvalue"},
+        "attributes": {
+          "value": {
+            "description": "The assigned newsvalue",
+            "format": "int"
+          }
+        },
+        "data": {
+          "duration": {
+            "description": "Duration in seconds, can represent the halving time for the score in a scoring algorithm.",
+            "format":"int",
+            "optional": true
+          },
+          "end": {
+            "description": "The cut-off time that the document has no newsvalue",
+            "format":"RFC3339",
+            "optional":true
+          }
+        }
+      }
+    }
+  ],
+  "links": [
+    {
+      "id": "core://story",
+      "block": {
+        "name": "Story",
+        "description": "An ongoing story that the document relates to",
+        "declares": {"type": "core/story", "rel":"subject"},
+        "attributes": {
+          "uuid": {},
+          "title": {"allowEmpty":true}
+        }
+      }
+    },
+    {
+      "id": "core://section",
+      "block": {
+        "name": "Section",
+        "description": "The editorial section the document belongs to",
+        "declares": {"rel":"section", "type": "core/section"},
+        "attributes": {
+          "uuid": {},
+          "title": {"allowEmpty":true}
+        }
+      }
+    },
+    {
+      "id": "core://byline",
+      "block": {
+        "name": "Author byline",
+        "description": "An author credited in the byline",
+        "declares": {"type": "core/author", "rel":"author"},
+        "attributes": {
+          "uuid": {"optional":true},
+          "title": {}
+        },
+        "data": {
+          "firstName": {"optional":true},
+          "lastName": {"optional":true}
+        }
+      }
+    }
+  ]
+}

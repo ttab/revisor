@@ -1,0 +1,220 @@
+{
+  "version": 1,
+  "name": "core-planning",
+  "documents": [
+    {
+      "name": "Planning item",
+      "description": "The planning item for an article or other deliverables",
+      "declares": "core/planning-item",
+      "links": [
+        {
+          "name": "Event",
+          "description": "The event that this planning item is coverage of, if any",
+          "declares": {
+            "rel": "event",
+            "type": "core/event"
+          },
+          "maxCount": 1,
+          "attributes": {
+            "uuid": {},
+            "title": {}
+          }
+        },
+        {
+          "ref": "core://section",
+          "count": 1
+        },
+        {
+          "ref": "core://story"
+        },
+        {
+          "name": "Category",
+          "description": "The category of the planning item",
+          "declares": {
+            "rel": "category",
+            "type": "core/category"
+          },
+          "attributes": {
+            "uuid": {},
+            "uri": { "optional": true },
+            "title": {}
+          }
+        },
+        {
+          "name": "Place",
+          "description": "The associated place for the planning item",
+          "declares": {
+            "rel": "place",
+            "type": "core/place"
+          },
+          "attributes": {
+            "uuid": {},
+            "title": {}
+          }
+        }
+      ],
+      "meta": [
+        {
+          "ref": "core://description"
+        },
+        {
+          "ref": "core://newsvalue",
+          "count": 1
+        },
+        {
+          "name": "Planning metadata",
+          "description": "Main metadata block for the planning item",
+          "declares": {
+            "type": "core/planning-item"
+          },
+          "count": 1,
+          "data": {
+            "start_date": {
+              "description": "The start date for the planning item",
+              "time": "2006-01-02"
+            },
+            "end_date": {
+              "description": "The end date for the planning item",
+              "time": "2006-01-02"
+            },
+            "date_tz": {
+              "description": "The timezone the date is in",
+              "optional": true
+            }
+          }
+        },
+        {
+          "name": "Assignment",
+          "description": "An assignment associated with the planning item",
+          "declares": {
+            "type": "core/assignment"
+          },
+          "attributes": {
+            "id": {
+              "description": "A unique identifier for the assignment",
+              "format": "uuid"
+            },
+            "title": { "allowEmpty": true }
+          },
+          "data": {
+            "full_day": {
+              "description": "Whether this is assignment is for a date rather than a specific time.",
+              "format": "bool",
+              "optional": true
+            },
+            "start": {
+              "description": "When the assignment should be carried out",
+              "format": "RFC3339",
+              "optional": true
+            },
+            "end": {
+              "description": "When work on the assignment ends.",
+              "format": "RFC3339",
+              "optional": true
+            },
+            "start_date": {
+              "description": "The start date for the assignment",
+              "time": "2006-01-02",
+              "optional": true
+            },
+            "end_date": {
+              "description": "The end date for the assignment",
+              "time": "2006-01-02",
+              "optional": true
+            },
+            "date_tz": {
+              "description": "The timezone the date is in",
+              "optional": true
+            },
+            "publish": {
+              "description": "The exact time the deliverables will be published",
+              "format": "RFC3339",
+              "optional": true
+            },
+            "public": {
+              "description": "Require the assignment to be public",
+              "format": "bool",
+              "const": "true"
+            },
+            "publish_slot": {
+              "description": "The approximate timeslot the deliverables should be published.",
+              "format": "int",
+              "optional": true
+            }
+          },
+          "meta": [
+            {
+              "name": "Assignment type",
+              "description": "Describes what kind of assignment this is",
+              "declares": {
+                "type": "core/assignment-type"
+              },
+              "minCount": 1,
+              "attributes": {
+                "value": {
+                  "enumReference": "core://assignment-types"
+                }
+              }
+            }
+          ],
+          "links": [
+            {
+              "name": "Section",
+              "description": "Section associated with the assignment",
+              "declares": {
+                "type": "core/section",
+                "rel": "section"
+              },
+              "attributes": {
+                "uuid": {},
+                "title": {}
+              }
+            },
+            {
+              "name": "Location",
+              "description": "Geographic location for the assignment",
+              "declares": {
+                "type": "core/geo-point",
+                "rel": "location"
+              },
+              "attributes": {
+                "title": {}
+              },
+              "data": {
+                "country": { "optional": true },
+                "locality": { "optional": true },
+                "name": { "optional": true },
+                "extraInfo": { "optional": true },
+                "geometry": {}
+              }
+            },
+            {
+              "name": "Deliverable",
+              "description": "A deliverable of the planning item",
+              "declares": {
+                "rel": "deliverable"
+              },
+              "attributes": {
+                "uuid": {},
+                "type": {}
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "enums": [
+    {
+      "declare": "core://assignment-types",
+      "values": {
+        "text": {},
+        "picture": {},
+        "video": {},
+        "graphic": {},
+        "flash": {},
+        "editorial-info": {}
+      }
+    }
+  ]
+}

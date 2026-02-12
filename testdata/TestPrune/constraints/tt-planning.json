@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "name": "tt-planning",
+  "documents": [
+    {
+      "match": {"type": {"const": "core/planning-item"}},
+      "meta": [
+        {
+          "ref": "tt://slugline",
+          "count": 1
+        },
+        {
+          "match": {
+            "type": {"const":"core/assignment"}
+          },
+          "meta": [
+            {
+              "ref": "tt://slugline",
+              "count": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
