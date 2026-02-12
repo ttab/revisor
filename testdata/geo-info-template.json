@@ -1,0 +1,28 @@
+{
+  "type": "core/place+template",
+  "uuid": "d9a8a437-3ed3-4b97-b9fc-cf236b6dc5e7",
+  "title": "Some place",
+  "meta": [
+    {
+      "type": "core/place",
+      "role": "absurd",
+      "data": {
+        "position": "POINT(12 15)"
+      }
+    },
+    {
+      "type": "extra/entity-info",
+      "data": {
+        "shortcode": "someplace",
+        "description": "A place where things are"
+      }
+    },
+    {
+      "type": "core/place",
+      "uri": "place://old",
+      "data": {
+        "position": "LINESTRING(30.123 10.15)"
+      }
+    }
+  ]
+}

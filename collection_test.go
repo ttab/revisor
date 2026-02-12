@@ -28,6 +28,10 @@ func TestCollection(t *testing.T) {
 	testValidator, err := revisor.NewValidator(testConstraints...)
 	mustf(t, err, "failed to create test validator")
 
+	testValidator = testValidator.WithVariants(revisor.Variant{
+		Name: "template",
+	})
+
 	tests := []validatorTest{
 		{
 			Name:      "TestConf",
