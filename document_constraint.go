@@ -106,6 +106,27 @@ func documentMatchAttribute(d *newsdoc.Document, name string, variants []Variant
 	return "", false
 }
 
+func setDocumentAttribute(d *newsdoc.Document, name string, value string) bool {
+	switch documentAttributeKey(name) {
+	case docAttrUUID:
+		d.UUID = value
+	case docAttrType:
+		d.Type = value
+	case docAttrURI:
+		d.URI = value
+	case docAttrURL:
+		d.URL = value
+	case docAttrTitle:
+		d.Title = value
+	case docAttrLanguage:
+		d.Language = value
+	default:
+		return false
+	}
+
+	return true
+}
+
 func documentAttribute(d *newsdoc.Document, name string) (string, bool) {
 	switch documentAttributeKey(name) {
 	case docAttrUUID:

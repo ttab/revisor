@@ -353,6 +353,39 @@ func blockAttribute(block *newsdoc.Block, name string) (string, bool) {
 	return "", false
 }
 
+func setBlockAttribute(block *newsdoc.Block, name string, value string) bool {
+	switch blockAttributeKey(name) {
+	case blockAttrUUID:
+		block.UUID = value
+	case blockAttrID:
+		block.ID = value
+	case blockAttrType:
+		block.Type = value
+	case blockAttrURI:
+		block.URI = value
+	case blockAttrURL:
+		block.URL = value
+	case blockAttrTitle:
+		block.Title = value
+	case blockAttrRel:
+		block.Rel = value
+	case blockAttrName:
+		block.Name = value
+	case blockAttrValue:
+		block.Value = value
+	case blockAttrContentType:
+		block.Contenttype = value
+	case blockAttrRole:
+		block.Role = value
+	case blockAttrSensitivity:
+		block.Sensitivity = value
+	default:
+		return false
+	}
+
+	return true
+}
+
 // DescribeCountConstraint returns a human readable (english) description of the
 // count contstraint for the block constraint.
 func (bc BlockConstraint) DescribeCountConstraint(kind BlockKind) string {
