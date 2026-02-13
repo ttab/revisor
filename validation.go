@@ -15,6 +15,7 @@ import (
 
 type Validator struct {
 	constraints []ConstraintSet
+	variants    []Variant
 
 	blocks       map[BlockKind]map[string]*BlockConstraint
 	documents    []*DocumentConstraint
@@ -193,6 +194,15 @@ func collectBlockDeclarations(
 	return nil
 }
 
+// WithVariants returns a shallow copy of the Validator configured with the
+// given document type variants.
+func (v *Validator) WithVariants(variants ...Variant) *Validator {
+	nv := *v
+	nv.variants = variants
+
+	return &nv
+}
+
 // WithConstraints returns a new Validator that uses an additional set of
 // constraints.
 func (v *Validator) WithConstraints(
@@ -202,7 +212,14 @@ func (v *Validator) WithConstraints(
 
 	c = append(c, constraints...)
 
-	return NewValidator(c...)
+	nv, err := NewValidator(c...)
+	if err != nil {
+		return nil, err
+	}
+
+	nv.variants = v.variants
+
+	return nv, nil
 }
 
 type ValidationResult struct {
@@ -370,6 +387,7 @@ func (v *Validator) ValidateDocument(
 
 	vCtx := ValidationContext{
 		coll:         ValueDiscarder{},
+		variants:     v.variants,
 		ValidateHTML: v.validateHTML,
 		ValidateEnum: v.enums.ValidValue,
 	}

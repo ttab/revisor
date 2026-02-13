@@ -26,7 +26,11 @@ func TestCollection(t *testing.T) {
 	)
 
 	testValidator, err := revisor.NewValidator(testConstraints...)
-	must(t, err, "failed to create test validator")
+	mustf(t, err, "failed to create test validator")
+
+	testValidator = testValidator.WithVariants(revisor.Variant{
+		Name: "template",
+	})
 
 	tests := []validatorTest{
 		{
@@ -37,7 +41,7 @@ func TestCollection(t *testing.T) {
 	}
 
 	paths, err := filepath.Glob(filepath.Join("testdata", "results-collection", "*.json"))
-	must(t, err, "failed to glob for collection result files")
+	mustf(t, err, "failed to glob for collection result files")
 
 	for j := range tests {
 		testCase := tests[j]
@@ -75,7 +79,7 @@ func testCollectionAgainstGolden(
 		var document newsdoc.Document // want     []revisor.ValidationResult
 
 		err := internal.UnmarshalFile(sourceDocPath, &document)
-		must(t, err, "failed to load document")
+		mustf(t, err, "failed to load document")
 
 		collector := revisor.NewValueCollector()
 
@@ -83,7 +87,7 @@ func testCollectionAgainstGolden(
 
 		_, err = testCase.Validator.ValidateDocument(ctx, &document,
 			revisor.WithValueCollector(collector))
-		must(t, err, "validate document")
+		mustf(t, err, "validate document")
 
 		collected := make(map[string]collectedValues)
 
@@ -118,18 +122,18 @@ func testCollectionAgainstGolden(
 
 		if regenerate {
 			data, err := json.MarshalIndent(collected, "", "  ")
-			must(t, err, "marshal for golden reference file")
+			mustf(t, err, "marshal for golden reference file")
 
 			data = append(data, '\n')
 
 			err = os.WriteFile(goldenPath, data, 0o600)
-			must(t, err, "write golden reference file")
+			mustf(t, err, "write golden reference file")
 		}
 
 		var want map[string]collectedValues
 
 		err = internal.UnmarshalFile(goldenPath, &want)
-		must(t, err, "failed to load expected result")
+		mustf(t, err, "failed to load expected result")
 
 		if diff := cmp.Diff(want, collected); diff != "" {
 			t.Fatalf("collection mismatch (-want +got):\n%s",
@@ -139,7 +143,7 @@ func testCollectionAgainstGolden(
 }
 
 //nolint:unparam
-func must(t *testing.T, err error, format string, a ...any) {
+func mustf(t *testing.T, err error, format string, a ...any) {
 	t.Helper()
 
 	if err != nil {

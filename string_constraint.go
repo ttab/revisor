@@ -182,8 +182,9 @@ func (sc StringConstraint) Requirement() string {
 }
 
 type ValidationContext struct {
-	coll ValueCollector
-	depr DeprecationHandlerFunc
+	coll     ValueCollector
+	depr     DeprecationHandlerFunc
+	variants []Variant
 
 	ValidateHTML func(policyName, value string) error
 	ValidateEnum func(enum string, value string) (*Deprecation, error)

@@ -384,6 +384,39 @@ A list of available block attributes, and whether they can be used in pattern ma
 | contenttype | The content type of the resource that the block describes | Yes   |
 | role        | The role that the block or resource has                   | Yes   |
 
+## Document type variants
+
+Document type variants allow documents to use a suffixed type like `"core/article+template"` and still match the base declaration `"core/article"`. Variants are configured on the validator, not in constraint sets, so that the set of allowed suffixes is controlled by the application.
+
+Configure variants using `WithVariants`:
+
+``` go
+validator, err := revisor.NewValidator(constraints...)
+if err != nil {
+    log.Fatal(err)
+}
+
+// Allow "+template" for all declared document types.
+validator = validator.WithVariants(revisor.Variant{
+    Name: "template",
+})
+
+// Or restrict a variant to specific base types.
+validator = validator.WithVariants(
+    revisor.Variant{
+        Name: "template",
+    },
+    revisor.Variant{
+        Name:  "example",
+        Types: []string{"core/planning-item"},
+    },
+)
+```
+
+When `Types` is empty the variant applies to all declared document types. When `Types` is set the variant only applies to the listed base types; a document with a non-matching base type will be treated as an undeclared type.
+
+Variants are preserved across `WithConstraints` calls.
+
 ## Testing
 
 Revisor implements a file-driven test in `TestValidateDocument` that checks so that all the "testdata/results/*.json" files match the validation results for the corresponding document under "testdata/". Result files with the prefix "base-" will be validated against "constraints/naviga.json", for result files with the prefix "example-" the "constraints/example.json" constraints will be used as well.

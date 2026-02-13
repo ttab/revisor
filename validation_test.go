@@ -95,9 +95,9 @@ func FuzzValidationWide(f *testing.F) {
 			extraConstraints revisor.ConstraintSet
 		)
 
-		if !(decodeBytes(t, constraintsA, &constraints) &&
-			decodeBytes(t, constraintsB, &extraConstraints) &&
-			decodeBytes(t, documentData, &document)) {
+		if !decodeBytes(t, constraintsA, &constraints) ||
+			!decodeBytes(t, constraintsB, &extraConstraints) ||
+			!decodeBytes(t, documentData, &document) {
 			return
 		}
 
@@ -268,6 +268,10 @@ func TestValidateDocument(t *testing.T) {
 		t.Fatalf("failed to create extended validator: %v", err)
 	}
 
+	orgValidator = orgValidator.WithVariants(revisor.Variant{
+		Name: "template",
+	})
+
 	testConstraints := decodeConstraintSets(t,
 		"testdata/constraints/geo.json",
 		"testdata/constraints/labels-hints.json",
@@ -339,25 +343,25 @@ func testAgainstGolden(
 		)
 
 		err := internal.UnmarshalFile(sourceDocPath, &document)
-		must(t, err, "failed to load document")
+		mustf(t, err, "failed to load document")
 
 		ctx := context.Background()
 
 		got, err := testCase.Validator.ValidateDocument(ctx, &document)
-		must(t, err, "validate document")
+		mustf(t, err, "validate document")
 
 		if regenerate {
 			goldie, err := json.MarshalIndent(got, "", "  ")
-			must(t, err, "marshal new golden results")
+			mustf(t, err, "marshal new golden results")
 
 			goldie = append(goldie, '\n')
 
 			err = os.WriteFile(goldenPath, goldie, 0o600)
-			must(t, err, "write updated golden file")
+			mustf(t, err, "write updated golden file")
 		}
 
 		err = internal.UnmarshalFile(goldenPath, &want)
-		must(t, err, "failed to load expected result")
+		mustf(t, err, "failed to load expected result")
 
 		for i := range got {
 			if !resultHas(want, got[i]) {
@@ -404,4 +408,125 @@ func equalResult(a, b revisor.ValidationResult) bool {
 	}
 
 	return true
+}
+
+func TestTemplateDocumentType(t *testing.T) {
+	constraintSet := revisor.ConstraintSet{
+		Name:    "test-template",
+		Version: 1,
+		Documents: []revisor.DocumentConstraint{
+			{
+				Declares: "core/article",
+				Name:     "Article",
+			},
+		},
+	}
+
+	baseValidator, err := revisor.NewValidator(constraintSet)
+	if err != nil {
+		t.Fatalf("failed to create validator: %v", err)
+	}
+
+	validator := baseValidator.WithVariants(revisor.Variant{Name: "template"})
+
+	ctx := context.Background()
+
+	t.Run("TemplateMatchesDeclares", func(t *testing.T) {
+		doc := newsdoc.Document{
+			Type: "core/article+template",
+			UUID: "00000000-0000-0000-0000-000000000001",
+			URI:  "article://test/1",
+		}
+
+		results, err := validator.ValidateDocument(ctx, &doc)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		for _, r := range results {
+			if strings.Contains(r.Error, "undeclared document type") {
+				t.Errorf("template document should not be undeclared, got: %s", r.Error)
+			}
+		}
+	})
+
+	t.Run("UnsupportedSuffixRejected", func(t *testing.T) {
+		doc := newsdoc.Document{
+			Type: "core/article+other",
+			UUID: "00000000-0000-0000-0000-000000000001",
+			URI:  "article://test/1",
+		}
+
+		results, err := validator.ValidateDocument(ctx, &doc)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		found := false
+
+		for _, r := range results {
+			if strings.Contains(r.Error, "undeclared document type") {
+				found = true
+
+				break
+			}
+		}
+
+		if !found {
+			t.Error("expected undeclared document type error for +other suffix")
+		}
+	})
+
+	t.Run("BaseTypeStillMatches", func(t *testing.T) {
+		doc := newsdoc.Document{
+			Type: "core/article",
+			UUID: "00000000-0000-0000-0000-000000000001",
+			URI:  "article://test/1",
+		}
+
+		results, err := validator.ValidateDocument(ctx, &doc)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		for _, r := range results {
+			if strings.Contains(r.Error, "undeclared document type") {
+				t.Errorf("base document type should still match, got: %s", r.Error)
+			}
+		}
+	})
+
+	t.Run("TypeRestrictedVariant", func(t *testing.T) {
+		restrictedValidator := baseValidator.WithVariants(
+			revisor.Variant{
+				Name:  "template",
+				Types: []string{"core/planning"},
+			},
+		)
+
+		doc := newsdoc.Document{
+			Type: "core/article+template",
+			UUID: "00000000-0000-0000-0000-000000000001",
+			URI:  "article://test/1",
+		}
+
+		results, err := restrictedValidator.ValidateDocument(ctx, &doc)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		found := false
+
+		for _, r := range results {
+			if strings.Contains(r.Error, "undeclared document type") {
+				found = true
+
+				break
+			}
+		}
+
+		if !found {
+			t.Error("expected undeclared document type error for type-restricted variant")
+		}
+	})
 }
