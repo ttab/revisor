@@ -87,6 +87,7 @@ func (v *Validator) Prune(
 		}
 
 		setDocumentBlocks(document, kind, pruned)
+
 		res = append(res, errs...)
 
 		// At document level pruneRemoveMe should not happen because

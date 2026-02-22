@@ -353,7 +353,7 @@ func blockAttribute(block *newsdoc.Block, name string) (string, bool) {
 	return "", false
 }
 
-func setBlockAttribute(block *newsdoc.Block, name string, value string) bool {
+func setBlockAttribute(block *newsdoc.Block, name string, value string) {
 	switch blockAttributeKey(name) {
 	case blockAttrUUID:
 		block.UUID = value
@@ -379,11 +379,7 @@ func setBlockAttribute(block *newsdoc.Block, name string, value string) bool {
 		block.Role = value
 	case blockAttrSensitivity:
 		block.Sensitivity = value
-	default:
-		return false
 	}
-
-	return true
 }
 
 // DescribeCountConstraint returns a human readable (english) description of the
