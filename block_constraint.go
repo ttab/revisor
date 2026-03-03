@@ -401,7 +401,7 @@ func (bc BlockConstraint) DescribeCountConstraint(kind BlockKind) string {
 		)
 	case bc.MaxCount != nil:
 		fmt.Fprintf(&s,
-			"less than %d %s",
+			"%d or less %s",
 			*bc.MaxCount, kind.Description(*bc.MaxCount),
 		)
 	case bc.MinCount != nil:
