@@ -147,8 +147,8 @@ func documentAttribute(d *newsdoc.Document, name string) (string, bool) {
 }
 
 // Variant defines a document type variant suffix. When a document type
-// contains a "+" separator (e.g. "core/article+template"), the part after the
-// last "+" is matched against configured variants. If Types is empty, the
+// contains a "#" separator (e.g. "core/article#template"), the part after the
+// last "#" is matched against configured variants. If Types is empty, the
 // variant applies to all declared document types.
 type Variant struct {
 	Name  string   `json:"name"`
@@ -156,10 +156,10 @@ type Variant struct {
 }
 
 // resolveVariant returns the base document type if the suffix after the last
-// "+" matches a configured variant (and the base type is allowed for that
+// "#" matches a configured variant (and the base type is allowed for that
 // variant). Returns docType unchanged if no variant matches.
 func resolveVariant(docType string, variants []Variant) string {
-	idx := strings.LastIndex(docType, "+")
+	idx := strings.LastIndex(docType, "#")
 	if idx == -1 {
 		return docType
 	}

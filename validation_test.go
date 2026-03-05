@@ -433,7 +433,7 @@ func TestTemplateDocumentType(t *testing.T) {
 
 	t.Run("TemplateMatchesDeclares", func(t *testing.T) {
 		doc := newsdoc.Document{
-			Type: "core/article+template",
+			Type: "core/article#template",
 			UUID: "00000000-0000-0000-0000-000000000001",
 			URI:  "article://test/1",
 		}
@@ -452,7 +452,7 @@ func TestTemplateDocumentType(t *testing.T) {
 
 	t.Run("UnsupportedSuffixRejected", func(t *testing.T) {
 		doc := newsdoc.Document{
-			Type: "core/article+other",
+			Type: "core/article#other",
 			UUID: "00000000-0000-0000-0000-000000000001",
 			URI:  "article://test/1",
 		}
@@ -473,7 +473,7 @@ func TestTemplateDocumentType(t *testing.T) {
 		}
 
 		if !found {
-			t.Error("expected undeclared document type error for +other suffix")
+			t.Error("expected undeclared document type error for #other suffix")
 		}
 	})
 
@@ -505,7 +505,7 @@ func TestTemplateDocumentType(t *testing.T) {
 		)
 
 		doc := newsdoc.Document{
-			Type: "core/article+template",
+			Type: "core/article#template",
 			UUID: "00000000-0000-0000-0000-000000000001",
 			URI:  "article://test/1",
 		}
