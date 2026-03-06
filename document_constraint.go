@@ -63,7 +63,7 @@ func (dc DocumentConstraint) Matches(
 	}
 
 	for _, k := range dc.Match.Keys {
-		value, ok := documentMatchAttribute(d, k, vCtx.variants)
+		value, ok := documentMatchAttribute(d, k)
 		if !ok {
 			return NoMatch
 		}
@@ -71,6 +71,19 @@ func (dc DocumentConstraint) Matches(
 		check := dc.Match.Constraints[k]
 
 		_, err := check.Validate(value, ok, vCtx)
+		if err != nil && documentAttributeKey(k) == docAttrType {
+			// Fall back to the resolved variant type so that
+			// match expressions targeting the base type still
+			// apply to variant documents.
+			resolved := resolveVariant(d.Type, vCtx.variants)
+			if resolved != value {
+				_, err = check.Validate(resolved, ok, vCtx)
+				if err == nil {
+					value = resolved
+				}
+			}
+		}
+
 		if err != nil {
 			return NoMatch
 		}
@@ -98,9 +111,9 @@ const (
 	docAttrURL      documentAttributeKey = "url"
 )
 
-func documentMatchAttribute(d *newsdoc.Document, name string, variants []Variant) (string, bool) {
+func documentMatchAttribute(d *newsdoc.Document, name string) (string, bool) {
 	if documentAttributeKey(name) == docAttrType {
-		return resolveVariant(d.Type, variants), true
+		return d.Type, true
 	}
 
 	return "", false

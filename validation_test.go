@@ -496,6 +496,92 @@ func TestTemplateDocumentType(t *testing.T) {
 		}
 	})
 
+	t.Run("VariantMatchExtension", func(t *testing.T) {
+		variantType := "core/article#prefab"
+
+		extensionSet := revisor.ConstraintSet{
+			Name:    "test-prefab-extension",
+			Version: 1,
+			Documents: []revisor.DocumentConstraint{
+				{
+					Match: revisor.MakeConstraintMap(map[string]revisor.StringConstraint{
+						"type": {Const: &variantType},
+					}),
+					Meta: []*revisor.BlockConstraint{
+						{
+							Declares: &revisor.BlockSignature{
+								Type: "core/prefab-setting",
+							},
+							Name: "Prefab setting",
+						},
+					},
+				},
+			},
+		}
+
+		extValidator, err := validator.WithConstraints(extensionSet)
+		if err != nil {
+			t.Fatalf("create extended validator: %v", err)
+		}
+
+		extValidator = extValidator.WithVariants(revisor.Variant{Name: "prefab"})
+
+		// The prefab-setting meta block should be valid on the variant.
+		t.Run("VariantAcceptsExtendedBlock", func(t *testing.T) {
+			doc := newsdoc.Document{
+				Type: "core/article#prefab",
+				UUID: "00000000-0000-0000-0000-000000000001",
+				URI:  "article://test/1",
+				Meta: []newsdoc.Block{
+					{Type: "core/prefab-setting"},
+				},
+			}
+
+			results, err := extValidator.ValidateDocument(ctx, &doc)
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+
+			for _, r := range results {
+				if strings.Contains(r.Error, "core/prefab-setting") {
+					t.Errorf("prefab-setting should be allowed on variant, got: %s", r.Error)
+				}
+			}
+		})
+
+		// The prefab-setting meta block should not be valid on the
+		// base document type.
+		t.Run("BaseRejectsExtendedBlock", func(t *testing.T) {
+			doc := newsdoc.Document{
+				Type: "core/article",
+				UUID: "00000000-0000-0000-0000-000000000001",
+				URI:  "article://test/1",
+				Meta: []newsdoc.Block{
+					{Type: "core/prefab-setting"},
+				},
+			}
+
+			results, err := extValidator.ValidateDocument(ctx, &doc)
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+
+			found := false
+
+			for _, r := range results {
+				if strings.Contains(r.Error, "undeclared block") {
+					found = true
+
+					break
+				}
+			}
+
+			if !found {
+				t.Error("expected undeclared block error for prefab-setting on base document type")
+			}
+		})
+	})
+
 	t.Run("TypeRestrictedVariant", func(t *testing.T) {
 		restrictedValidator := baseValidator.WithVariants(
 			revisor.Variant{
