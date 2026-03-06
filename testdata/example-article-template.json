@@ -1,6 +1,6 @@
 {
   "uuid": "98cedf81-ce8d-4dc4-bcbc-6091a756cc5c",
-  "type": "core/article+template",
+  "type": "core/article#template",
   "uri": "core://article/98cedf81-ce8d-4dc4-bcbc-6091a756cc5c",
   "title": "champ-inter",
   "content": [
