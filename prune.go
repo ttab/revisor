@@ -35,6 +35,7 @@ func (v *Validator) Prune(
 
 	vCtx := ValidationContext{
 		coll:         ValueDiscarder{},
+		variants:     v.variants,
 		ValidateHTML: v.validateHTML,
 		ValidateEnum: v.enums.ValidValue,
 	}
