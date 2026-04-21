@@ -1081,3 +1081,63 @@ func TestPruneExcessNestedBlocks(t *testing.T) {
 			doc.Content[0].Meta[0].Data["value"])
 	}
 }
+
+func TestPruneVariantDocumentType(t *testing.T) {
+	v := newTestValidator(t, simpleConstraints())
+	v = v.WithVariants(revisor.Variant{
+		Name:  "timeless",
+		Types: []string{"test/article"},
+	})
+
+	doc := &newsdoc.Document{
+		UUID:  "00000000-0000-0000-0000-000000000001",
+		Type:  "test/article#timeless",
+		Title: "Variant Article",
+		Content: []newsdoc.Block{
+			{
+				Type: "test/text",
+				Data: map[string]string{
+					"text": "Hello world",
+				},
+			},
+		},
+		Meta: []newsdoc.Block{
+			{
+				Type: "test/meta",
+				Data: map[string]string{
+					"key": "value",
+				},
+			},
+		},
+		Links: []newsdoc.Block{
+			{
+				Type: "test/link",
+				Rel:  "link",
+				URI:  "http://example.com",
+			},
+		},
+	}
+
+	ctx := context.Background()
+
+	res, err := v.Prune(ctx, doc)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if len(res) != 0 {
+		t.Errorf("expected no errors for variant document, got %d:", len(res))
+
+		for _, r := range res {
+			t.Errorf("  %v", r)
+		}
+	}
+
+	if doc.Type != "test/article#timeless" {
+		t.Errorf("expected type to be preserved, got %q", doc.Type)
+	}
+
+	if len(doc.Content) != 1 {
+		t.Errorf("expected 1 content block, got %d", len(doc.Content))
+	}
+}
