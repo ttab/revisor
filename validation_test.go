@@ -616,3 +616,82 @@ func TestTemplateDocumentType(t *testing.T) {
 		}
 	})
 }
+
+func TestOptionalDocumentUUID(t *testing.T) {
+	validator, err := revisor.NewValidator(revisor.ConstraintSet{
+		Name:    "test-uuid",
+		Version: 1,
+		Documents: []revisor.DocumentConstraint{
+			{
+				Declares: "core/article",
+				Name:     "Article",
+			},
+		},
+	})
+	if err != nil {
+		t.Fatalf("failed to create validator: %v", err)
+	}
+
+	ctx := context.Background()
+
+	uuidResult := revisor.ValidationResult{
+		Entity: []revisor.EntityRef{
+			{
+				RefType: revisor.RefTypeAttribute,
+				Name:    "uuid",
+			},
+		},
+		Error: "not a valid UUID: invalid UUID length: 0",
+	}
+
+	t.Run("MissingUUIDIsAnError", func(t *testing.T) {
+		doc := newsdoc.Document{
+			Type: "core/article",
+		}
+
+		results, err := validator.ValidateDocument(ctx, &doc)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		if !resultHas(results, uuidResult) {
+			t.Errorf("expected a missing UUID to be reported, got: %v", results)
+		}
+	})
+
+	t.Run("MissingUUIDCanBeAllowed", func(t *testing.T) {
+		doc := newsdoc.Document{
+			Type: "core/article",
+		}
+
+		results, err := validator.ValidateDocument(ctx, &doc,
+			revisor.WithOptionalDocumentUUID())
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		if len(results) != 0 {
+			t.Errorf("expected no validation errors, got: %v", results)
+		}
+	})
+
+	t.Run("InvalidUUIDIsStillAnError", func(t *testing.T) {
+		doc := newsdoc.Document{
+			Type: "core/article",
+			UUID: "not-a-uuid",
+		}
+
+		results, err := validator.ValidateDocument(ctx, &doc,
+			revisor.WithOptionalDocumentUUID())
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		if !resultHas(results, revisor.ValidationResult{
+			Entity: uuidResult.Entity,
+			Error:  "not a valid UUID: invalid UUID length: 10",
+		}) {
+			t.Errorf("expected an invalid UUID to be reported, got: %v", results)
+		}
+	})
+}

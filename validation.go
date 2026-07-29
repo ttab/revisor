@@ -372,6 +372,16 @@ func WithDeprecationHandler(
 	}
 }
 
+// WithOptionalDocumentUUID stops an empty document UUID from being reported as
+// a validation error. Use it for document types that are identified by
+// something other than a UUID and therefore never get one assigned. A UUID
+// that is set still has to be a valid one.
+func WithOptionalDocumentUUID() ValidationOptionFunc {
+	return func(vc *ValidationContext) {
+		vc.optionalUUID = true
+	}
+}
+
 func (v *Validator) ValidateDocument(
 	ctx context.Context,
 	document *newsdoc.Document, opts ...ValidationOptionFunc,
@@ -396,18 +406,22 @@ func (v *Validator) ValidateDocument(
 		opts[i](&vCtx)
 	}
 
-	_, err := uuid.Parse(document.UUID)
-	if err != nil {
-		res = append(res, ValidationResult{
-			Entity: []EntityRef{
-				{
-					RefType: RefTypeAttribute,
-					Name:    "uuid",
+	if document.UUID != "" || !vCtx.optionalUUID {
+		_, idErr := uuid.Parse(document.UUID)
+		if idErr != nil {
+			res = append(res, ValidationResult{
+				Entity: []EntityRef{
+					{
+						RefType: RefTypeAttribute,
+						Name:    "uuid",
+					},
 				},
-			},
-			Error: fmt.Sprintf("not a valid UUID: %v", err),
-		})
+				Error: fmt.Sprintf("not a valid UUID: %v", idErr),
+			})
+		}
 	}
+
+	var err error
 
 	for i := range v.documents {
 		match := v.documents[i].Matches(document, &vCtx)
