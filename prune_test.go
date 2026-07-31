@@ -1141,3 +1141,203 @@ func TestPruneVariantDocumentType(t *testing.T) {
 		t.Errorf("expected 1 content block, got %d", len(doc.Content))
 	}
 }
+
+// emptyCollectionConstraints requires one section link on the document, and one
+// image link on any core/image content block.
+func emptyCollectionConstraints() revisor.ConstraintSet {
+	return revisor.ConstraintSet{
+		Name: "test",
+		Documents: []revisor.DocumentConstraint{
+			{
+				Declares: "test/article",
+				Links: []*revisor.BlockConstraint{
+					{
+						Declares: &revisor.BlockSignature{
+							Type: "test/section",
+							Rel:  "section",
+						},
+						Count: intPtr(1),
+					},
+				},
+				Content: []*revisor.BlockConstraint{
+					{
+						Declares: &revisor.BlockSignature{
+							Type: "test/image",
+						},
+						Links: []*revisor.BlockConstraint{
+							{
+								Declares: &revisor.BlockSignature{
+									Rel: "image",
+								},
+								Count: intPtr(1),
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+// TestPruneMissingDocumentBlockCollection guards against prune skipping count
+// constraints for a document block collection that's empty or absent.
+func TestPruneMissingDocumentBlockCollection(t *testing.T) {
+	v := newTestValidator(t, emptyCollectionConstraints())
+
+	doc := &newsdoc.Document{
+		UUID: "00000000-0000-0000-0000-000000000001",
+		Type: "test/article",
+	}
+
+	ctx := context.Background()
+
+	valRes, err := v.ValidateDocument(ctx, doc)
+	if err != nil {
+		t.Fatalf("unexpected validation error: %v", err)
+	}
+
+	if len(valRes) != 1 {
+		t.Fatalf("expected 1 validation result, got %d", len(valRes))
+	}
+
+	res, err := v.Prune(ctx, doc)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if len(res) != len(valRes) {
+		t.Fatalf("expected prune to agree with validation, got %d results instead of %d:",
+			len(res), len(valRes))
+	}
+
+	if res[0].String() != valRes[0].String() {
+		t.Errorf("expected prune error %q, got %q",
+			valRes[0].String(), res[0].String())
+	}
+
+	// An absent collection must not be materialised as an empty slice, that
+	// would change the serialised form of the pruned document.
+	if doc.Links != nil {
+		t.Errorf("expected links to be left absent, got %v", doc.Links)
+	}
+}
+
+// TestPruneMissingNestedBlockCollection checks that a block that's missing a
+// required nested collection is removed by prune, and that the pruned document
+// validates cleanly.
+func TestPruneMissingNestedBlockCollection(t *testing.T) {
+	v := newTestValidator(t, emptyCollectionConstraints())
+
+	doc := &newsdoc.Document{
+		UUID: "00000000-0000-0000-0000-000000000001",
+		Type: "test/article",
+		Links: []newsdoc.Block{
+			{
+				Type: "test/section",
+				Rel:  "section",
+			},
+		},
+		Content: []newsdoc.Block{
+			{
+				Type: "test/image",
+			},
+		},
+	}
+
+	ctx := context.Background()
+
+	valRes, err := v.ValidateDocument(ctx, doc)
+	if err != nil {
+		t.Fatalf("unexpected validation error: %v", err)
+	}
+
+	if len(valRes) != 1 {
+		t.Fatalf("expected the image block to fail validation, got %d results",
+			len(valRes))
+	}
+
+	res, err := v.Prune(ctx, doc)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	// The image block has no count constraint of its own, so prune fixes
+	// the document by removing it.
+	if len(res) != 0 {
+		t.Errorf("expected no errors, got %d:", len(res))
+
+		for _, r := range res {
+			t.Errorf("  %v", r)
+		}
+	}
+
+	if len(doc.Content) != 0 {
+		t.Errorf("expected the image block to be removed, got %d content blocks",
+			len(doc.Content))
+	}
+
+	after, err := v.ValidateDocument(ctx, doc)
+	if err != nil {
+		t.Fatalf("unexpected validation error: %v", err)
+	}
+
+	if len(after) != 0 {
+		t.Errorf("expected the pruned document to validate cleanly, got %d results:",
+			len(after))
+
+		for _, r := range after {
+			t.Errorf("  %v", r)
+		}
+	}
+}
+
+// TestPruneMissingNestedCollectionCascades checks that a required block that's
+// missing a required nested collection cascades up to the document root instead
+// of being silently kept.
+func TestPruneMissingNestedCollectionCascades(t *testing.T) {
+	cs := emptyCollectionConstraints()
+	cs.Documents[0].Content[0].Count = intPtr(1)
+
+	v := newTestValidator(t, cs)
+
+	doc := &newsdoc.Document{
+		UUID: "00000000-0000-0000-0000-000000000001",
+		Type: "test/article",
+		Links: []newsdoc.Block{
+			{
+				Type: "test/section",
+				Rel:  "section",
+			},
+		},
+		Content: []newsdoc.Block{
+			{
+				Type: "test/image",
+			},
+		},
+	}
+
+	ctx := context.Background()
+
+	res, err := v.Prune(ctx, doc)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if len(res) != 1 {
+		t.Fatalf("expected 1 error, got %d: %v", len(res), res)
+	}
+
+	// The image block cannot be removed without violating its own count
+	// constraint, so the nested error is reported against it.
+	if len(doc.Content) != 1 {
+		t.Errorf("expected the image block to remain, got %d content blocks",
+			len(doc.Content))
+	}
+
+	// Block indexes are rendered 1-based in results.
+	want := `content block 1 (test/image): there must be 1 link where rel is "image"`
+
+	if res[0].String() != want {
+		t.Errorf("expected error %q, got %q", want, res[0].String())
+	}
+}

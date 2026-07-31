@@ -189,8 +189,16 @@ func (v *Validator) pruneBlockSlice(
 	vCtx ValidationContext,
 	documentLevel bool,
 ) (pruneStatus, []newsdoc.Block, []ValidationResult, error) {
+	// An empty collection has nothing to match or remove, but count
+	// constraints still have to be checked: a block that's missing outright
+	// violates them just like one that has been removed. Return the block
+	// slice untouched so that absent collections don't materialise as empty
+	// ones in the pruned document.
 	if len(blocks) == 0 {
-		return pruneOK, blocks, nil, nil
+		status, errs := pruneCountViolations(
+			blocks, kind, constraintSets, documentLevel)
+
+		return status, blocks, errs, nil
 	}
 
 	// Phase 1: Match all blocks against constraints.
@@ -325,31 +333,55 @@ func (v *Validator) pruneBlockSlice(
 
 	// Phase 6: Post-removal count check (recount from scratch after all
 	// removals).
-	finalCounts := countBlockMatches(blocks, kind, constraintSets)
+	status, countErrs := pruneCountViolations(
+		blocks, kind, constraintSets, documentLevel)
+	if status == pruneRemoveMe {
+		return pruneRemoveMe, blocks, countErrs, nil
+	}
+
+	res = append(res, countErrs...)
+
+	return pruneOK, blocks, res, nil
+}
+
+// pruneCountViolations counts the constraint matches in a block slice and
+// reports the count constraints that the blocks fail to satisfy. Only Count and
+// MinCount are checked, as excess blocks are removed by pruneExcessBlocks. At
+// document level all violations are collected, nested violations instead make
+// the parent block removable.
+func pruneCountViolations(
+	blocks []newsdoc.Block, kind BlockKind,
+	constraintSets []BlockConstraintSet,
+	documentLevel bool,
+) (pruneStatus, []ValidationResult) {
+	var res []ValidationResult
+
+	counts := countBlockMatches(blocks, kind, constraintSets)
 
 	for i := range constraintSets {
 		for _, constraint := range constraintSets[i].BlockConstraints(kind) {
-			count := finalCounts[constraint]
+			count := counts[constraint]
 
 			minOK := nilOrGTE(constraint.MinCount, count)
 			exactOK := nilOrEqual(constraint.Count, count)
 
-			if !minOK || !exactOK {
-				errResult := ValidationResult{
-					Error: constraint.DescribeCountConstraint(kind),
-				}
-
-				if documentLevel {
-					res = append(res, errResult)
-				} else {
-					return pruneRemoveMe, blocks,
-						[]ValidationResult{errResult}, nil
-				}
+			if minOK && exactOK {
+				continue
 			}
+
+			errResult := ValidationResult{
+				Error: constraint.DescribeCountConstraint(kind),
+			}
+
+			if !documentLevel {
+				return pruneRemoveMe, []ValidationResult{errResult}
+			}
+
+			res = append(res, errResult)
 		}
 	}
 
-	return pruneOK, blocks, res, nil
+	return pruneOK, res
 }
 
 // matchBlock matches a single block against constraint sets and populates
