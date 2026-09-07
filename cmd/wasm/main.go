@@ -86,7 +86,6 @@ func loadConstraints(_ js.Value, args []js.Value) any {
 		var sets []revisor.ConstraintSet
 
 		for i, dataValue := range args {
-			println(i)
 			if !dataValue.InstanceOf(uint8Array) {
 				return nil, fmt.Errorf(
 					"constraint set %d is not an Uint8Array", i)
@@ -144,7 +143,10 @@ func validateDocument(_ js.Value, args []js.Value) any {
 				"invalid document: %w", err)
 		}
 
-		result := validator.ValidateDocument(context.Background(), &d)
+		result, err := validator.ValidateDocument(context.Background(), &d)
+		if err != nil {
+			return nil, fmt.Errorf("validate document: %w", err)
+		}
 
 		returnData, err := json.Marshal(result)
 		if err != nil {

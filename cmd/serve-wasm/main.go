@@ -1,17 +1,18 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"os"
 	"strings"
 	"time"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 func main() {
-	app := cli.App{
+	app := cli.Command{
 		Name: "serve-wasm",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
@@ -19,15 +20,15 @@ func main() {
 				Value: ":8080",
 				Usage: "The address to listen to",
 			},
-			&cli.PathFlag{
+			&cli.StringFlag{
 				Name:  "dir",
 				Value: "public_html",
 			},
 		},
-		Action: func(c *cli.Context) error {
+		Action: func(_ context.Context, c *cli.Command) error {
 			var (
 				addr = c.String("addr")
-				dir  = c.Path("dir")
+				dir  = c.String("dir")
 			)
 
 			fs := http.FileServer(http.Dir(dir))
@@ -53,7 +54,7 @@ func main() {
 		},
 	}
 
-	err := app.Run(os.Args)
+	err := app.Run(context.Background(), os.Args)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to run: %v", err)
 		os.Exit(1)

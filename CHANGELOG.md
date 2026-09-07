@@ -4,6 +4,29 @@ All notable changes to this project after v1.0.0 are documented here. The
 entries below are derived from release tags; see the linked PRs for full
 detail.
 
+## [v1.0.3] - 2026-09-05
+
+**Breaking (toolchain):** the `go` directive is now 1.26.5, up from 1.25.7, so
+building against revisor needs Go 1.26.5 or later.
+
+Changes:
+
+- Fix the WebAssembly build, which had not compiled since `ValidateDocument`
+  grew a second return value — `cmd/wasm` now surfaces a validation error to
+  the JS caller as a rejected promise instead of dropping it. CI builds and
+  lints the `js/wasm` target so it cannot rot again unnoticed.
+- Regenerate `spec.schema.json`, which was missing `description` on
+  `Deprecation` and `colourFormats` on string constraints. Both were already
+  accepted by the parser, so specs using them validated against revisor while
+  failing against the published schema.
+- The `revisor` and `serve-wasm` commands moved from urfave/cli v2 to v3.
+  `serve-wasm`'s `--dir` is now a plain string flag rather than a path flag;
+  it takes the same values.
+- Dependency upgrades: gobwas/glob to v1.0.0 (a rewritten matching engine,
+  verified to produce identical results for every glob pattern in the bundled
+  core and tt schemas), newsdoc to v1.1.0, invopop/jsonschema to v0.14.0, and
+  golang.org/x/net to v0.58.0.
+
 ## [v1.0.2] - 2026-07-31
 
 **Behaviour change (prune):** `Prune` now reports `count`/`minCount` violations

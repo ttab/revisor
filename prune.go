@@ -45,7 +45,7 @@ func (v *Validator) Prune(
 		res = append(res, ValidationResult{
 			Entity: []EntityRef{{
 				RefType: RefTypeAttribute,
-				Name:    "uuid",
+				Name:    string(blockAttrUUID),
 			}},
 			Error: fmt.Sprintf("not a valid UUID: %v", err),
 		})

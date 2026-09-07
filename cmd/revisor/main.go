@@ -1,23 +1,24 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
 
 	"github.com/invopop/jsonschema"
 	"github.com/ttab/revisor"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 func main() {
-	app := &cli.App{
+	app := cli.Command{
 		Name: "revisor",
 		Commands: []*cli.Command{
 			{
 				Name:  "jsonschema",
 				Usage: "generates a JSON schema for revisor specifications",
-				Action: func(_ *cli.Context) error {
+				Action: func(_ context.Context, _ *cli.Command) error {
 					schema := jsonschema.Reflect(&revisor.ConstraintSet{})
 
 					enc := json.NewEncoder(os.Stdout)
@@ -26,7 +27,7 @@ func main() {
 
 					err := enc.Encode(schema)
 					if err != nil {
-						return fmt.Errorf("failed to encode schema: %w", err)
+						return fmt.Errorf("encode schema: %w", err)
 					}
 
 					return nil
@@ -35,7 +36,8 @@ func main() {
 		},
 	}
 
-	if err := app.Run(os.Args); err != nil {
+	err := app.Run(context.Background(), os.Args)
+	if err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err.Error())
 
 		os.Exit(1)

@@ -413,7 +413,7 @@ func (v *Validator) ValidateDocument(
 				Entity: []EntityRef{
 					{
 						RefType: RefTypeAttribute,
-						Name:    "uuid",
+						Name:    string(blockAttrUUID),
 					},
 				},
 				Error: fmt.Sprintf("not a valid UUID: %v", idErr),
@@ -691,7 +691,7 @@ func (v *Validator) validateBlock(
 				Entity: []EntityRef{
 					{
 						RefType: RefTypeAttribute,
-						Name:    "uuid",
+						Name:    string(blockAttrUUID),
 					},
 				},
 				Error: fmt.Sprintf("not a valid UUID: %v", err),
@@ -1066,10 +1066,10 @@ func (cs ConstraintSet) Validate() error {
 	}
 
 	for i, doc := range cs.Documents {
-		err := validateBlockConstraints(map[string][]*BlockConstraint{
-			"link":    doc.Links,
-			"meta":    doc.Meta,
-			"content": doc.Content,
+		err := validateBlockConstraints(map[BlockKind][]*BlockConstraint{
+			BlockKindLink:    doc.Links,
+			BlockKindMeta:    doc.Meta,
+			BlockKindContent: doc.Content,
 		})
 		if err != nil {
 			return fmt.Errorf("document %d: %w", i+1, err)
@@ -1089,10 +1089,10 @@ func validateBlockDeclarations(kind BlockKind, defs []*BlockDefinition) error {
 			return fmt.Errorf("%s block definition %d must have an ID", kind, i+1)
 		}
 
-		err := validateBlockConstraints(map[string][]*BlockConstraint{
-			"link":    def.Block.Links,
-			"meta":    def.Block.Meta,
-			"content": def.Block.Content,
+		err := validateBlockConstraints(map[BlockKind][]*BlockConstraint{
+			BlockKindLink:    def.Block.Links,
+			BlockKindMeta:    def.Block.Meta,
+			BlockKindContent: def.Block.Content,
 		})
 		if err != nil {
 			return fmt.Errorf("%s block definition %s: %w", kind, def.ID, err)
@@ -1102,17 +1102,17 @@ func validateBlockDeclarations(kind BlockKind, defs []*BlockDefinition) error {
 	return nil
 }
 
-func validateBlockConstraints(c map[string][]*BlockConstraint) error {
+func validateBlockConstraints(c map[BlockKind][]*BlockConstraint) error {
 	for k := range c {
 		for i, block := range c[k] {
 			if block == nil {
 				return fmt.Errorf("%s block %d must not be nil/null", k, i+1)
 			}
 
-			err := validateBlockConstraints(map[string][]*BlockConstraint{
-				"link":    block.Links,
-				"meta":    block.Meta,
-				"content": block.Content,
+			err := validateBlockConstraints(map[BlockKind][]*BlockConstraint{
+				BlockKindLink:    block.Links,
+				BlockKindMeta:    block.Meta,
+				BlockKindContent: block.Content,
 			})
 			if err != nil {
 				return fmt.Errorf("%s block %d: %w", k, i+1, err)

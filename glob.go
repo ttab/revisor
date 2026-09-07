@@ -13,7 +13,7 @@ import (
 // marshalling and unmarshalling.
 type Glob struct {
 	pattern string
-	glob    glob.Glob
+	glob    *glob.Pattern
 }
 
 // CompileGlob compiles a glob pattern.
@@ -29,7 +29,7 @@ func CompileGlob(pattern string) (*Glob, error) {
 	}, nil
 }
 
-func compileGlob(pattern string) (glob.Glob, error) { //nolint:ireturn
+func compileGlob(pattern string) (*glob.Pattern, error) {
 	cg, err := glob.Compile(pattern, '/', '+')
 	if err != nil {
 		return nil, fmt.Errorf("invalid glob pattern: %w", err)

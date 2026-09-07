@@ -252,6 +252,9 @@
         },
         "deprecated": {
           "$ref": "#/$defs/Deprecation"
+        },
+        "description": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -352,6 +355,12 @@
         },
         "geometry": {
           "type": "string"
+        },
+        "colourFormats": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "htmlPolicy": {
           "type": "string"
